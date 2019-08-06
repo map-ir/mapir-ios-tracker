@@ -9,6 +9,17 @@
 import Foundation
 
 enum TrackingError: Error {
+    enum ServiceError: Error, LocalizedError {
+        case apiKeyNotAvailable
+
+        var errorDescription: String? {
+            switch self {
+            case .apiKeyNotAvailable:
+                return "Starting service requires Map.ir access token. add your access in Info.plist or use init(token:) initalizer."
+            }
+        }
+    }
+
     enum LocationServiceError: Error, LocalizedError {
         case unauthorizedForAlwaysUsage
 
