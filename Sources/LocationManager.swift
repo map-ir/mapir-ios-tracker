@@ -17,8 +17,6 @@ protocol LocationManagerDelegate {
 
 final class LocationManager: NSObject {
 
-    private var managerType: TrackerType!
-
     let locationManager = CLLocationManager()
     var distanceFilter: Double {
         get { return locationManager.distanceFilter }
@@ -37,9 +35,8 @@ final class LocationManager: NSObject {
 
     var status: LocationManager.Status = .initiated
 
-    init(type: TrackerType) {
+    override init() {
         super.init()
-        self.managerType = type
         locationManager.distanceFilter = 20
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
@@ -69,19 +66,11 @@ final class LocationManager: NSObject {
         case .authorizedAlways:
             return .success(true)
         case .authorizedWhenInUse:
-            if self.managerType == .receiver {
-                return .success(true)
-            } else {
-                fallthrough
-            }
+            return .success(true)
         case .notDetermined, .denied, .restricted:
             fallthrough
         @unknown default:
-            if managerType == .publisher {
-                return .failure(TrackingError.LocationServiceError.unauthorizedForAlwaysUsage)
-            } else {
-                return .failure(TrackingError.LocationServiceError.unauthorizedForWhenInUseUsage)
-            }
+            return .failure(TrackingError.LocationServiceError.unauthorizedForAlwaysUsage)
         }
     }
 }
