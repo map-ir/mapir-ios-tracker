@@ -9,6 +9,12 @@
 import Foundation
 import CocoaMQTT
 
+typealias ConnectCompletionHandler = () -> Void
+
+protocol MQTTClientDelegate {
+
+}
+
 final class MQTTClient {
     private var username: String? {
         get { return client.username }
@@ -22,11 +28,13 @@ final class MQTTClient {
     private var status: CocoaMQTTConnState {
         return client.connState
     }
-    private var topic: String
+
+    var topic: String?
 
     private let client: CocoaMQTT!
     var defaultHost = "81.91.152.2"
     var defaultPort: UInt16 = 1883
+    var defaultQoS: CocoaMQTTQOS = .qos1
 
     init() {
         // TODO: Add UUID
@@ -36,50 +44,73 @@ final class MQTTClient {
         client.cleanSession = true
         client.delegate = self
         _ = client.connect()
-        
+    }
+
+    private var connectCompletionHandler: ConnectCompletionHandler?
+
+    func connect(completionHandler: @escaping ConnectCompletionHandler) {
+        self.connectCompletionHandler = completionHandler
+        _ = client.connect(timeout: 10)
+    }
+
+    func publish(data: Data, onTopic topic: String) {
+        let payload: [UInt8] = [UInt8](data)
+        let message = CocoaMQTTMessage(topic: topic, payload: payload)
+        message.qos = defaultQoS
+        message.dup = false
+        message.retained = true
+        client.publish(message)
     }
 }
 
 extension MQTTClient: CocoaMQTTDelegate {
     func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
-        <#code#>
+        switch state {
+        case .connected:
+            if let connectCompletionHandler = connectCompletionHandler {
+                connectCompletionHandler()
+            }
+        case .disconnected:
+            // TODO: Tell the delegate that the client disconnected.
+            break
+        case .connecting, .initial:
+            break
+        }
     }
     
     func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
-        <#code#>
+
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
-        <#code#>
+
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
-        <#code#>
+
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
-        <#code#>
+
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopic topics: [String]) {
-        <#code#>
+
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopic topic: String) {
-        <#code#>
+
     }
 
     func mqttDidPing(_ mqtt: CocoaMQTT) {
-        <#code#>
+
     }
 
     func mqttDidReceivePong(_ mqtt: CocoaMQTT) {
-        <#code#>
+
     }
 
     func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
-        <#code#>
+
     }
-
-
 }
