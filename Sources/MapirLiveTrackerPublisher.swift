@@ -41,8 +41,7 @@ public final class MapirLiveTrackerPublisher {
 
     public var trackingIdentifier: String?
 
-    var mqqtHost = "81.91.152.2"
-    var mqttPort = 1883
+    private var mqttClient = MQTTClient()
 
     var delegate: MapirLiveTrackerDelegate?
 
@@ -62,8 +61,6 @@ public final class MapirLiveTrackerPublisher {
         return UUID()
     }()
 
-    private var mqttClient: CocoaMQTT!
-
     init(distanceFilter: Meters = defaultDistanceFilter) {
         if let token = Bundle.main.object(forInfoDictionaryKey: "MAPIRAccessToken") as? String {
             self.accessToken = token
@@ -79,48 +76,107 @@ public final class MapirLiveTrackerPublisher {
         setupCoders()
     }
 
-    public func start(withTrackingIdentifier identifier: String) {
-        // TODO: Go get the username, password and topic from map.ir server.
-    }
-
     private func setupCoders() {
         jsonEncoder.outputFormatting = .prettyPrinted
     }
 
-    private func requestTopic() {
+    public func start(withTrackingIdentifier identifier: String) {
+
+        // Request topic, username and password from the server.
+        self.requestTopic(trackingIdentifier: identifier) { (result) in
+            // TODO: Chech if [weak self] is needed.
+            // guard let self = self else { return }
+            switch result {
+            case .failure(let error):
+                self.delegate?.liveTracker(self, failedWithError: error)
+                break
+            case .success(let topic, let username, let password):
+                self.topic = topic
+                self.username = username
+                self.password = password
+
+                // If request succeeds, connect to MQTT Client.
+                self.mqttClient.connect {
+
+                    // If connection succeeds, start locating and publishing data.
+                    do {
+                        try self.locationManager.startTracking()
+                    } catch let error{
+                        self.delegate?.liveTracker(self, failedWithError: error)
+                    }
+                }
+                break
+            }
+        }
+    }
+
+    private func requestTopic(trackingIdentifier: String,
+                              completionHandler: @escaping (Result<(String, String, String), Error>) -> Void) {
+
         let urlComponents = NetworkUtilities.shared.defaultURLComponents
         let url = urlComponents.url!
         var request = URLRequest(url: url)
+
         guard let token = accessToken else {
             delegate?.liveTracker(self, failedWithError: TrackingError.ServiceError.apiKeyNotAvailable)
             return
         }
+
         request.addValue(token, forHTTPHeaderField: "x-api-key")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "post"
         request.timeoutInterval = 10
         // TODO: Update types for subscriber and publisher
+
         guard let trackingIdentifier = self.trackingIdentifier else { return }
-        let bodyDictionary: JSONDictionary = ["type": "", "track_id": trackingIdentifier, "device_id": deviceIdentifier.uuidString]
+        let bodyDictionary: JSONDictionary = ["type": "\(TrackerType.publisher)", "track_id": trackingIdentifier, "device_id": deviceIdentifier.uuidString]
         guard let encodedBody = try? self.jsonEncoder.encode(bodyDictionary) else { return }
         request.httpBody = encodedBody
 
         URLSession.shared.dataTask(with: request) { (data, urlResponse, error) in
-            if let _ = error {
+            if let error = error {
+                completionHandler(.failure(error))
                 return
             }
 
             guard let data = data else { return }
-            guard let decodedData = try? self.jsonDecoder.decode(NewLiveTrackerResponse.self, from: data) else {
+            do {
+                let decodedData = try self.jsonDecoder.decode(NewLiveTrackerResponse.self, from: data)
+                completionHandler(.success((decodedData.data.topic, decodedData.data.username, decodedData.data.password)))
+                return
+            } catch let decodingError {
+                completionHandler(.failure(decodingError))
                 return
             }
-            self.password = decodedData.data.password
-            self.username = decodedData.data.username
-            self.topic    = decodedData.data.topic
-
         }
     }
 }
+
+
+extension MapirLiveTrackerPublisher: LocationManagerDelegate {
+    func locationManager(_ locationManager: LocationManager, locationUpdated: CLLocation) {
+        <#code#>
+    }
+
+    func locationManager(_ locationManager: LocationManager, locationUpdatesFailWithError error: Error) {
+        <#code#>
+    }
+
+
+}
+
+extension MapirLiveTrackerPublisher: MQTTClientDelegate {
+    func mqttClient(_ mqttClient: MQTTClient, disconnectedWithError error: Error?) {
+        <#code#>
+    }
+
+    func mqttClient(_ mqttClient: MQTTClient, publishedData: Data) {
+        <#code#>
+    }
+
+
+}
+
 
 struct NewLiveTrackerResponse: Decodable {
 

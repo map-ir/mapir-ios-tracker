@@ -30,6 +30,7 @@
 		C0A39FDE22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0A39FDB22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework */; };
 		C0A39FDF22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C0A39FDB22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C0D8130E22F6FA6700DAC957 /* TrackingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D8130D22F6FA6700DAC957 /* TrackingError.swift */; };
+		C0F276AE22FD63670015EDFC /* MQTTClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F276AD22FD63670015EDFC /* MQTTClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,6 +124,7 @@
 		C0A39FDA22F6EC3200D1DFD0 /* CocoaMQTT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaMQTT.framework; path = Carthage/Build/iOS/CocoaMQTT.framework; sourceTree = "<group>"; };
 		C0A39FDB22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaAsyncSocket.framework; path = Carthage/Build/iOS/CocoaAsyncSocket.framework; sourceTree = "<group>"; };
 		C0D8130D22F6FA6700DAC957 /* TrackingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingError.swift; sourceTree = "<group>"; };
+		C0F276AD22FD63670015EDFC /* MQTTClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MQTTClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -244,6 +246,7 @@
 				C0D8130D22F6FA6700DAC957 /* TrackingError.swift */,
 				C089446122F6E0FC00CBFB45 /* NetworkUtilities.swift */,
 				C01ABF2022F94B4500C93352 /* LocationManager.swift */,
+				C0F276AD22FD63670015EDFC /* MQTTClient.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -596,6 +599,7 @@
 			files = (
 				C01ABF2122F94B4500C93352 /* LocationManager.swift in Sources */,
 				C0D8130E22F6FA6700DAC957 /* TrackingError.swift in Sources */,
+				C0F276AE22FD63670015EDFC /* MQTTClient.swift in Sources */,
 				3D9C42A222745900000A6585 /* MapirLiveTrackerPublisher.swift in Sources */,
 				C089446222F6E0FC00CBFB45 /* NetworkUtilities.swift in Sources */,
 			);
