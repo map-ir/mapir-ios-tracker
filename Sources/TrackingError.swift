@@ -26,7 +26,7 @@ enum TrackingError: Error {
         var errorDescription: String? {
             switch self {
             case .unauthorizedForAlwaysUsage:
-                return "Authorization level for using tracker must be set to \"Always Usage\""
+                return "Authorization level must be set to \"Always Usage\" to use tracking features properly."
             }
         }
     }
