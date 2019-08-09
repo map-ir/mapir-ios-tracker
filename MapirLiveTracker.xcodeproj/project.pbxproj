@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3D9C42A222745900000A6585 /* MapirLiveTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9C42A122745900000A6585 /* MapirLiveTracker.swift */; };
-		3D9C42B1227459C1000A6585 /* MapirLiveTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9C42A122745900000A6585 /* MapirLiveTracker.swift */; };
-		3D9C42BF227459F6000A6585 /* MapirLiveTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9C42A122745900000A6585 /* MapirLiveTracker.swift */; };
-		3D9C42CD22745A28000A6585 /* MapirLiveTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9C42A122745900000A6585 /* MapirLiveTracker.swift */; };
+		3D9C42A222745900000A6585 /* MapirLiveTrackerPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9C42A122745900000A6585 /* MapirLiveTrackerPublisher.swift */; };
+		3D9C42B1227459C1000A6585 /* MapirLiveTrackerPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9C42A122745900000A6585 /* MapirLiveTrackerPublisher.swift */; };
+		3D9C42BF227459F6000A6585 /* MapirLiveTrackerPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9C42A122745900000A6585 /* MapirLiveTrackerPublisher.swift */; };
+		3D9C42CD22745A28000A6585 /* MapirLiveTrackerPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9C42A122745900000A6585 /* MapirLiveTrackerPublisher.swift */; };
 		3D9C42F62274604A000A6585 /* MapirLiveTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9C429022745894000A6585 /* MapirLiveTracker.framework */; };
 		3D9C42FC22746078000A6585 /* MapirLiveTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9C42D722745CDE000A6585 /* MapirLiveTrackerTests.swift */; };
 		3D9C43062274611B000A6585 /* MapirLiveTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9C42A92274599D000A6585 /* MapirLiveTracker.framework */; };
@@ -93,7 +93,7 @@
 		3D9C429022745894000A6585 /* MapirLiveTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MapirLiveTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9C429C227458E8000A6585 /* MapirLiveTracker.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MapirLiveTracker.plist; sourceTree = "<group>"; };
 		3D9C429D227458E8000A6585 /* MapirLiveTrackerTests.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MapirLiveTrackerTests.plist; sourceTree = "<group>"; };
-		3D9C42A122745900000A6585 /* MapirLiveTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapirLiveTracker.swift; sourceTree = "<group>"; };
+		3D9C42A122745900000A6585 /* MapirLiveTrackerPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapirLiveTrackerPublisher.swift; sourceTree = "<group>"; };
 		3D9C42A92274599D000A6585 /* MapirLiveTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MapirLiveTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9C42B7227459D6000A6585 /* MapirLiveTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MapirLiveTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9C42C522745A07000A6585 /* MapirLiveTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MapirLiveTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -240,7 +240,7 @@
 		3D9C42A0227458FA000A6585 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				3D9C42A122745900000A6585 /* MapirLiveTracker.swift */,
+				3D9C42A122745900000A6585 /* MapirLiveTrackerPublisher.swift */,
 				C0D8130D22F6FA6700DAC957 /* TrackingError.swift */,
 				C089446122F6E0FC00CBFB45 /* NetworkUtilities.swift */,
 				C01ABF2022F94B4500C93352 /* LocationManager.swift */,
@@ -596,7 +596,7 @@
 			files = (
 				C01ABF2122F94B4500C93352 /* LocationManager.swift in Sources */,
 				C0D8130E22F6FA6700DAC957 /* TrackingError.swift in Sources */,
-				3D9C42A222745900000A6585 /* MapirLiveTracker.swift in Sources */,
+				3D9C42A222745900000A6585 /* MapirLiveTrackerPublisher.swift in Sources */,
 				C089446222F6E0FC00CBFB45 /* NetworkUtilities.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -605,7 +605,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D9C42B1227459C1000A6585 /* MapirLiveTracker.swift in Sources */,
+				3D9C42B1227459C1000A6585 /* MapirLiveTrackerPublisher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -613,7 +613,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D9C42BF227459F6000A6585 /* MapirLiveTracker.swift in Sources */,
+				3D9C42BF227459F6000A6585 /* MapirLiveTrackerPublisher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -621,7 +621,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D9C42CD22745A28000A6585 /* MapirLiveTracker.swift in Sources */,
+				3D9C42CD22745A28000A6585 /* MapirLiveTrackerPublisher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
