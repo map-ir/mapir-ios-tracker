@@ -63,3 +63,16 @@ struct NetworkUtilities {
         return urlComponents
     }()
 }
+
+
+struct NewLiveTrackerResponse: Decodable {
+
+    struct Data: Decodable {
+        var topic: String
+        var username: String
+        var password: String
+    }
+
+    var data: NewLiveTrackerResponse.Data
+    var message: String
+}

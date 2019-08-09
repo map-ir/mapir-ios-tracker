@@ -155,11 +155,14 @@ public final class MapirLiveTrackerPublisher {
 
 extension MapirLiveTrackerPublisher: LocationManagerDelegate {
     func locationManager(_ locationManager: LocationManager, locationUpdated: CLLocation) {
-        <#code#>
+        // TODO: Implement usage of protobuf.
+        let test = "Hello, World!".data(using: .utf8)
+        guard let topic = topic else { return }
+        mqttClient.publish(data: test!, onTopic: topic)
     }
 
     func locationManager(_ locationManager: LocationManager, locationUpdatesFailWithError error: Error) {
-        <#code#>
+        // TODO: Send location update failure to the user.
     }
 
 
@@ -167,25 +170,12 @@ extension MapirLiveTrackerPublisher: LocationManagerDelegate {
 
 extension MapirLiveTrackerPublisher: MQTTClientDelegate {
     func mqttClient(_ mqttClient: MQTTClient, disconnectedWithError error: Error?) {
-        <#code#>
+        // TODO: Handle disconnection from server. and tell the user.
     }
 
     func mqttClient(_ mqttClient: MQTTClient, publishedData: Data) {
-        <#code#>
+        // TODO: Convert data to something like message and create a queue for messages.
     }
 
 
-}
-
-
-struct NewLiveTrackerResponse: Decodable {
-
-    struct Data: Decodable {
-        var topic: String
-        var username: String
-        var password: String
-    }
-
-    var data: NewLiveTrackerResponse.Data
-    var message: String
 }
