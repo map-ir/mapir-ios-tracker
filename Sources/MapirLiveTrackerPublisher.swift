@@ -87,6 +87,8 @@ public final class MapirLiveTrackerPublisher {
 
     private func commonInit(distanceFilter: Meters) {
         setupCoders()
+        locationManager.delegate = self
+        mqttClient.delegate      = self
     }
 
     private func setupCoders() {
