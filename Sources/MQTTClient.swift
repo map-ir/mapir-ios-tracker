@@ -12,20 +12,21 @@ import CocoaMQTT
 typealias ConnectCompletionHandler = () -> Void
 
 protocol MQTTClientDelegate {
-
+    func mqttClient(_ mqttClient: MQTTClient, disconnectedWithError error: Error?)
+    func mqttClient(_ mqttClient: MQTTClient, publishedData data: Data)
 }
 
 final class MQTTClient {
-    private var username: String? {
+    var username: String? {
         get { return client.username }
         set { client.username = newValue }
     }
-    private var password: String? {
+    var password: String? {
         get { return client.password }
         set { client.password = newValue }
     }
 
-    private var status: CocoaMQTTConnState {
+    var status: CocoaMQTTConnState {
         return client.connState
     }
 
@@ -36,9 +37,11 @@ final class MQTTClient {
     var defaultPort: UInt16 = 1883
     var defaultQoS: CocoaMQTTQOS = .qos1
 
+    var delegate: MQTTClientDelegate?
+
     init() {
-        // TODO: Add UUID
-        client = CocoaMQTT(clientID: "")
+        let uuid = UUID()
+        client = CocoaMQTT(clientID: uuid.uuidString)
         client.host = defaultHost
         client.port = defaultPort
         client.cleanSession = true
@@ -53,6 +56,10 @@ final class MQTTClient {
         _ = client.connect(timeout: 10)
     }
 
+    func disconnect() {
+        client.disconnect()
+    }
+
     func publish(data: Data, onTopic topic: String) {
         let payload: [UInt8] = [UInt8](data)
         let message = CocoaMQTTMessage(topic: topic, payload: payload)
@@ -60,6 +67,10 @@ final class MQTTClient {
         message.dup = false
         message.retained = true
         client.publish(message)
+    }
+
+    func subscribe(toTopic topic: String) {
+        client.subscribe(topic, qos: defaultQoS)
     }
 }
 
@@ -71,7 +82,6 @@ extension MQTTClient: CocoaMQTTDelegate {
                 connectCompletionHandler()
             }
         case .disconnected:
-            // TODO: Tell the delegate that the client disconnected.
             break
         case .connecting, .initial:
             break
@@ -91,7 +101,8 @@ extension MQTTClient: CocoaMQTTDelegate {
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
-
+//        let data = Data(message.payload)
+        
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopic topics: [String]) {
@@ -111,6 +122,6 @@ extension MQTTClient: CocoaMQTTDelegate {
     }
 
     func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
-
+        delegate?.mqttClient(self, disconnectedWithError: err)
     }
 }
