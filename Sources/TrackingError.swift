@@ -12,10 +12,15 @@ enum TrackingError: Error {
     enum ServiceError: Error, LocalizedError {
         case apiKeyNotAvailable
 
+        case serviceCurrentlyRunning
+
         var errorDescription: String? {
             switch self {
             case .apiKeyNotAvailable:
                 return "Starting service requires Map.ir access token. add your access in Info.plist or use init(token:) initalizer."
+
+            case .serviceCurrentlyRunning:
+                return "Can't start a publisher while a service is already started or being started."
             }
         }
     }
