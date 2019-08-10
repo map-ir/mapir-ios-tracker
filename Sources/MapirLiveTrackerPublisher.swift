@@ -29,26 +29,29 @@ enum TrackerType: String, CustomStringConvertible {
     }
 }
 
-protocol MapirLiveTrackerDelegate {
-    func liveTracker(_ liveTracker: MapirLiveTrackerPublisher, failedWithError error: Error)
+public protocol PublisherDelegate {
+    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, publishedLocation location: CLLocation)
+    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, failedWithError error: Error)
+}
+
+extension PublisherDelegate {
+    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, publishedLocation location: CLLocation) { }
 }
 
 public final class MapirLiveTrackerPublisher {
     public var accessToken: String?
-    var username: String?
-    var password: String?
-    var topic: String?
 
+    private var topic: String?
     public var trackingIdentifier: String?
 
     private var mqttClient = MQTTClient()
 
-    var delegate: MapirLiveTrackerDelegate?
+    var delegate: PublisherDelegate?
 
     private let jsonEncoder = JSONEncoder()
     private let jsonDecoder = JSONDecoder()
 
-    private let locationManager = LocationManager(type: .publisher)
+    private let locationManager = LocationManager()
     private static let defaultDistanceFilter: Meters = 10.0
 
     let deviceIdentifier: UUID = {
@@ -61,10 +64,20 @@ public final class MapirLiveTrackerPublisher {
         return UUID()
     }()
 
+    public enum Status {
+        case initiated
+        case starting
+        case started
+        case stopped
+    }
+
+    public private(set) var status: Status = .initiated
+
     init(distanceFilter: Meters = defaultDistanceFilter) {
         if let token = Bundle.main.object(forInfoDictionaryKey: "MAPIRAccessToken") as? String {
             self.accessToken = token
         }
+        commonInit(distanceFilter: distanceFilter)
     }
 
     init(token: String, distanceFilter: Meters = defaultDistanceFilter) {
@@ -82,30 +95,37 @@ public final class MapirLiveTrackerPublisher {
 
     public func start(withTrackingIdentifier identifier: String) {
 
-        // Request topic, username and password from the server.
-        self.requestTopic(trackingIdentifier: identifier) { (result) in
-            // TODO: Chech if [weak self] is needed.
-            // guard let self = self else { return }
-            switch result {
-            case .failure(let error):
-                self.delegate?.liveTracker(self, failedWithError: error)
-                break
-            case .success(let topic, let username, let password):
-                self.topic = topic
-                self.username = username
-                self.password = password
+        switch status {
+        case .started, .starting:
+            delegate?.publisher(self, failedWithError: TrackingError.ServiceError.serviceCurrentlyRunning)
+            return
+        case .stopped, .initiated:
+            // Request topic, username and password from the server.
+            self.requestTopic(trackingIdentifier: identifier) { (result) in
+                // TODO: Check if [weak self] is needed.
+                // guard let self = self else { return }
+                switch result {
+                case .failure(let error):
+                    self.delegate?.publisher(self, failedWithError: error)
+                    self.status = .stopped
+                    break
+                case .success(let topic, let username, let password):
+                    self.topic = topic
+                    self.mqttClient.username = username
+                    self.mqttClient.password = password
 
-                // If request succeeds, connect to MQTT Client.
-                self.mqttClient.connect {
-
-                    // If connection succeeds, start locating and publishing data.
-                    do {
-                        try self.locationManager.startTracking()
-                    } catch let error{
-                        self.delegate?.liveTracker(self, failedWithError: error)
+                    // If request succeeds, connect to MQTT Client.
+                    self.mqttClient.connect {
+                        // If connection succeeds, start locating and publishing data.
+                        do {
+                            try self.locationManager.startTracking()
+                            self.status = .started
+                        } catch let error {
+                            self.delegate?.publisher(self, failedWithError: error)
+                            self.status = .stopped
+                        }
                     }
                 }
-                break
             }
         }
     }
@@ -118,7 +138,7 @@ public final class MapirLiveTrackerPublisher {
         var request = URLRequest(url: url)
 
         guard let token = accessToken else {
-            delegate?.liveTracker(self, failedWithError: TrackingError.ServiceError.apiKeyNotAvailable)
+            delegate?.publisher(self, failedWithError: TrackingError.ServiceError.apiKeyNotAvailable)
             return
         }
 
@@ -126,7 +146,6 @@ public final class MapirLiveTrackerPublisher {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "post"
         request.timeoutInterval = 10
-        // TODO: Update types for subscriber and publisher
 
         guard let trackingIdentifier = self.trackingIdentifier else { return }
         let bodyDictionary: JSONDictionary = ["type": "\(TrackerType.publisher)", "track_id": trackingIdentifier, "device_id": deviceIdentifier.uuidString]
@@ -154,15 +173,28 @@ public final class MapirLiveTrackerPublisher {
 
 
 extension MapirLiveTrackerPublisher: LocationManagerDelegate {
-    func locationManager(_ locationManager: LocationManager, locationUpdated: CLLocation) {
-        // TODO: Implement usage of protobuf.
-        let test = "Hello, World!".data(using: .utf8)
+    func locationManager(_ locationManager: LocationManager, locationUpdated location: CLLocation) {
+
+        guard locationManager.status == .tracking else { return }
+        guard mqttClient.status == .connected else { return }
+
+        let dateFormatter = ISO8601DateFormatter()
+        let timestamp = dateFormatter.string(from: location.timestamp)
+
+        var proto = LiveTracker_Location()
+        proto.direction  = Float(location.course)
+        proto.location   = [location.coordinate.longitude, location.coordinate.latitude]
+        proto.speed      = location.speed
+        proto.rtimestamp = timestamp
+
+        guard let data = try? proto.serializedData() else { return }
         guard let topic = topic else { return }
-        mqttClient.publish(data: test!, onTopic: topic)
+        mqttClient.publish(data: data, onTopic: topic)
     }
 
     func locationManager(_ locationManager: LocationManager, locationUpdatesFailWithError error: Error) {
-        // TODO: Send location update failure to the user.
+        guard let delegate = self.delegate else { return }
+        delegate.publisher(self, failedWithError: error)
     }
 
 
@@ -171,10 +203,24 @@ extension MapirLiveTrackerPublisher: LocationManagerDelegate {
 extension MapirLiveTrackerPublisher: MQTTClientDelegate {
     func mqttClient(_ mqttClient: MQTTClient, disconnectedWithError error: Error?) {
         // TODO: Handle disconnection from server. and tell the user.
+        guard let delegate = self.delegate else { return }
+        guard let error = error else { return }
+        delegate.publisher(self, failedWithError: error)
     }
 
-    func mqttClient(_ mqttClient: MQTTClient, publishedData: Data) {
+    func mqttClient(_ mqttClient: MQTTClient, publishedData data: Data) {
         // TODO: Convert data to something like message and create a queue for messages.
+        guard let delegate = self.delegate else { return }
+        guard let decodedProto = try? LiveTracker_Location(serializedData: data) else { return }
+
+        let coordinate = CLLocationCoordinate2D(latitude: decodedProto.location[1], longitude: decodedProto.location[0])
+        let course = Double(decodedProto.direction)
+        let speed = decodedProto.speed
+        let dateFormatter = ISO8601DateFormatter()
+        guard let date = dateFormatter.date(from: decodedProto.rtimestamp) else { return }
+
+        let location = CLLocation(coordinate: coordinate, altitude: -1, horizontalAccuracy: -1, verticalAccuracy: -1, course: course, speed: speed, timestamp: date)
+        delegate.publisher(self, publishedLocation: location)
     }
 
 
