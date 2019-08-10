@@ -11,7 +11,7 @@ import CoreLocation
 
 protocol LocationManagerDelegate {
     // TODO: Define Location Manger Delegate
-    func locationManager(_ locationManager: LocationManager, locationUpdated: CLLocation)
+    func locationManager(_ locationManager: LocationManager, locationUpdated location: CLLocation)
     func locationManager(_ locationManager: LocationManager, locationUpdatesFailWithError error: Error)
 }
 
