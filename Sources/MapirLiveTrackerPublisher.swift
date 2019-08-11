@@ -46,13 +46,13 @@ public final class MapirLiveTrackerPublisher {
 
     private var mqttClient = MQTTClient()
 
-    var delegate: PublisherDelegate?
+    public var delegate: PublisherDelegate?
 
     private let jsonEncoder = JSONEncoder()
     private let jsonDecoder = JSONDecoder()
 
     private let locationManager = LocationManager()
-    private static let defaultDistanceFilter: Meters = 10.0
+    public static let defaultDistanceFilter: Meters = 10.0
 
     let deviceIdentifier: UUID = {
         let uuid: UUID?
@@ -73,14 +73,14 @@ public final class MapirLiveTrackerPublisher {
 
     public private(set) var status: Status = .initiated
 
-    init(distanceFilter: Meters = defaultDistanceFilter) {
+    public init(distanceFilter: Meters = defaultDistanceFilter) {
         if let token = Bundle.main.object(forInfoDictionaryKey: "MAPIRAccessToken") as? String {
             self.accessToken = token
         }
         commonInit(distanceFilter: distanceFilter)
     }
 
-    init(token: String, distanceFilter: Meters = defaultDistanceFilter) {
+    public init(token: String, distanceFilter: Meters = defaultDistanceFilter) {
         self.accessToken = token
         commonInit(distanceFilter: distanceFilter)
     }
@@ -149,7 +149,6 @@ public final class MapirLiveTrackerPublisher {
         request.httpMethod = "post"
         request.timeoutInterval = 10
 
-        guard let trackingIdentifier = self.trackingIdentifier else { return }
         let bodyDictionary: JSONDictionary = ["type": "\(TrackerType.publisher)", "track_id": trackingIdentifier, "device_id": deviceIdentifier.uuidString]
         guard let encodedBody = try? self.jsonEncoder.encode(bodyDictionary) else { return }
         request.httpBody = encodedBody
@@ -163,13 +162,17 @@ public final class MapirLiveTrackerPublisher {
             guard let data = data else { return }
             do {
                 let decodedData = try self.jsonDecoder.decode(NewLiveTrackerResponse.self, from: data)
-                completionHandler(.success((decodedData.data.topic, decodedData.data.username, decodedData.data.password)))
+                DispatchQueue.main.async {
+                    completionHandler(.success((decodedData.data.topic, decodedData.data.username, decodedData.data.password)))
+                }
                 return
             } catch let decodingError {
-                completionHandler(.failure(decodingError))
+                DispatchQueue.main.async {
+                    completionHandler(.failure(decodingError))
+                }
                 return
             }
-        }
+        }.resume()
     }
 }
 
@@ -189,9 +192,13 @@ extension MapirLiveTrackerPublisher: LocationManagerDelegate {
         proto.speed      = location.speed
         proto.rtimestamp = timestamp
 
-        guard let data = try? proto.serializedData() else { return }
-        guard let topic = topic else { return }
-        mqttClient.publish(data: data, onTopic: topic)
+        do {
+            let data = try proto.serializedData()
+            guard let topic = topic else { return }
+            mqttClient.publish(data: data, onTopic: topic)
+        } catch let error {
+            print(error)
+        }
     }
 
     func locationManager(_ locationManager: LocationManager, locationUpdatesFailWithError error: Error) {
