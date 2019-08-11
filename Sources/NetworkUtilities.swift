@@ -59,7 +59,7 @@ struct NetworkUtilities {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "dev.map.ir"
-        urlComponents.path = "/tracking"
+        urlComponents.path = "/tracking/"
         return urlComponents
     }()
 }
