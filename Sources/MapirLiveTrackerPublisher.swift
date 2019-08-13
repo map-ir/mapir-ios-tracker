@@ -40,8 +40,8 @@ extension PublisherDelegate {
 
 public final class MapirLiveTrackerPublisher {
     public var accessToken: String?
-
     private var topic: String?
+
     public var trackingIdentifier: String?
 
     private var mqttClient = MQTTClient()
@@ -67,7 +67,7 @@ public final class MapirLiveTrackerPublisher {
     public enum Status {
         case initiated
         case starting
-        case started
+        case running
         case stopped
     }
 
@@ -98,10 +98,11 @@ public final class MapirLiveTrackerPublisher {
     public func start(withTrackingIdentifier identifier: String) {
 
         switch status {
-        case .started, .starting:
+        case .running, .starting:
             delegate?.publisher(self, failedWithError: TrackingError.ServiceError.serviceCurrentlyRunning)
             return
         case .stopped, .initiated:
+            trackingIdentifier = identifier
             // Request topic, username and password from the server.
             self.requestTopic(trackingIdentifier: identifier) { (result) in
                 // TODO: Check if [weak self] is needed.
@@ -121,7 +122,7 @@ public final class MapirLiveTrackerPublisher {
                         // If connection succeeds, start locating and publishing data.
                         do {
                             try self.locationManager.startTracking()
-                            self.status = .started
+                            self.status = .running
                         } catch let error {
                             self.delegate?.publisher(self, failedWithError: error)
                             self.status = .stopped
@@ -211,7 +212,6 @@ extension MapirLiveTrackerPublisher: LocationManagerDelegate {
 
 extension MapirLiveTrackerPublisher: MQTTClientDelegate {
     func mqttClient(_ mqttClient: MQTTClient, disconnectedWithError error: Error?) {
-        // TODO: Handle disconnection from server. and tell the user.
         guard let delegate = self.delegate else { return }
         guard let error = error else { return }
         delegate.publisher(self, failedWithError: error)
@@ -230,6 +230,10 @@ extension MapirLiveTrackerPublisher: MQTTClientDelegate {
 
         let location = CLLocation(coordinate: coordinate, altitude: -1, horizontalAccuracy: -1, verticalAccuracy: -1, course: course, speed: speed, timestamp: date)
         delegate.publisher(self, publishedLocation: location)
+    }
+
+    func mqttClient(_ mqttClient: MQTTClient, receivedData data: Data) {
+        // Do nothing
     }
 
 
