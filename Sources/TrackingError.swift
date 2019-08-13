@@ -14,6 +14,9 @@ enum TrackingError: Error {
 
         case serviceCurrentlyRunning
 
+        case couldNotDecodeProtobufData(Error?)
+        case couldNotEncodeProtobufObject(desc: Error?)
+
         var errorDescription: String? {
             switch self {
             case .apiKeyNotAvailable:
@@ -21,6 +24,20 @@ enum TrackingError: Error {
 
             case .serviceCurrentlyRunning:
                 return "Can't start a publisher while a service is already started or being started."
+
+            case .couldNotDecodeProtobufData(let error):
+                if let error = error {
+                    return "Couldn't decode protobuf encoded data. Contact SDK support.\nMore info: \(error)"
+                } else {
+                    return "Couldn't decode protobuf encoded data. Contact SDK support."
+                }
+
+            case .couldNotEncodeProtobufObject(let error):
+                if let error = error {
+                    return "Couldn't endcode protobuf object to data. Contact SDK support.\nMore info: \(error)"
+                } else {
+                    return "Couldn't endcode protobuf object to data. Contact SDK support."
+                }
             }
         }
     }
