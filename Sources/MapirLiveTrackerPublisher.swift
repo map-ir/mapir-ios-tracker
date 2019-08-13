@@ -54,6 +54,9 @@ public final class MapirLiveTrackerPublisher {
     private let locationManager = LocationManager()
     public static let defaultDistanceFilter: Meters = 10.0
 
+    public var maximumNumberOfRetries = 3
+    var retries = 0
+
     let deviceIdentifier: UUID = {
         let uuid: UUID?
         #if os(iOS) || os(watchOS) || os(tvOS)
@@ -96,7 +99,7 @@ public final class MapirLiveTrackerPublisher {
     }
 
     public func start(withTrackingIdentifier identifier: String) {
-
+        retries = 0
         switch status {
         case .running, .starting:
             delegate?.publisher(self, failedWithError: TrackingError.ServiceError.serviceCurrentlyRunning)
@@ -104,32 +107,45 @@ public final class MapirLiveTrackerPublisher {
         case .stopped, .initiated:
             trackingIdentifier = identifier
             // Request topic, username and password from the server.
-            self.requestTopic(trackingIdentifier: identifier) { (result) in
-                // TODO: Check if [weak self] is needed.
-                // guard let self = self else { return }
-                switch result {
-                case .failure(let error):
-                    self.delegate?.publisher(self, failedWithError: error)
-                    self.status = .stopped
-                    break
-                case .success(let topic, let username, let password):
-                    self.topic = topic
-                    self.mqttClient.username = username
-                    self.mqttClient.password = password
+            self.requestTopic(trackingIdentifier: identifier, completionHandler: requestTopicCompletionHandler)
+        }
+    }
 
-                    // If request succeeds, connect to MQTT Client.
-                    self.mqttClient.connect {
-                        // If connection succeeds, start locating and publishing data.
-                        do {
-                            try self.locationManager.startTracking()
-                            self.status = .running
-                        } catch let error {
-                            self.delegate?.publisher(self, failedWithError: error)
-                            self.status = .stopped
-                        }
-                    }
-                }
+    func connectMqtt() {
+        self.mqttClient.connect {
+            self.retries = 0
+            do {
+                try self.locationManager.startTracking()
+                self.status = .running
+            } catch let error {
+                self.delegate?.publisher(self, failedWithError: error)
+                self.status = .stopped
             }
+        }
+    }
+
+    lazy var requestTopicCompletionHandler: ((Result<(String, String, String), Error>) -> Void) = { [weak self] (result) in
+        // TODO: Check if [weak self] is needed.
+        guard let self = self else { return }
+        switch result {
+        case .failure(let error):
+            if self.retries < self.maximumNumberOfRetries {
+                guard let trackingIdentifier = self.trackingIdentifier else { return }
+                self.requestTopic(trackingIdentifier: trackingIdentifier, completionHandler: self.requestTopicCompletionHandler)
+                self.retries += 1
+            } else {
+                self.delegate?.publisher(self, failedWithError: error)
+            }
+            self.status = .stopped
+            break
+        case .success(let topic, let username, let password):
+            self.retries = 0
+            self.topic = topic
+            self.mqttClient.username = username
+            self.mqttClient.password = password
+
+            // If request succeeds, connect to MQTT Client.
+            self.connectMqtt()
         }
     }
 
@@ -150,7 +166,7 @@ public final class MapirLiveTrackerPublisher {
         request.httpMethod = "post"
         request.timeoutInterval = 10
 
-        let bodyDictionary: JSONDictionary = ["type": "\(TrackerType.publisher)", "track_id": trackingIdentifier, "device_id": deviceIdentifier.uuidString]
+        let bodyDictionary: JSONDictionary = ["type": "publisher", "track_id": trackingIdentifier, "device_id": deviceIdentifier.uuidString]
         guard let encodedBody = try? self.jsonEncoder.encode(bodyDictionary) else { return }
         request.httpBody = encodedBody
 
@@ -185,6 +201,10 @@ extension MapirLiveTrackerPublisher: LocationManagerDelegate {
         guard mqttClient.status == .connected else { return }
 
         let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.timeZone = TimeZone.current
+        if #available(iOSApplicationExtension 11.0, *) {
+            dateFormatter.formatOptions = [.withFractionalSeconds]
+        }
         let timestamp = dateFormatter.string(from: location.timestamp)
 
         var proto = LiveTracker_Location()
@@ -198,7 +218,7 @@ extension MapirLiveTrackerPublisher: LocationManagerDelegate {
             guard let topic = topic else { return }
             mqttClient.publish(data: data, onTopic: topic)
         } catch let error {
-            print(error)
+            delegate?.publisher(self, failedWithError: TrackingError.ServiceError.couldNotEncodeProtobufObject(desc: error))
         }
     }
 
@@ -214,7 +234,12 @@ extension MapirLiveTrackerPublisher: MQTTClientDelegate {
     func mqttClient(_ mqttClient: MQTTClient, disconnectedWithError error: Error?) {
         guard let delegate = self.delegate else { return }
         guard let error = error else { return }
-        delegate.publisher(self, failedWithError: error)
+        if retries < maximumNumberOfRetries {
+            self.connectMqtt()
+            retries += 1
+        } else {
+            delegate.publisher(self, failedWithError: error)
+        }
     }
 
     func mqttClient(_ mqttClient: MQTTClient, publishedData data: Data) {
