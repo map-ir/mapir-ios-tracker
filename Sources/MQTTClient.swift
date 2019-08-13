@@ -14,6 +14,7 @@ typealias ConnectCompletionHandler = () -> Void
 protocol MQTTClientDelegate {
     func mqttClient(_ mqttClient: MQTTClient, disconnectedWithError error: Error?)
     func mqttClient(_ mqttClient: MQTTClient, publishedData data: Data)
+    func mqttClient(_ mqttClient: MQTTClient, receivedData data: Data)
 }
 
 final class MQTTClient {
@@ -35,7 +36,7 @@ final class MQTTClient {
     private let client: CocoaMQTT!
     var defaultHost = "81.91.152.2"
     var defaultPort: UInt16 = 1883
-    var defaultQoS: CocoaMQTTQOS = .qos1
+    var defaultQoS: CocoaMQTTQOS = .qos0
 
     var delegate: MQTTClientDelegate?
 
@@ -46,7 +47,6 @@ final class MQTTClient {
         client.port = defaultPort
         client.cleanSession = true
         client.delegate = self
-        _ = client.connect()
     }
 
     private var connectCompletionHandler: ConnectCompletionHandler?
@@ -101,7 +101,8 @@ extension MQTTClient: CocoaMQTTDelegate {
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
-//        let data = Data(message.payload)
+        let data = Data(message.payload)
+        delegate?.mqttClient(self, receivedData: data)
         
     }
 
