@@ -31,10 +31,13 @@ public final class MapirLiveTrackerReceiver {
 
     private var mqttClient = MQTTClient()
 
-    var delegate: ReceiverDelegate?
+    public var delegate: ReceiverDelegate?
 
     private let jsonEncoder = JSONEncoder()
     private let jsonDecoder = JSONDecoder()
+
+    public var maximumNumberOfRetries = 3
+    var retries = 0
 
     let deviceIdentifier: UUID = {
         let uuid: UUID?
@@ -55,14 +58,14 @@ public final class MapirLiveTrackerReceiver {
 
     public private(set) var status: Status = .initiated
 
-    init() {
+    public init() {
         if let token = Bundle.main.object(forInfoDictionaryKey: "MAPIRAccessToken") as? String {
             self.accessToken = token
         }
         commonInit()
     }
 
-    init(token: String) {
+    public init(token: String) {
         self.accessToken = token
         commonInit()
     }
@@ -77,6 +80,7 @@ public final class MapirLiveTrackerReceiver {
     }
 
     public func start(withTrackingIdentifier identifier: String) {
+        retries = 0
 
         switch status {
         case .running, .starting:
@@ -84,28 +88,40 @@ public final class MapirLiveTrackerReceiver {
         case .stopped, .initiated:
             trackingIdentifier = identifier
             // Request topic, username and password from the server.
-            self.requestTopic(trackingIdentifier: identifier) { (result) in
-                // TODO: Chech if [weak self] is needed.
-                // guard let self = self else { return }
-                switch result {
-                case .failure(let error):
-                    self.delegate?.receiver(self, failedWithError: error)
-                    self.status = .stopped
-                    break
-                case .success(let topic, let username, let password):
-                    self.topic = topic
-                    self.mqttClient.username = username
-                    self.mqttClient.password = password
+            self.requestTopic(trackingIdentifier: identifier, completionHandler: requestTopicCompletionHandler)
+        }
+    }
 
-                    // If request succeeds, connect to MQTT Client.
-                    self.mqttClient.connect {
-                        // TODO: Subscribe on topic and start receiving.
-                        guard let topic = self.topic else { return }
-                        self.mqttClient.subscribe(toTopic: topic)
-                        self.status = .running
-                    }
-                }
+    private func connectMqtt() {
+        self.mqttClient.connect { [weak self] in
+            self?.retries = 0
+            // TODO: Subscribe on topic and start receiving.
+            guard let topic = self?.topic else { return }
+            self?.mqttClient.subscribe(toTopic: topic) { [weak self] in
+                self?.status = .running
             }
+        }
+    }
+
+    lazy var requestTopicCompletionHandler: ((Result<(String, String, String), Error>) -> Void) = {  [weak self] (result) in // TODO: Chech if [weak self] is needed.
+        guard let self = self else { return }
+        switch result {
+        case .failure(let error):
+            if self.retries < self.maximumNumberOfRetries {
+                guard let trackingIdentifier = self.trackingIdentifier else { return }
+                self.retries += 1
+                self.requestTopic(trackingIdentifier: trackingIdentifier, completionHandler: self.requestTopicCompletionHandler)
+            } else {
+                self.delegate?.receiver(self, failedWithError: error)
+                self.status = .stopped
+            }
+        case .success(let topic, let username, let password):
+            self.topic = topic
+            self.mqttClient.username = username
+            self.mqttClient.password = password
+
+            // If request succeeds, connect to MQTT Client.
+            self.connectMqtt()
         }
     }
 
@@ -127,7 +143,7 @@ public final class MapirLiveTrackerReceiver {
         request.timeoutInterval = 10
 
         guard let trackingIdentifier = self.trackingIdentifier else { return }
-        let bodyDictionary: JSONDictionary = ["type": "\(TrackerType.receiver)", "track_id": trackingIdentifier, "device_id": deviceIdentifier.uuidString]
+        let bodyDictionary: JSONDictionary = ["type": "subscriber", "track_id": trackingIdentifier, "device_id": deviceIdentifier.uuidString]
         guard let encodedBody = try? self.jsonEncoder.encode(bodyDictionary) else { return }
         request.httpBody = encodedBody
 
@@ -150,7 +166,11 @@ public final class MapirLiveTrackerReceiver {
                 }
                 return
             }
-        }
+        }.resume()
+    }
+
+    public func stop() {
+        // TODO: Stop the damn subscription.
     }
 }
 
