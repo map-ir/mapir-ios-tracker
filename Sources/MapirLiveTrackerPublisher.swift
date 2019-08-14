@@ -112,14 +112,16 @@ public final class MapirLiveTrackerPublisher {
     }
 
     func connectMqtt() {
-        self.mqttClient.connect {
-            self.retries = 0
+        self.mqttClient.connect { [weak self] in
+            self?.retries = 0
             do {
-                try self.locationManager.startTracking()
-                self.status = .running
+                try self?.locationManager.startTracking()
+                self?.status = .running
             } catch let error {
-                self.delegate?.publisher(self, failedWithError: error)
-                self.status = .stopped
+                if let self = self {
+                    self.status = .stopped
+                    self.delegate?.publisher(self, failedWithError: error)
+                }
             }
         }
     }
@@ -135,9 +137,8 @@ public final class MapirLiveTrackerPublisher {
                 self.retries += 1
             } else {
                 self.delegate?.publisher(self, failedWithError: error)
+                self.status = .stopped
             }
-            self.status = .stopped
-            break
         case .success(let topic, let username, let password):
             self.retries = 0
             self.topic = topic
@@ -190,6 +191,10 @@ public final class MapirLiveTrackerPublisher {
                 return
             }
         }.resume()
+    }
+
+    public func stop() {
+        // TODO: Stop the damn publishing and location service.
     }
 }
 
