@@ -19,27 +19,54 @@ import AppKit
 
 
 public protocol ReceiverDelegate {
+
+    /// Receives location updates of the specified tracking identifier.
+    ///
+    /// - parameter liveTrackerReceiver: the receiver that received the location.
+    /// - Parameter location: `CLLocation` instance of received data.
+    /// It does not contain accuracy, floor and altitude data.
+    ///
+    /// You may check the timestamp of the received `location` object to validate it.
     func receiver(_ liveTrackerReceiver: MapirLiveTrackerReceiver, locationReceived location: CLLocation)
-    func receiver(_ liveTrackerReceiver: MapirLiveTrackerReceiver, failedWithError error: Error?)
+
+    /// Sends the delegate errors related to failure of the procedure.
+    ///
+    /// A failure does not mean that the service is going to stop the operation.
+    /// while an error cuases a stop, `receive(_:stoppedWithError:)` gets called instead.
+    ///
+    /// - parameter liveTrackerReceiver: the receiver that had failure.
+    /// - Parameter error: `Error` describing the failure.
+    func receiver(_ liveTrackerReceiver: MapirLiveTrackerReceiver, failedWithError error: Error)
+
+    /// Tells the delegate that the operation is going to stop with or without an error.
+    ///
+    /// After such errors, you may use `restart()` method to start it again.
+    ///
+    /// - Parameter liveTrackerReceiver: The receiver object that stopped.
+    /// - Parameter error: Error which caused the process to stop, if there is any.
+    func receiver(_ liveTrackerReceiver: MapirLiveTrackerReceiver, stoppedWithError error: Error?)
 }
 
 public final class MapirLiveTrackerReceiver {
-    public var accessToken: String?
+
+    // MARK: General Properties
+
+    /// Map.ir access token which is needed to access the sevices.
+    public private(set) var accessToken: String?
     private var topic: String?
 
-    public var trackingIdentifier: String?
+    public private(set) var trackingIdentifier: String?
 
     private var mqttClient = MQTTClient()
 
+    /// All updates are sent the delegate class.
     public var delegate: ReceiverDelegate?
 
-    private let jsonEncoder = JSONEncoder()
-    private let jsonDecoder = JSONDecoder()
-
+    /// Maximum number of retries that SDK itself handles.
     public var maximumNumberOfRetries = 3
-    var retries = 0
+    private var retries = 0
 
-    let deviceIdentifier: UUID = {
+    private let deviceIdentifier: UUID = {
         let uuid: UUID?
         #if os(iOS) || os(watchOS) || os(tvOS)
         if let uuid = UIDevice.current.identifierForVendor {
@@ -56,8 +83,18 @@ public final class MapirLiveTrackerReceiver {
         case stopped
     }
 
+    /// Indicates the current status of the service.
+    ///
+    /// It can be one of 4 different states: `initiated`, `starting`, `running`, `stopped`.
     public private(set) var status: Status = .initiated
 
+    // MARK: Initializers
+
+    /// Initializes a Receiver object.
+    ///
+    /// Consider adding your valid access token with key of `MAPIRAccessToken` to your **Info.plist**.
+    /// If you don't have any, visit [App Registration website](https://corp.map.ir/appregistration).
+    /// Starting the publisher fails if you don't define the this key-value pair.
     public init() {
         if let token = Bundle.main.object(forInfoDictionaryKey: "MAPIRAccessToken") as? String {
             self.accessToken = token
@@ -65,27 +102,27 @@ public final class MapirLiveTrackerReceiver {
         commonInit()
     }
 
+    /// DescriptionInitializes a Receiver object.
+    ///
+    /// - Parameter token: Your Map.ir access token.
+    /// If you don't have any, visit [App Registration website](https://corp.map.ir/appregistration).
     public init(token: String) {
         self.accessToken = token
         commonInit()
     }
 
     private func commonInit() {
-        setupCoders()
         mqttClient.delegate = self
     }
 
-    private func setupCoders() {
-        jsonEncoder.outputFormatting = .prettyPrinted
-    }
+    // MARK: Start
 
     public func start(withTrackingIdentifier identifier: String) {
-        retries = 0
-
         switch status {
         case .running, .starting:
             delegate?.receiver(self, failedWithError: TrackingError.ServiceError.serviceCurrentlyRunning)
         case .stopped, .initiated:
+            retries = 0
             trackingIdentifier = identifier
             // Request topic, username and password from the server.
             self.requestTopic(trackingIdentifier: identifier, completionHandler: requestTopicCompletionHandler)
@@ -102,7 +139,7 @@ public final class MapirLiveTrackerReceiver {
         }
     }
 
-    lazy var requestTopicCompletionHandler: ((Result<(String, String, String), Error>) -> Void) = {  [weak self] (result) in // TODO: Chech if [weak self] is needed.
+    private lazy var requestTopicCompletionHandler: ((Result<(String, String, String), Error>) -> Void) = {  [weak self] (result) in // TODO: Chech if [weak self] is needed.
         guard let self = self else { return }
         switch result {
         case .failure(let error):
@@ -138,13 +175,18 @@ public final class MapirLiveTrackerReceiver {
         }
 
         request.addValue(token, forHTTPHeaderField: "x-api-key")
+        request.addValue(NetworkUtilities.shared.userAgent, forHTTPHeaderField: "User-Agent")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "post"
         request.timeoutInterval = 10
 
         guard let trackingIdentifier = self.trackingIdentifier else { return }
         let bodyDictionary: JSONDictionary = ["type": "subscriber", "track_id": trackingIdentifier, "device_id": deviceIdentifier.uuidString]
-        guard let encodedBody = try? self.jsonEncoder.encode(bodyDictionary) else { return }
+
+        let jsonEncoder = JSONEncoder()
+        jsonEncoder.outputFormatting = .prettyPrinted
+
+        guard let encodedBody = try? jsonEncoder.encode(bodyDictionary) else { return }
         request.httpBody = encodedBody
 
         URLSession.shared.dataTask(with: request) { (data, urlResponse, error) in
@@ -155,7 +197,7 @@ public final class MapirLiveTrackerReceiver {
 
             guard let data = data else { return }
             do {
-                let decodedData = try self.jsonDecoder.decode(NewLiveTrackerResponse.self, from: data)
+                let decodedData = try JSONDecoder().decode(NewLiveTrackerResponse.self, from: data)
                 DispatchQueue.main.async {
                     completionHandler(.success((decodedData.data.topic, decodedData.data.username, decodedData.data.password)))
                 }
@@ -169,31 +211,35 @@ public final class MapirLiveTrackerReceiver {
         }.resume()
     }
 
+    // MARK: Stop
+
     private var expectedDisconnect = false
 
+    /// Stops the service.
     public func stop() {
         expectedDisconnect = true
-        switch mqttClient.status {
-        case .connected, .connecting:
-            mqttClient.disconnect()
-        case .disconnected, .initial:
-            break
-        }
+
+        mqttClient.disconnect()
+
         retries = 0
         self.status = .stopped
     }
 }
 
+// MARK: - MQTT Client Delegate
 extension MapirLiveTrackerReceiver: MQTTClientDelegate {
     func mqttClient(_ mqttClient: MQTTClient, disconnectedWithError error: Error?) {
         guard let delegate = delegate else { return }
 
-        if !expectedDisconnect, retries < maximumNumberOfRetries {
+        if expectedDisconnect {
+            delegate.receiver(self, stoppedWithError: nil)
+            self.stop()
+            expectedDisconnect = false
+        } else if retries < maximumNumberOfRetries {
             self.connectMqtt()
             retries += 1
-        } else if expectedDisconnect {
-            delegate.receiver(self, failedWithError: error)
-            expectedDisconnect = false
+        } else {
+            delegate.receiver(self, stoppedWithError: error)
         }
     }
 
@@ -205,13 +251,7 @@ extension MapirLiveTrackerReceiver: MQTTClientDelegate {
         guard let delegate = delegate else { return }
         do {
             let decodedProto = try LiveTracker_Location(serializedData: data)
-            let coordinate = CLLocationCoordinate2D(latitude: decodedProto.location[1], longitude: decodedProto.location[0])
-            let course = Double(decodedProto.direction)
-            let speed = decodedProto.speed
-            let dateFormatter = ISO8601DateFormatter()
-            guard let date = dateFormatter.date(from: decodedProto.rtimestamp) else { return }
-
-            let location = CLLocation(coordinate: coordinate, altitude: -1, horizontalAccuracy: -1, verticalAccuracy: -1, course: course, speed: speed, timestamp: date)
+            let location = CLLocation(protoLocation: decodedProto)
             delegate.receiver(self, locationReceived: location)
         } catch let error {
             delegate.receiver(self, failedWithError: TrackingError.ServiceError.couldNotDecodeProtobufData(error))
