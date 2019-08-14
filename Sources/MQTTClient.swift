@@ -10,11 +10,13 @@ import Foundation
 import CocoaMQTT
 
 typealias ConnectCompletionHandler = () -> Void
+typealias SubscribeCompletionHandler =  () -> Void
 
 protocol MQTTClientDelegate {
     func mqttClient(_ mqttClient: MQTTClient, disconnectedWithError error: Error?)
     func mqttClient(_ mqttClient: MQTTClient, publishedData data: Data)
     func mqttClient(_ mqttClient: MQTTClient, receivedData data: Data)
+    // func mqttClientConnected(_ mqttClient: MQTTClient)
 }
 
 final class MQTTClient {
@@ -45,11 +47,18 @@ final class MQTTClient {
         client = CocoaMQTT(clientID: uuid.uuidString)
         client.host = defaultHost
         client.port = defaultPort
+        client.autoReconnect = false
         client.cleanSession = true
         client.delegate = self
     }
 
+    deinit {
+        connectCompletionHandler = nil
+        subscribeCompletionHandler = nil
+    }
+
     private var connectCompletionHandler: ConnectCompletionHandler?
+    private var subscribeCompletionHandler: SubscribeCompletionHandler?
 
     func connect(completionHandler: @escaping ConnectCompletionHandler) {
         self.connectCompletionHandler = completionHandler
@@ -69,8 +78,13 @@ final class MQTTClient {
         client.publish(message)
     }
 
-    func subscribe(toTopic topic: String) {
+    func subscribe(toTopic topic: String, completionHandler: SubscribeCompletionHandler?) {
+        self.subscribeCompletionHandler = completionHandler
         client.subscribe(topic, qos: defaultQoS)
+    }
+
+    func unsubscribe(topic: String) {
+        client.unsubscribe(topic)
     }
 }
 
@@ -93,7 +107,8 @@ extension MQTTClient: CocoaMQTTDelegate {
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
-
+        let data = Data(message.payload)
+        delegate?.mqttClient(self, publishedData: data)
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
@@ -107,7 +122,7 @@ extension MQTTClient: CocoaMQTTDelegate {
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopic topics: [String]) {
-
+        subscribeCompletionHandler?()
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopic topic: String) {
