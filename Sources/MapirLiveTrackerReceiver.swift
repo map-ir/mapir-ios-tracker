@@ -20,7 +20,7 @@ import AppKit
 
 public protocol ReceiverDelegate {
     func receiver(_ liveTrackerReceiver: MapirLiveTrackerReceiver, locationReceived location: CLLocation)
-    func receiver(_ liveTrackerReceiver: MapirLiveTrackerReceiver, failedWithError error: Error)
+    func receiver(_ liveTrackerReceiver: MapirLiveTrackerReceiver, failedWithError error: Error?)
 }
 
 public final class MapirLiveTrackerReceiver {
@@ -94,7 +94,6 @@ public final class MapirLiveTrackerReceiver {
 
     private func connectMqtt() {
         self.mqttClient.connect { [weak self] in
-            self?.retries = 0
             // TODO: Subscribe on topic and start receiving.
             guard let topic = self?.topic else { return }
             self?.mqttClient.subscribe(toTopic: topic) { [weak self] in
@@ -120,6 +119,7 @@ public final class MapirLiveTrackerReceiver {
             self.mqttClient.username = username
             self.mqttClient.password = password
 
+            self.retries = 0
             // If request succeeds, connect to MQTT Client.
             self.connectMqtt()
         }
@@ -169,17 +169,32 @@ public final class MapirLiveTrackerReceiver {
         }.resume()
     }
 
+    private var expectedDisconnect = false
+
     public func stop() {
-        // TODO: Stop the damn subscription.
+        expectedDisconnect = true
+        switch mqttClient.status {
+        case .connected, .connecting:
+            mqttClient.disconnect()
+        case .disconnected, .initial:
+            break
+        }
+        retries = 0
+        self.status = .stopped
     }
 }
 
 extension MapirLiveTrackerReceiver: MQTTClientDelegate {
     func mqttClient(_ mqttClient: MQTTClient, disconnectedWithError error: Error?) {
         guard let delegate = delegate else { return }
-        guard let error = error else { return }
 
-        delegate.receiver(self, failedWithError: error)
+        if !expectedDisconnect, retries < maximumNumberOfRetries {
+            self.connectMqtt()
+            retries += 1
+        } else if expectedDisconnect {
+            delegate.receiver(self, failedWithError: error)
+            expectedDisconnect = false
+        }
     }
 
     func mqttClient(_ mqttClient: MQTTClient, publishedData data: Data) {

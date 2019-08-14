@@ -31,11 +31,7 @@ enum TrackerType: String, CustomStringConvertible {
 
 public protocol PublisherDelegate {
     func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, publishedLocation location: CLLocation)
-    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, failedWithError error: Error)
-}
-
-extension PublisherDelegate {
-    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, publishedLocation location: CLLocation) { }
+    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, failedWithError error: Error?)
 }
 
 public final class MapirLiveTrackerPublisher {
@@ -113,7 +109,6 @@ public final class MapirLiveTrackerPublisher {
 
     func connectMqtt() {
         self.mqttClient.connect { [weak self] in
-            self?.retries = 0
             do {
                 try self?.locationManager.startTracking()
                 self?.status = .running
@@ -146,6 +141,7 @@ public final class MapirLiveTrackerPublisher {
             self.mqttClient.password = password
 
             // If request succeeds, connect to MQTT Client.
+            self.retries = 0
             self.connectMqtt()
         }
     }
@@ -193,8 +189,27 @@ public final class MapirLiveTrackerPublisher {
         }.resume()
     }
 
+    private var expectedDisconnect = false
+
     public func stop() {
-        // TODO: Stop the damn publishing and location service.
+        expectedDisconnect = true
+
+        switch locationManager.status {
+        case .tracking:
+            locationManager.stopTracking()
+        case .initiated, .stopped:
+            break
+        }
+
+        switch mqttClient.status {
+        case .connected, .connecting:
+            mqttClient.disconnect()
+        default:
+            break
+        }
+
+        self.retries = 0
+        self.status = .stopped
     }
 }
 
@@ -238,12 +253,13 @@ extension MapirLiveTrackerPublisher: LocationManagerDelegate {
 extension MapirLiveTrackerPublisher: MQTTClientDelegate {
     func mqttClient(_ mqttClient: MQTTClient, disconnectedWithError error: Error?) {
         guard let delegate = self.delegate else { return }
-        guard let error = error else { return }
-        if retries < maximumNumberOfRetries {
+
+        if !expectedDisconnect, retries < maximumNumberOfRetries {
             self.connectMqtt()
             retries += 1
         } else {
             delegate.publisher(self, failedWithError: error)
+            expectedDisconnect = false
         }
     }
 
