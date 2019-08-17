@@ -9,7 +9,7 @@
 import Foundation
 import CoreLocation
 
-protocol LocationManagerDelegate {
+protocol LocationManagerDelegate: class {
     // TODO: Define Location Manger Delegate
     func locationManager(_ locationManager: LocationManager, locationUpdated location: CLLocation)
     func locationManager(_ locationManager: LocationManager, locationUpdatesFailWithError error: Error)
@@ -25,7 +25,7 @@ final class LocationManager: NSObject {
 
     var location: CLLocation?
 
-    var delegate: LocationManagerDelegate?
+    weak var delegate: LocationManagerDelegate?
 
     enum Status {
         case initiated

@@ -12,7 +12,7 @@ import CocoaMQTT
 typealias ConnectCompletionHandler = () -> Void
 typealias SubscribeCompletionHandler =  () -> Void
 
-protocol MQTTClientDelegate {
+protocol MQTTClientDelegate: class {
     func mqttClient(_ mqttClient: MQTTClient, disconnectedWithError error: Error?)
     func mqttClient(_ mqttClient: MQTTClient, publishedData data: Data)
     func mqttClient(_ mqttClient: MQTTClient, receivedData data: Data)
@@ -40,7 +40,7 @@ final class MQTTClient {
     var defaultPort: UInt16 = 1883
     var defaultQoS: CocoaMQTTQOS = .qos0
 
-    var delegate: MQTTClientDelegate?
+    weak var delegate: MQTTClientDelegate?
 
     init() {
         let uuid = UUID()
