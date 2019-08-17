@@ -15,30 +15,114 @@ let token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6Ijc4MDMzN2YyYjFlOTZkZjE
 class MainViewController: UIViewController {
 
     var tracker: MapirLiveTrackerPublisher!
+    var receiver: MapirLiveTrackerReceiver!
     let locationManager = CLLocationManager()
 
-    
-    @IBAction func startButtonTapped(_ sender: UIButton) {
+    var sentLocations: [CLLocation] = []
+    var receivedLocations: [CLLocation] = []
+
+    var trackingIdentifier = "sample-unique-identifier"
+
+    @IBOutlet weak var tableView: UITableView!
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        receiver = MapirLiveTrackerReceiver(token: token)
+        receiver.delegate = self
+
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+
+    @IBAction func startReceiveButtonTapped(_ sender: UIButton) {
+        switch receiver.status {
+        case .initiated, .stopped:
+            receiver.start(withTrackingIdentifier: trackingIdentifier)
+        default:
+            receiver.stop()
+        }
+
+    }
+
+    @IBAction func startPublishButtonTapped(_ sender: UIButton) {
         switch CLLocationManager.authorizationStatus() {
         case .authorizedWhenInUse, .denied, .notDetermined, .restricted:
             locationManager.requestAlwaysAuthorization()
         case .authorizedAlways:
             tracker = MapirLiveTrackerPublisher(token: token, distanceFilter: 20.0)
             tracker.delegate = self
-            tracker.start(withTrackingIdentifier: "123456")
+            tracker.start(withTrackingIdentifier: trackingIdentifier)
         @unknown default:
             fatalError()
         }
     }
 }
 
-extension MainViewController: PublisherDelegate {
-    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, publishedLocation location: CLLocation) {
-        dump(location)
+extension MainViewController: ReceiverDelegate {
+    func receiver(_ liveTrackerReceiver: MapirLiveTrackerReceiver, locationReceived location: CLLocation) {
+        receivedLocations.insert(location, at: 0)
+        tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
     }
 
-    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, failedWithError error: Error) {
-        dump(error)
+    func receiver(_ liveTrackerReceiver: MapirLiveTrackerReceiver, failedWithError error: Error?) {
+        print("-- Error Occured: ", error.localizedDescription)
+    }
+
+
+}
+
+extension MainViewController: PublisherDelegate {
+    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, publishedLocation location: CLLocation) {
+        
+        sentLocations.insert(location, at: 0)
+        tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .automatic)
+    }
+
+    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, failedWithError error: Error?) {
+        print("-- Error Occured: ", error)
+    }
+}
+
+extension MainViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 1 {
+            return sentLocations.count
+        } else if section == 0 {
+            return receivedLocations.count
+        }
+        return 0
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        var data: CLLocation = CLLocation()
+        if indexPath.section == 1 {
+            data = sentLocations[indexPath.row]
+        } else if indexPath.section == 0 {
+            data = receivedLocations[indexPath.row]
+        }
+
+        let cell = tableView.dequeueReusableCell(withIdentifier: DataTableViewCell.reuseIdentifier, for: indexPath) as! DataTableViewCell
+
+        cell.coordinatesLabel.text = "\(data.coordinate.latitude), \(data.coordinate.longitude)"
+        cell.directionLabel.text = "\(data.course)"
+        cell.speedLabel.text = "\(data.speed)"
+        cell.timeLabel.text = "\(data.timestamp.description(with: Locale.current))"
+
+        return cell
+    }
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 1 {
+            return "Sent Locations"
+        } else if section == 0 {
+            return "Received Locations"
+        }
+        return nil
     }
 
 
