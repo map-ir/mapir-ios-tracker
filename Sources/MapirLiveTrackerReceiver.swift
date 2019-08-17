@@ -18,7 +18,7 @@ import AppKit
 #endif
 
 
-public protocol ReceiverDelegate {
+public protocol ReceiverDelegate: class {
 
     /// Receives location updates of the specified tracking identifier.
     ///
@@ -51,16 +51,22 @@ public final class MapirLiveTrackerReceiver {
 
     // MARK: General Properties
 
-    /// Map.ir access token which is needed to access the sevices.
+    /// Your access token of Map.ir services.
+    /// Visit [App Registration website](https://corp.map.ir/appregistration) for more information.
     public private(set) var accessToken: String?
     private var topic: String?
 
+    /// Current tracking identifier which service is using.
+    /// `stop()` method does not remove tracking identifier,
+    /// so you can use `restart()` method to receive data of the same identifier.
     public private(set) var trackingIdentifier: String?
 
     private var mqttClient = MQTTClient()
 
-    /// All updates are sent the delegate class.
-    public var delegate: ReceiverDelegate?
+    /// The receiver's delegate.
+    ///
+    /// Receiver sents notifications about received data and failures to the delegate.
+    public weak var delegate: ReceiverDelegate?
 
     /// Maximum number of retries that SDK itself handles.
     public var maximumNumberOfRetries = 3
@@ -76,10 +82,18 @@ public final class MapirLiveTrackerReceiver {
         return UUID()
     }()
 
+    /// Status of Receiver class
     public enum Status {
+        /// Class is initiated and it's ready to start.
         case initiated
+
+        /// Trying to connect Map.ir servers and receive credentials.
         case starting
+
+        /// Service is runnging and data is being published successfully.
         case running
+
+        /// Service is stopped due to user initiated stop of error occurance.
         case stopped
     }
 
@@ -117,6 +131,16 @@ public final class MapirLiveTrackerReceiver {
 
     // MARK: Start
 
+    /// Starts receiving location of the the specified tracking identifier.
+    ///
+    /// This method first authorizes the user then starts receiving. it may take some time to run.
+    /// If the starting fails, you will be notified via `receiver(_:stoppedWithError:)` delegate method.
+    /// The receiver receives the data which is published on the same tracking identifier session.
+    ///
+    /// - Attention: You yourself must handle uniqueness of your tracking identifiers.
+    /// Otherwise conflicts may occure between published and received data.
+    ///
+    /// - Parameter identifier: A string which is used to name the current publishing session.
     public func start(withTrackingIdentifier identifier: String) {
         switch status {
         case .running, .starting:
@@ -216,6 +240,9 @@ public final class MapirLiveTrackerReceiver {
     private var expectedDisconnect = false
 
     /// Stops the service.
+    ///
+    /// Stopping does not remove the previous tracking identifier.
+    /// You can restart the service and the previously added tracking identifier will be used again.
     public func stop() {
         expectedDisconnect = true
 
@@ -223,6 +250,12 @@ public final class MapirLiveTrackerReceiver {
 
         retries = 0
         self.status = .stopped
+    }
+
+    // MARK: Restart
+
+    func restart() {
+        // TODO: complete method.
     }
 }
 

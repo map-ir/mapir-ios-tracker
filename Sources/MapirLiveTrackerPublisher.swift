@@ -29,7 +29,8 @@ enum TrackerType: String, CustomStringConvertible {
     }
 }
 
-public protocol PublisherDelegate {
+public protocol PublisherDelegate: class {
+    
     /// Sends the delegate the latest published `CLLocation` object.
     ///
     /// - parameter liveTrackerPublisher: the publisher that sent the location.
@@ -56,14 +57,22 @@ public final class MapirLiveTrackerPublisher {
 
     // MARK: General Properties
 
+    /// Your access token of Map.ir services.
+    /// Visit [App Registration website](https://corp.map.ir/appregistration) for more information.
     public private(set) var accessToken: String?
     private var topic: String?
 
+    /// Current tracking identifier which service is using.
+    /// `stop()` method does not remove tracking identifier,
+    /// so you can use `restart()` method to publish data of the same identifier.
     public private(set) var trackingIdentifier: String?
 
     private var mqttClient = MQTTClient()
 
-    public var delegate: PublisherDelegate?
+    /// The publisher's delegate.
+    ///
+    /// Publisher sents notifications about published data and failures to the delegate.
+    public weak var delegate: PublisherDelegate?
 
     private let locationManager = LocationManager()
     public static let defaultDistanceFilter: Meters = 10.0
@@ -82,10 +91,18 @@ public final class MapirLiveTrackerPublisher {
         return UUID()
     }()
 
+    /// Status of Publisher class
     public enum Status {
+        /// Class is initiated and it's ready to start.
         case initiated
+
+        /// Trying to connect Map.ir servers and receive credentials.
         case starting
+
+        /// Service is runnging and data is being published successfully.
         case running
+
+        /// Service is stopped due to user initiated stop of error occurance.
         case stopped
     }
 
@@ -116,7 +133,6 @@ public final class MapirLiveTrackerPublisher {
     /// starting the publisher fails if you don't define the this key-value pair.
     ///
     /// - Parameter token: Your Map.ir access token.
-    /// If you don't have any, visit [App Registration website](https://corp.map.ir/appregistration).
     /// - Parameter distanceFilter: New location will be published when the user moves this amount from last published location.
     public init(token: String, distanceFilter: Meters = defaultDistanceFilter) {
         self.accessToken = token
@@ -130,6 +146,16 @@ public final class MapirLiveTrackerPublisher {
 
     // MARK: Start
 
+    /// Starts publishing location of the current device.
+    ///
+    /// This method first authorizes the user then starts publishing. it may take some time to run.
+    /// If the starting fails, you will be notified via `publisher(_:stoppedWithError:)` delegate method.
+    /// A receiver that uses this identifier receives the data which is published in this session.
+    ///
+    /// - Attention: You yourself must handle uniqueness of your tracking identifiers.
+    /// Otherwise conflicts may occure between published and received data.
+    ///
+    /// - Parameter identifier: A string which is used to name the current publishing session.
     public func start(withTrackingIdentifier identifier: String) {
         switch status {
         case .running, .starting:
@@ -235,6 +261,9 @@ public final class MapirLiveTrackerPublisher {
     private var expectedDisconnect = false
 
     /// Stops the service.
+    ///
+    /// Stopping does not remove the previous tracking identifier.
+    /// You can restart the service and the previously added tracking identifier will be used again.
     public func stop() {
         expectedDisconnect = true
 
@@ -243,6 +272,12 @@ public final class MapirLiveTrackerPublisher {
         
         self.retries = 0
         self.status = .stopped
+    }
+
+    // MARK: Restart
+
+    func restart() {
+        // TODO: complete method.
     }
 }
 
