@@ -42,7 +42,7 @@ public protocol PublisherDelegate: class {
     ///
     /// - Parameter liveTrackerPublisher: The publisher which failed
     /// - Parameter error: `Error` describing the failure.
-    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, failedWithError error: Error?)
+    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, failedWithError error: Error)
 
     /// Tells the delegate that the operation is going to stop with or without an error.
     ///
@@ -141,6 +141,7 @@ public final class MapirLiveTrackerPublisher {
 
     private func commonInit(distanceFilter: Meters) {
         locationManager.delegate = self
+        locationManager.distanceFilter = distanceFilter
         mqttClient.delegate      = self
     }
 
@@ -277,7 +278,14 @@ public final class MapirLiveTrackerPublisher {
     // MARK: Restart
 
     func restart() {
-        // TODO: complete method.
+        guard mqttClient.username != nil, mqttClient.password != nil, topic != nil else {
+            guard let delegate = delegate else { return }
+            delegate.publisher(self, stoppedWithError: TrackingError.ServiceError.authorizationNotAvailable)
+            self.stop()
+            return
+        }
+
+        self.connectMqtt()
     }
 }
 
@@ -321,8 +329,8 @@ extension MapirLiveTrackerPublisher: MQTTClientDelegate {
             self.connectMqtt()
             retries += 1
         } else {
-            delegate.publisher(self, failedWithError: error)
-            expectedDisconnect = false
+            delegate.publisher(self, stoppedWithError: error)
+            self.stop()
         }
     }
 

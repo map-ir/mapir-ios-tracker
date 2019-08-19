@@ -255,7 +255,14 @@ public final class MapirLiveTrackerReceiver {
     // MARK: Restart
 
     func restart() {
-        // TODO: complete method.
+        guard mqttClient.username != nil, mqttClient.password != nil, topic != nil else {
+            guard let delegate = delegate else { return }
+            delegate.receiver(self, stoppedWithError: TrackingError.ServiceError.authorizationNotAvailable)
+            self.stop()
+            return
+        }
+
+        self.connectMqtt()
     }
 }
 
@@ -273,6 +280,7 @@ extension MapirLiveTrackerReceiver: MQTTClientDelegate {
             retries += 1
         } else {
             delegate.receiver(self, stoppedWithError: error)
+            self.stop()
         }
     }
 

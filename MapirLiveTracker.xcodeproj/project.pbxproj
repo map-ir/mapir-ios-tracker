@@ -34,6 +34,7 @@
 		C0B5989422FE8D2700E997DA /* Location.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B5989322FE8D2700E997DA /* Location.pb.swift */; };
 		C0B5989622FED19B00E997DA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C0B5989522FED19B00E997DA /* Main.storyboard */; };
 		C0D8130E22F6FA6700DAC957 /* TrackingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D8130D22F6FA6700DAC957 /* TrackingError.swift */; };
+		C0DF45892309542900E4413C /* ISO8601DateFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DF45882309542900E4413C /* ISO8601DateFormatter+Extension.swift */; };
 		C0F276AE22FD63670015EDFC /* MQTTClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F276AD22FD63670015EDFC /* MQTTClient.swift */; };
 /* End PBXBuildFile section */
 
@@ -136,6 +137,7 @@
 		C0B5989522FED19B00E997DA /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		C0D22D5722FEE81A00FD65E4 /* Terhran, Iran, Running.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Terhran, Iran, Running.gpx"; sourceTree = "<group>"; };
 		C0D8130D22F6FA6700DAC957 /* TrackingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingError.swift; sourceTree = "<group>"; };
+		C0DF45882309542900E4413C /* ISO8601DateFormatter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ISO8601DateFormatter+Extension.swift"; sourceTree = "<group>"; };
 		C0F276AD22FD63670015EDFC /* MQTTClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MQTTClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -263,6 +265,7 @@
 				C0F276AD22FD63670015EDFC /* MQTTClient.swift */,
 				C0B5989322FE8D2700E997DA /* Location.pb.swift */,
 				C07B855D23041A1C00E51BF2 /* CLLocation+Extensions.swift */,
+				C0DF45882309542900E4413C /* ISO8601DateFormatter+Extension.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -479,6 +482,7 @@
 				3D9C431E2274629B000A6585 /* Frameworks */,
 				3D9C431F2274629B000A6585 /* Resources */,
 				3D9C433822746323000A6585 /* Embed Frameworks */,
+				C000B2C22308014200BBF22D /* Carthage Copy-Frameworks */,
 			);
 			buildRules = (
 			);
@@ -620,6 +624,30 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		C000B2C22308014200BBF22D /* Carthage Copy-Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaAsyncSocket.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaMQTT.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
+			);
+			name = "Carthage Copy-Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaAsyncSocket.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaMQTT.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftProtobuf.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+		};
 		C080C2E82307F387004B0CBB /* Carthage Outdated Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -651,6 +679,7 @@
 				C0F276AE22FD63670015EDFC /* MQTTClient.swift in Sources */,
 				C0485EB422FDFEA900E27F28 /* MapirLiveTrackerReceiver.swift in Sources */,
 				C0B5989422FE8D2700E997DA /* Location.pb.swift in Sources */,
+				C0DF45892309542900E4413C /* ISO8601DateFormatter+Extension.swift in Sources */,
 				3D9C42A222745900000A6585 /* MapirLiveTrackerPublisher.swift in Sources */,
 				C089446222F6E0FC00CBFB45 /* NetworkUtilities.swift in Sources */,
 			);
