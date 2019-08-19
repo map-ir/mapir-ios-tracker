@@ -14,6 +14,8 @@ enum TrackingError: Error {
 
         case serviceCurrentlyRunning
 
+        case authorizationNotAvailable
+
         case couldNotDecodeProtobufData(Error?)
         case couldNotEncodeProtobufObject(desc: Error?)
 
@@ -38,6 +40,8 @@ enum TrackingError: Error {
                 } else {
                     return "Couldn't endcode protobuf object to data. Contact SDK support."
                 }
+            case .authorizationNotAvailable:
+                return "Couldn't find authorization status. use start(withTrackingIdentifier:) method to receive authorization data."
             }
         }
     }
