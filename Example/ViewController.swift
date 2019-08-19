@@ -21,7 +21,7 @@ class MainViewController: UIViewController {
     var sentLocations: [CLLocation] = []
     var receivedLocations: [CLLocation] = []
 
-    var trackingIdentifier = "sample-unique-identifier"
+    var trackingIdentifier = "sample-unique-identifier-test"
 
     @IBOutlet weak var tableView: UITableView!
 
@@ -50,7 +50,7 @@ class MainViewController: UIViewController {
         case .authorizedWhenInUse, .denied, .notDetermined, .restricted:
             locationManager.requestAlwaysAuthorization()
         case .authorizedAlways:
-            tracker = MapirLiveTrackerPublisher(token: token, distanceFilter: 20.0)
+            tracker = MapirLiveTrackerPublisher(token: token, distanceFilter: 30.0)
             tracker.delegate = self
             tracker.start(withTrackingIdentifier: trackingIdentifier)
         @unknown default:
@@ -62,11 +62,19 @@ class MainViewController: UIViewController {
 extension MainViewController: ReceiverDelegate {
     func receiver(_ liveTrackerReceiver: MapirLiveTrackerReceiver, locationReceived location: CLLocation) {
         receivedLocations.insert(location, at: 0)
-        tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+        tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .top)
     }
 
-    func receiver(_ liveTrackerReceiver: MapirLiveTrackerReceiver, failedWithError error: Error?) {
-        print("-- Error Occured: ", error.localizedDescription)
+    func receiver(_ liveTrackerReceiver: MapirLiveTrackerReceiver, failedWithError error: Error) {
+        print("-- Receiver Error Occured: ", error.localizedDescription)
+    }
+
+    func receiver(_ liveTrackerReceiver: MapirLiveTrackerReceiver, stoppedWithError error: Error?) {
+        if let error = error {
+            print("-- Recevier Stopped: ", error)
+        } else {
+            print("-- Recevier Stopped")
+        }
     }
 
 
@@ -76,11 +84,19 @@ extension MainViewController: PublisherDelegate {
     func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, publishedLocation location: CLLocation) {
         
         sentLocations.insert(location, at: 0)
-        tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .automatic)
+        tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .top)
     }
 
-    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, failedWithError error: Error?) {
-        print("-- Error Occured: ", error)
+    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, failedWithError error: Error) {
+        print("-- Publisher Error Occured: ", error)
+    }
+
+    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, stoppedWithError error: Error?) {
+        if let error = error {
+            print("-- Publisher Stopped: ", error)
+        } else {
+            print("-- Publisher Stopped")
+        }
     }
 }
 
