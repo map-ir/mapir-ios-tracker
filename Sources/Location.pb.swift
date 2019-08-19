@@ -104,12 +104,7 @@ extension LiveTracker_Location {
     init(location: CLLocation) {
         self.init()
 
-        let dateFormatter = ISO8601DateFormatter()
-        dateFormatter.timeZone = TimeZone.current
-        if #available(iOSApplicationExtension 11.0, *) {
-            dateFormatter.formatOptions = [.withFractionalSeconds]
-        }
-        let timestamp = dateFormatter.string(from: location.timestamp)
+        let timestamp = ISO8601DateFormatter.default.string(from: location.timestamp)
 
         self.location = [location.coordinate.longitude, location.coordinate.latitude]
         self.direction = Float(location.course)
