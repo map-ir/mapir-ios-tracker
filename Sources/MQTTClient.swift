@@ -16,7 +16,6 @@ protocol MQTTClientDelegate: class {
     func mqttClient(_ mqttClient: MQTTClient, disconnectedWithError error: Error?)
     func mqttClient(_ mqttClient: MQTTClient, publishedData data: Data)
     func mqttClient(_ mqttClient: MQTTClient, receivedData data: Data)
-    // func mqttClientConnected(_ mqttClient: MQTTClient)
 }
 
 final class MQTTClient {
@@ -36,20 +35,28 @@ final class MQTTClient {
     var topic: String?
 
     private let client: CocoaMQTT!
-    var defaultHost = "81.91.152.2"
-    var defaultPort: UInt16 = 1883
-    var defaultQoS: CocoaMQTTQOS = .qos0
+    var networkConfiguration: NetworkConfiguration
 
     weak var delegate: MQTTClientDelegate?
 
-    init() {
+    init(networkConfiguration: NetworkConfiguration) {
         let uuid = UUID()
+        self.networkConfiguration = networkConfiguration
         client = CocoaMQTT(clientID: uuid.uuidString)
-        client.host = defaultHost
-        client.port = defaultPort
+        client.host = self.networkConfiguration.brokerAddress
+        client.port = self.networkConfiguration.brokerPort
+
+        if networkConfiguration.usesSSL {
+            // TODO: setup SSL
+        }
+
         client.autoReconnect = false
         client.cleanSession = true
         client.delegate = self
+    }
+
+    func changeNetworkConfigurationTo(_ newNetworkConfiguration: NetworkConfiguration) {
+
     }
 
     deinit {
@@ -72,7 +79,7 @@ final class MQTTClient {
     func publish(data: Data, onTopic topic: String) {
         let payload: [UInt8] = [UInt8](data)
         let message = CocoaMQTTMessage(topic: topic, payload: payload)
-        message.qos = defaultQoS
+        message.qos = self.networkConfiguration.qos
         message.dup = false
         message.retained = true
         client.publish(message)
@@ -80,7 +87,7 @@ final class MQTTClient {
 
     func subscribe(toTopic topic: String, completionHandler: SubscribeCompletionHandler?) {
         self.subscribeCompletionHandler = completionHandler
-        client.subscribe(topic, qos: defaultQoS)
+        client.subscribe(topic, qos: self.networkConfiguration.qos)
     }
 
     func unsubscribe(topic: String) {

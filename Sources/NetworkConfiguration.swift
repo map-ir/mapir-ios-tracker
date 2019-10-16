@@ -7,27 +7,34 @@
 //
 
 import Foundation
+import CocoaMQTT
 
 public struct NetworkConfiguration {
 
     public let serverURL: URL
-    public let brokerAddress: String
-    public let port: UInt16
     public let maximumNetworkRetries: Int
-    public let usesSSL: Bool = false
+
+    public let brokerAddress: String
+    public let brokerPort: UInt16
+    public let qos: CocoaMQTTQOS
+    public let usesSSL: Bool
 
     public let session: URLSession = .shared
 
     public static let mapirDefault = NetworkConfiguration(serverURL: URL(string: "https://tracking-dev.map.ir/")!,
+                                                          maximumRetries: 3,
                                                           brokerAddress: "dev.map.ir",
                                                           port: 1883,
-                                                          maximumRetries: 3)
+                                                          qos: .qos0,
+                                                          usesSSL: false)
 
-    public init(serverURL: URL, brokerAddress: String, port: UInt16, maximumRetries: Int) {
+    public init(serverURL: URL, maximumRetries: Int, brokerAddress: String, port: UInt16, qos: CocoaMQTTQOS, usesSSL: Bool) {
         self.serverURL = serverURL
         self.brokerAddress = brokerAddress
-        self.port = port
+        self.brokerPort = port
         self.maximumNetworkRetries = 3
+        self.qos = qos
+        self.usesSSL = false
     }
 
     let userAgent: String = {
