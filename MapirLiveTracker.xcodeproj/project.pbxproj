@@ -117,7 +117,6 @@
 		3D9C42D922745DAF000A6585 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
 		3D9C42DA22745DB0000A6585 /* .swift-version */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".swift-version"; sourceTree = SOURCE_ROOT; };
 		3D9C42DB22745DB0000A6585 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = SOURCE_ROOT; };
-		3D9C42EC22745FDA000A6585 /* LinuxMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
 		3D9C42F12274604A000A6585 /* MapirLiveTracker-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MapirLiveTracker-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9C43012274611B000A6585 /* MapirLiveTracker-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MapirLiveTracker-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9C431122746198000A6585 /* MapirLiveTracker-macOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MapirLiveTracker-macOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -276,7 +275,6 @@
 		3D9C42A32274595F000A6585 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				3D9C42EC22745FDA000A6585 /* LinuxMain.swift */,
 				3D9C42D722745CDE000A6585 /* MapirLiveTrackerTests.swift */,
 			);
 			path = Tests;
