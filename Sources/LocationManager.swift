@@ -10,7 +10,6 @@ import Foundation
 import CoreLocation
 
 protocol LocationManagerDelegate: class {
-    // TODO: Define Location Manger Delegate
     func locationManager(_ locationManager: LocationManager, locationUpdated location: CLLocation)
     func locationManager(_ locationManager: LocationManager, locationUpdatesFailWithError error: Error)
 }
@@ -70,7 +69,7 @@ final class LocationManager: NSObject {
         case .notDetermined, .denied, .restricted:
             fallthrough
         @unknown default:
-            return .failure(TrackingError.LocationServiceError.unauthorizedForAlwaysUsage)
+            return .failure(LocationServiceError.unauthorizedForAlwaysUsage)
         }
     }
 }
