@@ -14,8 +14,8 @@ let token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6Ijc4MDMzN2YyYjFlOTZkZjE
 
 class MainViewController: UIViewController {
 
-    var tracker: MapirLiveTrackerPublisher!
-    var receiver: MapirLiveTrackerReceiver!
+    var tracker: Publisher!
+    var receiver: Subscriber!
     let locationManager = CLLocationManager()
 
     var sentLocations: [CLLocation] = []
@@ -28,48 +28,61 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        receiver = MapirLiveTrackerReceiver(token: token)
+        receiver = Subscriber(accessToken: token)
+        tracker = Publisher(accessToken: token, distanceFilter: 30)
         receiver.delegate = self
 
         tableView.delegate = self
         tableView.dataSource = self
     }
 
-    @IBAction func startReceiveButtonTapped(_ sender: UIButton) {
-        switch receiver.status {
-        case .initiated, .stopped:
-            receiver.start(withTrackingIdentifier: trackingIdentifier)
-        default:
-            receiver.stop()
-        }
+    @IBAction func clearButtonTapped(_ sender: UIButton) {
+        sentLocations = []
+        receivedLocations = []
 
+        tableView.reloadData()
     }
 
-    @IBAction func startPublishButtonTapped(_ sender: UIButton) {
-        switch CLLocationManager.authorizationStatus() {
-        case .authorizedWhenInUse, .denied, .notDetermined, .restricted:
-            locationManager.requestAlwaysAuthorization()
-        case .authorizedAlways:
-            tracker = MapirLiveTrackerPublisher(token: token, distanceFilter: 30.0)
-            tracker.delegate = self
-            tracker.start(withTrackingIdentifier: trackingIdentifier)
-        @unknown default:
-            fatalError()
+    @IBAction func receivingSwitched(_ sender: UISwitch) {
+        if sender.isOn {
+            receiver.start(withTrackingIdentifier: trackingIdentifier)
+        } else {
+            receiver.stop()
         }
+    }
+
+    @IBAction func publishingSwitched(_ sender: UISwitch) {
+        if sender.isOn {
+            switch CLLocationManager.authorizationStatus() {
+            case .authorizedWhenInUse, .denied, .notDetermined, .restricted:
+                locationManager.requestAlwaysAuthorization()
+            case .authorizedAlways:
+                tracker = Publisher(accessToken: token, distanceFilter: 10.0)
+                tracker.delegate = self
+                tracker.start(withTrackingIdentifier: trackingIdentifier)
+            @unknown default:
+                fatalError()
+            }
+        } else {
+            tracker.stop()
+        }
+    }
+    @IBAction func startPublishButtonTapped(_ sender: UIButton) {
+
     }
 }
 
-extension MainViewController: ReceiverDelegate {
-    func receiver(_ liveTrackerReceiver: MapirLiveTrackerReceiver, locationReceived location: CLLocation) {
+extension MainViewController: SubscriberDelegate {
+    func subscriber(_ subscriber: Subscriber, locationReceived location: CLLocation) {
         receivedLocations.insert(location, at: 0)
         tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .top)
     }
 
-    func receiver(_ liveTrackerReceiver: MapirLiveTrackerReceiver, failedWithError error: Error) {
+    func subscriber(_ subscriber: Subscriber, failedWithError error: Error) {
         print("-- Receiver Error Occured: ", error.localizedDescription)
     }
 
-    func receiver(_ liveTrackerReceiver: MapirLiveTrackerReceiver, stoppedWithError error: Error?) {
+    func subscriber(_ subscriber: Subscriber, stoppedWithError error: Error?) {
         if let error = error {
             print("-- Recevier Stopped: ", error)
         } else {
@@ -81,17 +94,17 @@ extension MainViewController: ReceiverDelegate {
 }
 
 extension MainViewController: PublisherDelegate {
-    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, publishedLocation location: CLLocation) {
+    func publisher(_ liveTrackerPublisher: Publisher, publishedLocation location: CLLocation) {
         
         sentLocations.insert(location, at: 0)
         tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .top)
     }
 
-    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, failedWithError error: Error) {
+    func publisher(_ liveTrackerPublisher: Publisher, failedWithError error: Error) {
         print("-- Publisher Error Occured: ", error)
     }
 
-    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, stoppedWithError error: Error?) {
+    func publisher(_ liveTrackerPublisher: Publisher, stoppedWithError error: Error?) {
         if let error = error {
             print("-- Publisher Stopped: ", error)
         } else {
@@ -140,6 +153,4 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         }
         return nil
     }
-
-
 }
