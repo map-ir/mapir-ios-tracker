@@ -1,7 +1,9 @@
 # MapirLiveTracker document generator jazzy settings
 
-copyright: Copyright 1398 Map
-author: Alireza Asadi
-xcodebuild_arguments: [-target, MapirLiveTracker-iOS]
 clean: true
+copyright: Copyright 1398 Map
+author: Map.ir
+author_url: https://support.map.ir
+github_url: https://github.com/realm/realm-cocoa
+xcodebuild_arguments: [-target, MapirLiveTracker-iOS]
 output: ./Documentation
