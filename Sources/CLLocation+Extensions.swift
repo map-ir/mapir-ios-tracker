@@ -15,12 +15,11 @@ internal extension CLLocation {
         let coordinate = CLLocationCoordinate2D(latitude: protoLocation.location[1], longitude: protoLocation.location[0])
         let course = Double(protoLocation.direction)
         let speed = protoLocation.speed
-
-        if let date = ISO8601DateFormatter.default.date(from: protoLocation.rtimestamp) {
-            self.init(coordinate: coordinate, altitude: -1, horizontalAccuracy: -1, verticalAccuracy: -1, course: course, speed: speed, timestamp: date)
-
-        } else {
-            self.init(coordinate: coordinate, altitude: -1, horizontalAccuracy: -1, verticalAccuracy: -1, course: course, speed: speed, timestamp: Date())
+        let epochTimeString = protoLocation.rtimestamp
+        guard let epoch = Double(epochTimeString) else {
+            preconditionFailure("Timestamp is not in correct format.")
         }
+        let date = Date(timeIntervalSince1970: epoch)
+        self.init(coordinate: coordinate, altitude: -1, horizontalAccuracy: -1, verticalAccuracy: -1, course: course, speed: speed, timestamp: date)
     }
 }

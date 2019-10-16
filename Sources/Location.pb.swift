@@ -104,11 +104,10 @@ extension LiveTracker_Location {
     init(location: CLLocation) {
         self.init()
 
-        let timestamp = ISO8601DateFormatter.default.string(from: location.timestamp)
-
+        let epochTime = Int(location.timestamp.timeIntervalSince1970)
         self.location = [location.coordinate.longitude, location.coordinate.latitude]
         self.direction = Float(location.course)
         self.speed = location.speed
-        self.rtimestamp = timestamp
+        self.rtimestamp = "\(epochTime)"
     }
 }
