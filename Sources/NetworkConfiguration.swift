@@ -8,9 +8,27 @@
 
 import Foundation
 
-struct NetworkUtilities {
-    static let shared = NetworkUtilities()
-    private init() { }
+public struct NetworkConfiguration {
+
+    public let serverURL: URL
+    public let brokerAddress: String
+    public let port: UInt16
+    public let maximumNetworkRetries: Int
+    public let usesSSL: Bool = false
+
+    public let session: URLSession = .shared
+
+    public static let mapirDefault = NetworkConfiguration(serverURL: URL(string: "https://tracking-dev.map.ir/")!,
+                                                          brokerAddress: "dev.map.ir",
+                                                          port: 1883,
+                                                          maximumRetries: 3)
+
+    public init(serverURL: URL, brokerAddress: String, port: UInt16, maximumRetries: Int) {
+        self.serverURL = serverURL
+        self.brokerAddress = brokerAddress
+        self.port = port
+        self.maximumNetworkRetries = 3
+    }
 
     let userAgent: String = {
         var components: [String] = []
@@ -21,7 +39,7 @@ struct NetworkUtilities {
         }
 
         // Replace Your bundle name
-        let libraryBundle: Bundle? = Bundle(for: MapirLiveTrackerPublisher.self)
+        let libraryBundle: Bundle? = Bundle(for: Publisher.self)
 
         if let libraryName = libraryBundle?.infoDictionary?["CFBundleName"] as? String, let version = libraryBundle?.infoDictionary?["CFBundleShortVersionString"] as? String {
             components.append("\(libraryName)/\(version)")
@@ -53,14 +71,6 @@ struct NetworkUtilities {
         components.append("(\(chip))")
 
         return components.joined(separator: " ")
-    }()
-
-    let defaultURLComponents: URLComponents = {
-        var urlComponents = URLComponents()
-        urlComponents.scheme = "https"
-        urlComponents.host = "dev.map.ir"
-        urlComponents.path = "/tracking/"
-        return urlComponents
     }()
 }
 

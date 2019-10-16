@@ -1,59 +1,53 @@
 //
-//  MapirLiveTracker.swift
-//  MapirLiveTracker
+//  MapirLiveTrackerReceiver.swift
+//  MapirLiveTracker-iOS
 //
-//  Created by Alireza Asadi on 13 Mordad, 1398 AP.
-//  Copyright © 1398 Map. All rights reserved.
+//  Created by Alireza Asadi on 18/5/1398 AP.
+//  Copyright © 1398 AP Map. All rights reserved.
 //
 
-// Include Foundation
-@_exported import Foundation
+import Foundation
 import CocoaMQTT
 import CoreLocation
+import SwiftProtobuf
+
 #if os(iOS) || os(watchOS) || os(tvOS)
 import UIKit
 #elseif os(macOS)
 import AppKit
 #endif
 
-public typealias JSONDictionary = [String: String]
 
-public typealias Meters = Double
+public protocol ReceiverDelegate: class {
 
-enum TrackerType: String, CustomStringConvertible {
-    case receiver
-    case publisher
-
-    var description: String {
-        return self.rawValue
-    }
-}
-
-public protocol PublisherDelegate: class {
-    
-    /// Sends the delegate the latest published `CLLocation` object.
+    /// Receives location updates of the specified tracking identifier.
     ///
-    /// - parameter liveTrackerPublisher: the publisher that sent the location.
-    /// - Parameter location: `CLLocation` instance of published data.
+    /// - parameter liveTrackerReceiver: the receiver that received the location.
+    /// - Parameter location: `CLLocation` instance of received data.
     /// It does not contain accuracy, floor and altitude data.
-    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, publishedLocation location: CLLocation)
-
-    /// Sends the failure details to the delegate.
     ///
-    /// - Parameter liveTrackerPublisher: The publisher which failed
+    /// You may check the timestamp of the received `location` object to validate it.
+    func receiver(_ liveTrackerReceiver: MapirLiveTrackerReceiver, locationReceived location: CLLocation)
+
+    /// Sends the delegate errors related to failure of the procedure.
+    ///
+    /// A failure does not mean that the service is going to stop the operation.
+    /// while an error cuases a stop, `receive(_:stoppedWithError:)` gets called instead.
+    ///
+    /// - parameter liveTrackerReceiver: the receiver that had failure.
     /// - Parameter error: `Error` describing the failure.
-    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, failedWithError error: Error)
+    func receiver(_ liveTrackerReceiver: MapirLiveTrackerReceiver, failedWithError error: Error)
 
     /// Tells the delegate that the operation is going to stop with or without an error.
     ///
     /// After such errors, you may use `restart()` method to start it again.
     ///
-    /// - Parameter liveTrackerPublisher: Publisher object that stopped.
+    /// - Parameter liveTrackerReceiver: The receiver object that stopped.
     /// - Parameter error: Error which caused the process to stop, if there is any.
-    func publisher(_ liveTrackerPublisher: MapirLiveTrackerPublisher, stoppedWithError error: Error?)
+    func receiver(_ liveTrackerReceiver: MapirLiveTrackerReceiver, stoppedWithError error: Error?)
 }
 
-public final class MapirLiveTrackerPublisher {
+public final class MapirLiveTrackerReceiver {
 
     // MARK: General Properties
 
@@ -64,21 +58,18 @@ public final class MapirLiveTrackerPublisher {
 
     /// Current tracking identifier which service is using.
     /// `stop()` method does not remove tracking identifier,
-    /// so you can use `restart()` method to publish data of the same identifier.
+    /// so you can use `restart()` method to receive data of the same identifier.
     public private(set) var trackingIdentifier: String?
 
     private var mqttClient = MQTTClient()
 
-    /// The publisher's delegate.
+    /// The receiver's delegate.
     ///
-    /// Publisher sents notifications about published data and failures to the delegate.
-    public weak var delegate: PublisherDelegate?
-
-    private let locationManager = LocationManager()
-    public static let defaultDistanceFilter: Meters = 10.0
+    /// Receiver sents notifications about received data and failures to the delegate.
+    public weak var delegate: ReceiverDelegate?
 
     /// Maximum number of retries that SDK itself handles.
-    public var maximumNumberOfRetries = 3
+    public var networkConfiguration: NetworkConfiguration = .mapirDefault
     private var retries = 0
 
     private let deviceIdentifier: UUID = {
@@ -91,7 +82,7 @@ public final class MapirLiveTrackerPublisher {
         return UUID()
     }()
 
-    /// Status of Publisher class
+    /// Status of Receiver class
     public enum Status {
         /// Class is initiated and it's ready to start.
         case initiated
@@ -113,45 +104,38 @@ public final class MapirLiveTrackerPublisher {
 
     // MARK: Initializers
 
-
-    /// Initializes a Publisher object.
+    /// Initializes a Receiver object.
     ///
     /// Consider adding your valid access token with key of `MAPIRAccessToken` to your **Info.plist**.
-    /// starting the publisher fails if you don't define the this key-value pair.
-    ///
-    /// - Parameter distanceFilter: New location will be published when the user moves this amount from last published location.
-    public init(distanceFilter: Meters = defaultDistanceFilter) {
+    /// If you don't have any, visit [App Registration website](https://corp.map.ir/appregistration).
+    /// Starting the publisher fails if you don't define the this key-value pair.
+    public init() {
         if let token = Bundle.main.object(forInfoDictionaryKey: "MAPIRAccessToken") as? String {
             self.accessToken = token
         }
-        commonInit(distanceFilter: distanceFilter)
+        commonInit()
     }
 
-    /// Initializes a Publisher object.
-    /// Consider adding your valid access token with key of `MAPIRAccessToken` to your **Info.plist**.
-    /// If you don't have any, visit [App Registration website](https://corp.map.ir/appregistration).
-    /// starting the publisher fails if you don't define the this key-value pair.
+    /// DescriptionInitializes a Receiver object.
     ///
     /// - Parameter token: Your Map.ir access token.
-    /// - Parameter distanceFilter: New location will be published when the user moves this amount from last published location.
-    public init(token: String, distanceFilter: Meters = defaultDistanceFilter) {
+    /// If you don't have any, visit [App Registration website](https://corp.map.ir/appregistration).
+    public init(token: String) {
         self.accessToken = token
-        commonInit(distanceFilter: distanceFilter)
+        commonInit()
     }
 
-    private func commonInit(distanceFilter: Meters) {
-        locationManager.delegate = self
-        locationManager.distanceFilter = distanceFilter
-        mqttClient.delegate      = self
+    private func commonInit() {
+        mqttClient.delegate = self
     }
 
     // MARK: Start
 
-    /// Starts publishing location of the current device.
+    /// Starts receiving location of the the specified tracking identifier.
     ///
-    /// This method first authorizes the user then starts publishing. it may take some time to run.
-    /// If the starting fails, you will be notified via `publisher(_:stoppedWithError:)` delegate method.
-    /// A receiver that uses this identifier receives the data which is published in this session.
+    /// This method first authorizes the user then starts receiving. it may take some time to run.
+    /// If the starting fails, you will be notified via `receiver(_:stoppedWithError:)` delegate method.
+    /// The receiver receives the data which is published on the same tracking identifier session.
     ///
     /// - Attention: You yourself must handle uniqueness of your tracking identifiers.
     /// Otherwise conflicts may occure between published and received data.
@@ -160,8 +144,7 @@ public final class MapirLiveTrackerPublisher {
     public func start(withTrackingIdentifier identifier: String) {
         switch status {
         case .running, .starting:
-            delegate?.publisher(self, failedWithError: TrackingError.ServiceError.serviceCurrentlyRunning)
-            return
+            delegate?.receiver(self, failedWithError: TrackingError.ServiceError.serviceCurrentlyRunning)
         case .stopped, .initiated:
             retries = 0
             trackingIdentifier = identifier
@@ -172,39 +155,33 @@ public final class MapirLiveTrackerPublisher {
 
     private func connectMqtt() {
         self.mqttClient.connect { [weak self] in
-            do {
-                try self?.locationManager.startTracking()
+            // TODO: Subscribe on topic and start receiving.
+            guard let topic = self?.topic else { return }
+            self?.mqttClient.subscribe(toTopic: topic) { [weak self] in
                 self?.status = .running
-            } catch let error {
-                if let self = self {
-                    self.status = .stopped
-                    self.delegate?.publisher(self, failedWithError: error)
-                }
             }
         }
     }
 
-    private lazy var requestTopicCompletionHandler: ((Result<(String, String, String), Error>) -> Void) = { [weak self] (result) in
-        // TODO: Check if [weak self] is needed.
+    private lazy var requestTopicCompletionHandler: ((Result<(String, String, String), Error>) -> Void) = {  [weak self] (result) in // TODO: Chech if [weak self] is needed.
         guard let self = self else { return }
         switch result {
         case .failure(let error):
             if self.retries < self.maximumNumberOfRetries {
                 guard let trackingIdentifier = self.trackingIdentifier else { return }
-                self.requestTopic(trackingIdentifier: trackingIdentifier, completionHandler: self.requestTopicCompletionHandler)
                 self.retries += 1
+                self.requestTopic(trackingIdentifier: trackingIdentifier, completionHandler: self.requestTopicCompletionHandler)
             } else {
-                self.delegate?.publisher(self, failedWithError: error)
+                self.delegate?.receiver(self, failedWithError: error)
                 self.status = .stopped
             }
         case .success(let topic, let username, let password):
-            self.retries = 0
             self.topic = topic
             self.mqttClient.username = username
             self.mqttClient.password = password
 
-            // If request succeeds, connect to MQTT Client.
             self.retries = 0
+            // If request succeeds, connect to MQTT Client.
             self.connectMqtt()
         }
     }
@@ -217,7 +194,7 @@ public final class MapirLiveTrackerPublisher {
         var request = URLRequest(url: url)
 
         guard let token = accessToken else {
-            delegate?.publisher(self, failedWithError: TrackingError.ServiceError.apiKeyNotAvailable)
+            delegate?.receiver(self, failedWithError: TrackingError.ServiceError.apiKeyNotAvailable)
             return
         }
 
@@ -227,7 +204,8 @@ public final class MapirLiveTrackerPublisher {
         request.httpMethod = "post"
         request.timeoutInterval = 10
 
-        let bodyDictionary: JSONDictionary = ["type": "publisher", "track_id": trackingIdentifier, "device_id": deviceIdentifier.uuidString]
+        guard let trackingIdentifier = self.trackingIdentifier else { return }
+        let bodyDictionary: JSONDictionary = ["type": "subscriber", "track_id": trackingIdentifier, "device_id": deviceIdentifier.uuidString]
 
         let jsonEncoder = JSONEncoder()
         jsonEncoder.outputFormatting = .prettyPrinted
@@ -268,10 +246,9 @@ public final class MapirLiveTrackerPublisher {
     public func stop() {
         expectedDisconnect = true
 
-        locationManager.stopTracking()
         mqttClient.disconnect()
-        
-        self.retries = 0
+
+        retries = 0
         self.status = .stopped
     }
 
@@ -280,7 +257,7 @@ public final class MapirLiveTrackerPublisher {
     func restart() {
         guard mqttClient.username != nil, mqttClient.password != nil, topic != nil else {
             guard let delegate = delegate else { return }
-            delegate.publisher(self, stoppedWithError: TrackingError.ServiceError.authorizationNotAvailable)
+            delegate.receiver(self, stoppedWithError: TrackingError.ServiceError.authorizationNotAvailable)
             self.stop()
             return
         }
@@ -289,65 +266,36 @@ public final class MapirLiveTrackerPublisher {
     }
 }
 
-// MARK: - Location Manager Delegate
-extension MapirLiveTrackerPublisher: LocationManagerDelegate {
-    func locationManager(_ locationManager: LocationManager, locationUpdated location: CLLocation) {
-
-        guard locationManager.status == .tracking else { return }
-        guard mqttClient.status == .connected else { return }
-
-        let proto = LiveTracker_Location(location: location)
-
-        do {
-            let data = try proto.serializedData()
-            guard let topic = topic else { return }
-            mqttClient.publish(data: data, onTopic: topic)
-        } catch let error {
-            delegate?.publisher(self, failedWithError: TrackingError.ServiceError.couldNotEncodeProtobufObject(desc: error))
-        }
-    }
-
-    func locationManager(_ locationManager: LocationManager, locationUpdatesFailWithError error: Error) {
-        guard let delegate = self.delegate else { return }
-        delegate.publisher(self, stoppedWithError: error)
-        self.stop()
-    }
-
-
-}
-
 // MARK: - MQTT Client Delegate
-extension MapirLiveTrackerPublisher: MQTTClientDelegate {
+extension MapirLiveTrackerReceiver: MQTTClientDelegate {
     func mqttClient(_ mqttClient: MQTTClient, disconnectedWithError error: Error?) {
-        guard let delegate = self.delegate else { return }
+        guard let delegate = delegate else { return }
 
         if expectedDisconnect {
-            delegate.publisher(self, stoppedWithError: nil)
+            delegate.receiver(self, stoppedWithError: nil)
             self.stop()
             expectedDisconnect = false
-        } else if !expectedDisconnect, retries < maximumNumberOfRetries {
+        } else if retries < maximumNumberOfRetries {
             self.connectMqtt()
             retries += 1
         } else {
-            delegate.publisher(self, stoppedWithError: error)
+            delegate.receiver(self, stoppedWithError: error)
             self.stop()
         }
     }
 
     func mqttClient(_ mqttClient: MQTTClient, publishedData data: Data) {
-        guard let delegate = self.delegate else { return }
-        do {
-            let decodedProto = try LiveTracker_Location(serializedData: data)
-            let location = CLLocation(protoLocation: decodedProto)
-            delegate.publisher(self, publishedLocation: location)
-        } catch let error {
-            delegate.publisher(self, failedWithError: error)
-        }
+        // Do nothing.
     }
 
     func mqttClient(_ mqttClient: MQTTClient, receivedData data: Data) {
-        // Do nothing
+        guard let delegate = delegate else { return }
+        do {
+            let decodedProto = try LiveTracker_Location(serializedData: data)
+            let location = CLLocation(protoLocation: decodedProto)
+            delegate.receiver(self, locationReceived: location)
+        } catch let error {
+            delegate.receiver(self, failedWithError: TrackingError.ServiceError.couldNotDecodeProtobufData(error))
+        }
     }
-
-
 }
