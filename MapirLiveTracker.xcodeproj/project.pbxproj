@@ -31,6 +31,7 @@
 		C0485EB722FE04E200E27F28 /* SwiftProtobuf.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C0485EB522FE04E200E27F28 /* SwiftProtobuf.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C07B855E23041A1C00E51BF2 /* CLLocation+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07B855D23041A1C00E51BF2 /* CLLocation+Extensions.swift */; };
 		C089446222F6E0FC00CBFB45 /* NetworkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C089446122F6E0FC00CBFB45 /* NetworkConfiguration.swift */; };
+		C0987AF3235DA28200EAE20B /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0987AF2235DA28200EAE20B /* Logger.swift */; };
 		C0A39FDC22F6EC3200D1DFD0 /* CocoaMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0A39FDA22F6EC3200D1DFD0 /* CocoaMQTT.framework */; };
 		C0A39FDD22F6EC3200D1DFD0 /* CocoaMQTT.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C0A39FDA22F6EC3200D1DFD0 /* CocoaMQTT.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C0A39FDE22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0A39FDB22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework */; };
@@ -134,6 +135,7 @@
 		C07B855D23041A1C00E51BF2 /* CLLocation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocation+Extensions.swift"; sourceTree = "<group>"; };
 		C089446122F6E0FC00CBFB45 /* NetworkConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConfiguration.swift; sourceTree = "<group>"; };
 		C089446322F6E21D00CBFB45 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = SOURCE_ROOT; };
+		C0987AF2235DA28200EAE20B /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		C0A39FDA22F6EC3200D1DFD0 /* CocoaMQTT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaMQTT.framework; path = Carthage/Build/iOS/CocoaMQTT.framework; sourceTree = "<group>"; };
 		C0A39FDB22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaAsyncSocket.framework; path = Carthage/Build/iOS/CocoaAsyncSocket.framework; sourceTree = "<group>"; };
 		C0B5989322FE8D2700E997DA /* Location.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.pb.swift; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 				C0B5989322FE8D2700E997DA /* Location.pb.swift */,
 				C07B855D23041A1C00E51BF2 /* CLLocation+Extensions.swift */,
 				C0061BE82355B30C006435E7 /* AccountManager.swift */,
+				C0987AF2235DA28200EAE20B /* Logger.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -679,6 +682,7 @@
 				C0D8130E22F6FA6700DAC957 /* Errors.swift in Sources */,
 				C0F276AE22FD63670015EDFC /* MQTTClient.swift in Sources */,
 				C0485EB422FDFEA900E27F28 /* Subscriber.swift in Sources */,
+				C0987AF3235DA28200EAE20B /* Logger.swift in Sources */,
 				C0061BE92355B30C006435E7 /* AccountManager.swift in Sources */,
 				C0B5989422FE8D2700E997DA /* Location.pb.swift in Sources */,
 				3D9C42A222745900000A6585 /* Publisher.swift in Sources */,
