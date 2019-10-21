@@ -7,51 +7,50 @@
 //
 
 import Foundation
+import CoreLocation
 
-enum ServiceError: Error {
-    case apiKeyNotAvailable
+enum LiveTrackerError: Error {
+
+    case accessTokenNotAvailable
 
     case serviceCurrentlyRunning
 
-    case authorizationNotAvailable
+    case notAuthorizedForLocationUsage(CLAuthorizationStatus)
 
-    case couldNotDecodeProtobufData(Error?)
-    case couldNotEncodeProtobufObject(desc: Error?)
+    case trackingIdentifierNotAvailable
 
     var errorDescription: String? {
         switch self {
-        case .apiKeyNotAvailable:
-            return "Starting service requires Map.ir access token. add your access in Info.plist or use init(token:) initalizer."
+        case .accessTokenNotAvailable:
+            return "Starting service requires Map.ir access token. add your access token in Info.plist or use initalizer that accepts token."
 
         case .serviceCurrentlyRunning:
-            return "Can't start a publisher while a service is already started or being started."
+            return "Can't start a publisher while a service is being started or already started."
 
-        case .couldNotDecodeProtobufData(let error):
-            if let error = error {
-                return "Couldn't decode protobuf encoded data. Contact SDK support.\nMore info: \(error)"
-            } else {
-                return "Couldn't decode protobuf encoded data. Contact SDK support."
-            }
+        case .trackingIdentifierNotAvailable:
+            return "Tracking identifier is not available. You must specify it first, using start(withTrackingIdentifier:) instance method."
 
-        case .couldNotEncodeProtobufObject(let error):
-            if let error = error {
-                return "Couldn't endcode protobuf object to data. Contact SDK support.\nMore info: \(error)"
-            } else {
-                return "Couldn't endcode protobuf object to data. Contact SDK support."
-            }
-        case .authorizationNotAvailable:
-            return "Couldn't find authorization status. use start(withTrackingIdentifier:) method to receive authorization data."
+        case .notAuthorizedForLocationUsage(let current):
+            return "Location service permission is required for Publisher. It must be set to \"When In Use\" or \"Always\" but it is \"\(current.description)\"."
         }
     }
 }
 
-enum LocationServiceError: Error, LocalizedError {
-    case unauthorizedForAlwaysUsage
-
-    var errorDescription: String? {
+fileprivate extension CLAuthorizationStatus {
+    var description: String {
         switch self {
-        case .unauthorizedForAlwaysUsage:
-            return "Authorization level must be set to \"Always Usage\" to use tracking features properly."
+        case .notDetermined:
+            return "Not Determined"
+        case .denied:
+            return "Denied"
+        case .restricted:
+            return "Restricted"
+        case .authorizedWhenInUse:
+            return "When In Use"
+        case .authorizedAlways:
+            return "Always"
+        @unknown default:
+            return "Unknown"
         }
     }
 }
