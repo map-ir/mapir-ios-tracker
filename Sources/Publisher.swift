@@ -21,27 +21,31 @@ public typealias JSONDictionary = [String: String]
 public typealias Meters = Double
 
 public protocol PublisherDelegate: class {
-    
-    /// Sends the delegate the latest published `CLLocation` object.
-    ///
-    /// - parameter publisher: the publisher that sent the location.
-    /// - Parameter location: `CLLocation` instance of published data.
-    /// It does not contain accuracy, floor and altitude data.
-    func publisher(_ publisher: Publisher, publishedLocation location: CLLocation)
-
-    /// Sends the failure details to the delegate.
-    ///
-    /// - Parameter publisher: The publisher which failed
-    /// - Parameter error: `Error` describing the failure.
-    func publisher(_ publisher: Publisher, failedWithError error: Error)
 
     /// Tells the delegate that the operation is going to stop with or without an error.
     ///
     /// After such errors, you may use `restart()` method to start it again.
-    ///
     /// - Parameter publisher: Publisher object that stopped.
     /// - Parameter error: Error which caused the process to stop, if there is any.
     func publisher(_ publisher: Publisher, stoppedWithError error: Error?)
+}
+
+public extension PublisherDelegate {
+
+    /// Sends the delegate the latest published `CLLocation` object.
+    ///
+    /// Default implementation provided.
+    /// - parameter publisher: the publisher that sent the location.
+    /// - Parameter location: `CLLocation` instance of published data.
+    /// It does not contain accuracy, floor and altitude data.
+    @inlinable func publisher(_ publisher: Publisher, publishedLocation location: CLLocation) { return }
+
+    /// Sends the failure details to the delegate.
+    ///
+    /// Default implementation provided.
+    /// - Parameter publisher: The publisher which failed
+    /// - Parameter error: `Error` describing the failure.
+    @inlinable func publisher(_ publisher: Publisher, failedWithError error: Error) { return }
 }
 
 public final class Publisher {

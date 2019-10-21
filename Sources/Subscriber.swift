@@ -29,15 +29,6 @@ public protocol SubscriberDelegate: class {
     /// You may check the timestamp of the received `location` object to validate it.
     func subscriber(_ subscriber: Subscriber, locationReceived location: CLLocation)
 
-    /// Sends the delegate errors related to failure of the procedure.
-    ///
-    /// A failure does not mean that the service is going to stop the operation.
-    /// while an error cuases a stop, `receive(_:stoppedWithError:)` gets called instead.
-    ///
-    /// - parameter subscriber: the receiver that had failure.
-    /// - Parameter error: `Error` describing the failure.
-    func subscriber(_ subscriber: Subscriber, failedWithError error: Error)
-
     /// Tells the delegate that the operation is going to stop with or without an error.
     ///
     /// After such errors, you may use `restart()` method to start it again.
@@ -45,6 +36,19 @@ public protocol SubscriberDelegate: class {
     /// - Parameter subscriber: The receiver object that stopped.
     /// - Parameter error: Error which caused the process to stop, if there is any.
     func subscriber(_ subscriber: Subscriber, stoppedWithError error: Error?)
+}
+
+public extension SubscriberDelegate {
+
+    /// Sends the delegate errors related to failure of the procedure.
+    ///
+    /// A failure does not mean that the service is going to stop the operation.
+    /// while an error cuases a stop, `receive(_:stoppedWithError:)` gets called instead.
+    ///
+    /// Default implementation provided.
+    /// - parameter subscriber: the receiver that had failure.
+    /// - Parameter error: `Error` describing the failure.
+    @inlinable func subscriber(_ subscriber: Subscriber, failedWithError error: Error) { return }
 }
 
 public final class Subscriber {
