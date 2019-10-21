@@ -44,13 +44,12 @@ final class LocationManager: NSObject {
     }
 
     func startTracking() throws {
-        switch authorizationCheck() {
-        case .success(_):
+        if let authError = authorizationCheck() {
+            throw authError
+        } else {
             locationManager.startUpdatingLocation()
             locationManager.startUpdatingHeading()
             status = .tracking
-        case .failure(let error):
-            throw error
         }
     }
 
@@ -60,16 +59,15 @@ final class LocationManager: NSObject {
         status = .stopped
     }
 
-    func authorizationCheck() -> Result<Any, Error> {
-        switch CLLocationManager.authorizationStatus() {
-        case .authorizedAlways:
-            return .success(true)
-        case .authorizedWhenInUse:
-            return .success(true)
+    func authorizationCheck() -> Error? {
+        let auth = CLLocationManager.authorizationStatus()
+        switch auth {
+        case .authorizedAlways, .authorizedWhenInUse:
+            return nil
         case .notDetermined, .denied, .restricted:
             fallthrough
         @unknown default:
-            return .failure(LocationServiceError.unauthorizedForAlwaysUsage)
+            return LiveTrackerError.notAuthorizedForLocationUsage(auth)
         }
     }
 }
@@ -83,12 +81,9 @@ extension LocationManager: CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        switch authorizationCheck() {
-        case .failure(let error):
+        if let authError = authorizationCheck() {
             self.status = .stopped
-            delegate?.locationManager(self, locationUpdatesFailWithError: error)
-        default:
-            break
+            delegate?.locationManager(self, locationUpdatesFailWithError: authError)
         }
     }
 }
