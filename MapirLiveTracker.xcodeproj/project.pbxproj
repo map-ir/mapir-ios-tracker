@@ -40,6 +40,7 @@
 		C0B5989622FED19B00E997DA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C0B5989522FED19B00E997DA /* Main.storyboard */; };
 		C0D8130E22F6FA6700DAC957 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D8130D22F6FA6700DAC957 /* Errors.swift */; };
 		C0F276AE22FD63670015EDFC /* MQTTClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F276AD22FD63670015EDFC /* MQTTClient.swift */; };
+		C0F6DD4D236065FD00906036 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F6DD4C236065FD00906036 /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -143,6 +144,7 @@
 		C0D22D5722FEE81A00FD65E4 /* Terhran, Iran, Running.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Terhran, Iran, Running.gpx"; sourceTree = "<group>"; };
 		C0D8130D22F6FA6700DAC957 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		C0F276AD22FD63670015EDFC /* MQTTClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MQTTClient.swift; sourceTree = "<group>"; };
+		C0F6DD4C236065FD00906036 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -265,6 +267,7 @@
 				C0485EB322FDFEA900E27F28 /* Subscriber.swift */,
 				C0D8130D22F6FA6700DAC957 /* Errors.swift */,
 				C089446122F6E0FC00CBFB45 /* NetworkConfiguration.swift */,
+				C0F6DD4C236065FD00906036 /* NetworkManager.swift */,
 				C01ABF2022F94B4500C93352 /* LocationManager.swift */,
 				C0F276AD22FD63670015EDFC /* MQTTClient.swift */,
 				C0B5989322FE8D2700E997DA /* Location.pb.swift */,
@@ -681,6 +684,7 @@
 				C07B855E23041A1C00E51BF2 /* CLLocation+Extensions.swift in Sources */,
 				C0D8130E22F6FA6700DAC957 /* Errors.swift in Sources */,
 				C0F276AE22FD63670015EDFC /* MQTTClient.swift in Sources */,
+				C0F6DD4D236065FD00906036 /* NetworkManager.swift in Sources */,
 				C0485EB422FDFEA900E27F28 /* Subscriber.swift in Sources */,
 				C0987AF3235DA28200EAE20B /* Logger.swift in Sources */,
 				C0061BE92355B30C006435E7 /* AccountManager.swift in Sources */,
