@@ -14,8 +14,10 @@ typealias SubscribeCompletionHandler =  () -> Void
 
 protocol MQTTClientDelegate: class {
     func mqttClient(_ mqttClient: MQTTClient, disconnectedWithError error: Error?)
-    func mqttClient(_ mqttClient: MQTTClient, publishedData data: Data)
-    func mqttClient(_ mqttClient: MQTTClient, receivedData data: Data)
+}
+extension MQTTClientDelegate {
+    func mqttClient(_ mqttClient: MQTTClient, publishedData data: Data) { return }
+    func mqttClient(_ mqttClient: MQTTClient, receivedData data: Data) { return }
 }
 
 final class MQTTClient {
@@ -32,31 +34,56 @@ final class MQTTClient {
         return client.connState
     }
 
+    var isReady: Bool {
+        return username != nil && password != nil && topic != nil
+    }
+
     var topic: String?
 
-    private let client: CocoaMQTT!
-    var networkConfiguration: NetworkConfiguration
+    private var client: CocoaMQTT!
+
+    weak var networkConfiguration: NetworkConfiguration!
 
     weak var delegate: MQTTClientDelegate?
 
-    init(networkConfiguration: NetworkConfiguration) {
-        let uuid = UUID()
-        self.networkConfiguration = networkConfiguration
-        client = CocoaMQTT(clientID: uuid.uuidString)
-        client.host = self.networkConfiguration.brokerAddress
-        client.port = self.networkConfiguration.brokerPort
+    init() {
 
-        if networkConfiguration.usesSSL {
-            // TODO: setup SSL
+        NotificationCenter.default.addObserver(forName: kNetworkConfigurationUpdatedNotification,
+                                               object: nil,
+                                               queue: .main) { [weak self] (notification) in
+            self?.updateNetworkConfiguration()
         }
+
+        NotificationCenter.default.addObserver(forName: kUpdatedUsernameAndPasswordNotification,
+                                               object: nil,
+                                               queue: .main) { [weak self] (notification) in
+            self?.updateUsernameAndPassword()
+        }
+
+        let uuid = UUID()
+        client = CocoaMQTT(clientID: uuid.uuidString)
+
+        updateNetworkConfiguration()
 
         client.autoReconnect = false
         client.cleanSession = true
         client.delegate = self
     }
 
-    func changeNetworkConfigurationTo(_ newNetworkConfiguration: NetworkConfiguration) {
+    func updateNetworkConfiguration() {
+        client.host = NetworkingManager.shared.configuration.brokerAddress
+        client.port = NetworkingManager.shared.configuration.brokerPort
 
+        if NetworkingManager.shared.configuration.usesSSL {
+            // TODO: setup SSL
+        }
+
+        networkConfiguration = NetworkingManager.shared.configuration
+    }
+
+    func updateUsernameAndPassword() {
+        self.username = AccountManager.shared.username
+        self.password = AccountManager.shared.password
     }
 
     deinit {
