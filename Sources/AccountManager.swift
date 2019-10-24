@@ -13,52 +13,135 @@ import UIKit
 import AppKit
 #endif
 
+let kAccessTokenInfoPlistKey = "MAPIRAccessToken"
+
+let kUpdatedUsernameAndPasswordNotification = Notification.Name("kUpdatedUsernameAndPasswordNotification")
+
+/// Manager for Map.ir account.
 public final class AccountManager {
 
-    var accessToken: String?
-    var username: String?
-    var password: String?
+    public static var shared: AccountManager = AccountManager()
 
-    var topics: [String: String] = [:]
-
-    init(accessToken: String) {
-        self.accessToken = accessToken
-    }
-
-    init() {
-        if let token = Bundle.main.object(forInfoDictionaryKey: "MAPIRAccessToken") as? String {
-            self.accessToken = token
+    private var _accessToken: String?
+    public internal(set) var accessToken: String? {
+        get {
+            return _accessToken
+        }
+        set {
+            if let newValue = newValue, !newValue.isEmpty {
+                _accessToken = newValue
+            } else {
+                if let token = Bundle.main.object(forInfoDictionaryKey: kAccessTokenInfoPlistKey) as? String {
+                    _accessToken = token
+                } else {
+                    logError("Couldn't find access token in Info.plist. You can't start unless you add your access token using Publisher/Subsciber initializer that has accessToken argument, or Info.plist.")
+                }
+            }
         }
     }
 
-    let deviceIdentifier: UUID = {
-        #if os(iOS) || os(watchOS) || os(tvOS)
-        if let uuid = UIDevice.current.identifierForVendor {
-            return uuid
+    internal private(set) var username: String?
+    internal private(set) var password: String?
+
+    private func set(username: String, password: String) {
+        if self.username?.lowercased() == username.lowercased() || self.password?.lowercased() == password.lowercased() {
+            self.username = username
+            self.password = password
+            let notification = Notification(name: kUpdatedUsernameAndPasswordNotification)
+            NotificationCenter.default.post(notification)
         }
-        #endif
-        return UUID()
-    }()
+    }
+
+    private var topics: [String: String] = [:]
+
+    private init() { }
 
     var isAuthenticated: Bool {
-        if let token = accessToken, !token.isEmpty {
-            return true
-        } else {
-            return false
-        }
+        (accessToken ?? "").isEmpty ? false : true
     }
 
-    func topic(forTrackingIdentifier trackingID: String) -> String? {
+    typealias RequestTopicCompletionHandler = (String?, Error?) -> ()
+
+    func topic(forTrackingIdentifier trackingID: String, completionHandler: @escaping RequestTopicCompletionHandler) {
         if let topic = topics[trackingID] {
-            return topic
+            completionHandler(topic, nil)
+            return
         } else {
-            createNewTopic(forTrackingIdentifier: trackingID)
-            return nil
+            createNewTopic(forTrackingIdentifier: trackingID, completionHandler: completionHandler)
+            return
         }
     }
 
-    func createNewTopic(forTrackingIdentifier trackingID: String) {
+    var activeTopicFetchingTask: URLSessionDataTask? = nil
 
+    func createNewTopic(forTrackingIdentifier trackingID: String, completionHandler: @escaping RequestTopicCompletionHandler) {
+
+        if let activeTask = activeTopicFetchingTask, activeTask.state == .running {
+            activeTask.cancel()
+        }
+
+        guard let accessToken = self.accessToken else {
+            logError("Couldn't find Map.ir access token.")
+            return
+        }
+
+        var headers: [String: String] = [:]
+        headers.updateValue(accessToken, forKey: "x-api-key")
+        headers.updateValue("application/json", forKey: "Content-Type")
+
+        let bodyDictionary: JSONDictionary = ["type": "subscriber", "track_id": trackingID, "device_id": NetworkConfiguration.deviceIdentifier.uuidString]
+
+        let jsonEncoder = JSONEncoder()
+        jsonEncoder.outputFormatting = .prettyPrinted
+
+        guard let encodedBody = try? jsonEncoder.encode(bodyDictionary) else { return }
+
+        let request = NetworkingManager.shared.urlRequest(ofHTTPMehod: "post", customHeaders: headers, body: encodedBody)
+
+        let dataTask = NetworkingManager.shared.dataTask(with: request) { (data, urlResponse, error) in
+            if let error = error {
+                DispatchQueue.main.async { completionHandler(nil, error) }
+                return
+            }
+
+            guard let data = data else { return }
+
+            let urlResponse = urlResponse as! HTTPURLResponse
+            switch urlResponse.statusCode {
+            case 200...201:
+                do {
+                    struct NewLiveTrackerResponse: Decodable {
+
+                        struct Data: Decodable {
+                            var topic: String
+                            var username: String
+                            var password: String
+                        }
+
+                        var data: NewLiveTrackerResponse.Data
+                        var message: String
+                    }
+
+                    let decodedData = try JSONDecoder().decode(NewLiveTrackerResponse.self, from: data)
+                    self.set(username: decodedData.data.username, password: decodedData.data.password)
+                    DispatchQueue.main.async {
+                        completionHandler(decodedData.data.topic, nil)
+                    }
+                    return
+                } catch let decodingError {
+                    DispatchQueue.main.async {
+                        completionHandler(nil, decodingError)
+                    }
+                    return
+                }
+            default:
+                DispatchQueue.main.async {
+                    completionHandler(nil, InternalError.couldNotCreateTopic)
+                }
+            }
+        }
+
+        self.activeTopicFetchingTask = dataTask
+        dataTask.resume()
     }
-
 }

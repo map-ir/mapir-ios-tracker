@@ -8,6 +8,7 @@
 
 import Foundation
 import CocoaMQTT
+import UIKit
 
 public class NetworkConfiguration {
 
@@ -39,7 +40,7 @@ public class NetworkConfiguration {
         self.session = session
     }
 
-    let userAgent: String = {
+    static let userAgent: String = {
         var components: [String] = []
 
         if let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String ?? Bundle.main.infoDictionary?["CFBundleIdentifier"] as?String {
@@ -80,5 +81,14 @@ public class NetworkConfiguration {
         components.append("(\(chip))")
 
         return components.joined(separator: " ")
+    }()
+
+    static let deviceIdentifier: UUID = {
+        #if os(iOS) || os(watchOS) || os(tvOS)
+        if let uuid = UIDevice.current.identifierForVendor {
+            return uuid
+        }
+        #endif
+        return UUID()
     }()
 }
