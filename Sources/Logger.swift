@@ -8,21 +8,25 @@
 
 import Foundation
 
-func logDebug(_ message: String) {
-    Logger.default.log(message, level: .debug)
+func logDebug(_ message: Any..., separator: String = " ", terminator: String = "\n") {
+    Logger.default.log(message, level: .debug, separator: separator, terminator: terminator)
 }
 
-func logInfo(_ message: String) {
-    Logger.default.log(message, level: .info)
+func logInfo(_ message: Any..., separator: String = " ", terminator: String = "\n") {
+    Logger.default.log(message, level: .info, separator: separator, terminator: terminator)
 }
 
-func logError(_ message: String) {
-    Logger.default.log(message, level: .error)
+func logError(_ message: Any..., separator: String = " ", terminator: String = "\n") {
+    Logger.default.log(message, level: .error, separator: separator, terminator: terminator)
 }
 
+/// Logging manager class for SDK.
 struct Logger {
+
+    /// Indicates logging level.
     var level: Level
 
+    /// Default logger instance.
     static let `default` = Logger(level: .debug)
 
     private init(level: Level) {
@@ -35,9 +39,10 @@ struct Logger {
         return timeFormatter
     }()
 
-    func log(_ message: String, level: Level) {
+    func log(_ message: [Any], level: Level, separator: String = " ", terminator: String = "\n") {
         if level.rawValue >= self.level.rawValue {
-            print("LiveTracker - \(level.description) - \(self.timeFormatter.string(from: Date())): \(message)")
+            let message = message.map { "\($0)" }.joined(separator: separator)
+            print("LiveTracker - \(level.description) - \(self.timeFormatter.string(from: Date())): \(message)", terminator: terminator)
         }
     }
 }
