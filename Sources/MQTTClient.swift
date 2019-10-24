@@ -14,10 +14,12 @@ typealias SubscribeCompletionHandler =  () -> Void
 
 protocol MQTTClientDelegate: class {
     func mqttClient(_ mqttClient: MQTTClient, disconnectedWithError error: Error?)
+    func mqttClient(_ mqttClient: MQTTClient, publishedData data: Data)
+    func mqttClient(_ mqttClient: MQTTClient, receivedData data: Data)
 }
 extension MQTTClientDelegate {
-    func mqttClient(_ mqttClient: MQTTClient, publishedData data: Data) { return }
-    func mqttClient(_ mqttClient: MQTTClient, receivedData data: Data) { return }
+    @inlinable func mqttClient(_ mqttClient: MQTTClient, publishedData data: Data) { return }
+    @inlinable func mqttClient(_ mqttClient: MQTTClient, receivedData data: Data) { return }
 }
 
 final class MQTTClient {
@@ -40,34 +42,37 @@ final class MQTTClient {
 
     var topic: String?
 
-    private var client: CocoaMQTT!
+    private let client: CocoaMQTT!
 
     weak var networkConfiguration: NetworkConfiguration!
 
     weak var delegate: MQTTClientDelegate?
 
     init() {
-
-        NotificationCenter.default.addObserver(forName: kNetworkConfigurationUpdatedNotification,
-                                               object: nil,
-                                               queue: .main) { [weak self] (notification) in
-            self?.updateNetworkConfiguration()
-        }
-
-        NotificationCenter.default.addObserver(forName: kUpdatedUsernameAndPasswordNotification,
-                                               object: nil,
-                                               queue: .main) { [weak self] (notification) in
-            self?.updateUsernameAndPassword()
-        }
-
         let uuid = UUID()
         client = CocoaMQTT(clientID: uuid.uuidString)
+
+        setupObservers()
 
         updateNetworkConfiguration()
 
         client.autoReconnect = false
         client.cleanSession = true
         client.delegate = self
+    }
+
+    func setupObservers() {
+        NotificationCenter.default.addObserver(forName: kNetworkConfigurationUpdatedNotification,
+                                               object: nil,
+                                               queue: .main) { [weak self] (_) in
+            self?.updateNetworkConfiguration()
+        }
+
+        NotificationCenter.default.addObserver(forName: kUpdatedUsernameAndPasswordNotification,
+                                               object: nil,
+                                               queue: .main) { [weak self] (_) in
+            self?.updateUsernameAndPassword()
+        }
     }
 
     func updateNetworkConfiguration() {
@@ -99,8 +104,11 @@ final class MQTTClient {
         _ = client.connect(timeout: 10)
     }
 
+    /// Stops MQTTClient if it is connecting or connected.
     func disconnect() {
-        client.disconnect()
+        if status == .connected || status == .connecting {
+            client.disconnect()
+        }
     }
 
     func publish(data: Data, onTopic topic: String) {
