@@ -10,11 +10,21 @@ import Foundation
 
 let kNetworkConfigurationUpdatedNotification = Notification.Name("kNetworkConfigurationUpdatedNotification")
 
+typealias JSONDictionary = [String: String]
+
+/// Object that managers networking related tasks.
 public class NetworkingManager {
 
+    /// Shared networking manager.
     public static let shared = NetworkingManager()
 
     private var _configuration: NetworkConfiguration = .mapirDefault
+
+    /// Configuration for the Networking Manager.
+    ///
+    /// By default it is set to `NetworkConfiguration.mapirDefault`.
+    /// If you want to change the network configuration, you may stop the service first.
+    /// Or just change it before instatiating `Publisher` or `Subscriber`.
     public var configuration: NetworkConfiguration {
         get { _configuration }
         set {
@@ -34,9 +44,9 @@ extension NetworkingManager {
 
         var urlRequest: URLRequest
         if let path = path {
-            urlRequest = URLRequest(url: configuration.apiBaseURL.appendingPathComponent(path))
+            urlRequest = URLRequest(url: configuration.authenticationServiceURL.appendingPathComponent(path))
         } else {
-            urlRequest = URLRequest(url: configuration.apiBaseURL)
+            urlRequest = URLRequest(url: configuration.authenticationServiceURL)
         }
 
         urlRequest.httpMethod = method
@@ -46,7 +56,7 @@ extension NetworkingManager {
             urlRequest.addValue(pair.value, forHTTPHeaderField: pair.key)
         }
 
-        if method.lowercased() == "body" {
+        if method.lowercased() == "post" {
             urlRequest.httpBody = body
         }
 
