@@ -21,9 +21,6 @@
 		3D9C433422746323000A6585 /* MapirLiveTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9C429022745894000A6585 /* MapirLiveTracker.framework */; };
 		3D9C433522746323000A6585 /* MapirLiveTracker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9C429022745894000A6585 /* MapirLiveTracker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C0061BE92355B30C006435E7 /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0061BE82355B30C006435E7 /* AccountManager.swift */; };
-		C0061BEA2355B311006435E7 /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0061BE82355B30C006435E7 /* AccountManager.swift */; };
-		C0061BEB2355B312006435E7 /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0061BE82355B30C006435E7 /* AccountManager.swift */; };
-		C0061BEC2355B312006435E7 /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0061BE82355B30C006435E7 /* AccountManager.swift */; };
 		C01ABF2122F94B4500C93352 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01ABF2022F94B4500C93352 /* LocationManager.swift */; };
 		C0478D2323028EBF00C15A73 /* DataTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0478D2223028EBF00C15A73 /* DataTableViewCell.swift */; };
 		C0485EB422FDFEA900E27F28 /* Subscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0485EB322FDFEA900E27F28 /* Subscriber.swift */; };
@@ -141,6 +138,7 @@
 		C0A39FDB22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaAsyncSocket.framework; path = Carthage/Build/iOS/CocoaAsyncSocket.framework; sourceTree = "<group>"; };
 		C0B5989322FE8D2700E997DA /* Location.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.pb.swift; sourceTree = "<group>"; };
 		C0B5989522FED19B00E997DA /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		C0BDDBAE23623671007F4A16 /* Documentation.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = Documentation.sh; sourceTree = "<group>"; };
 		C0D22D5722FEE81A00FD65E4 /* Terhran, Iran, Running.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Terhran, Iran, Running.gpx"; sourceTree = "<group>"; };
 		C0D8130D22F6FA6700DAC957 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		C0F276AD22FD63670015EDFC /* MQTTClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MQTTClient.swift; sourceTree = "<group>"; };
@@ -221,6 +219,7 @@
 				3D9C42A32274595F000A6585 /* Tests */,
 				3D9C43222274629B000A6585 /* Example */,
 				3D9C429B227458E8000A6585 /* Configs */,
+				C0BDDBAD2362364B007F4A16 /* Scripts */,
 				3D9C429122745894000A6585 /* Products */,
 				C0A39FD922F6EC3200D1DFD0 /* Frameworks */,
 			);
@@ -317,6 +316,14 @@
 				C0A39FDA22F6EC3200D1DFD0 /* CocoaMQTT.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C0BDDBAD2362364B007F4A16 /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				C0BDDBAE23623671007F4A16 /* Documentation.sh */,
+			);
+			path = Scripts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -698,7 +705,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C0061BEA2355B311006435E7 /* AccountManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -706,7 +712,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C0061BEB2355B312006435E7 /* AccountManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -714,7 +719,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C0061BEC2355B312006435E7 /* AccountManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1205,7 +1209,6 @@
 		3D9C430A2274611B000A6585 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Configs/MapirLiveTrackerTests.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1225,7 +1228,6 @@
 		3D9C430B2274611B000A6585 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Configs/MapirLiveTrackerTests.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1245,7 +1247,6 @@
 		3D9C431A22746198000A6585 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1266,7 +1267,6 @@
 		3D9C431B22746198000A6585 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
