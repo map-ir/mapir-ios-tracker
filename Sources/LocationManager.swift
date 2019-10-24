@@ -45,6 +45,7 @@ final class LocationManager: NSObject {
 
     func startTracking() throws {
         if let authError = authorizationCheck() {
+            status = .stopped
             throw authError
         } else {
             locationManager.startUpdatingLocation()
@@ -53,10 +54,13 @@ final class LocationManager: NSObject {
         }
     }
 
+    /// Stops Location Manager if it is tracking.
     func stopTracking() {
-        locationManager.stopUpdatingLocation()
-        locationManager.stopUpdatingHeading()
-        status = .stopped
+        if status == .tracking {
+            locationManager.stopUpdatingLocation()
+            locationManager.stopUpdatingHeading()
+            status = .stopped
+        }
     }
 
     func authorizationCheck() -> Error? {
