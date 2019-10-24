@@ -23,23 +23,38 @@ class MainViewController: UIViewController {
 
     var trackingIdentifier = "sample-unique-identifier-test"
 
+    let dateFormatter: DateFormatter = {
+        let dateForamtter = DateFormatter()
+        dateForamtter.timeZone = TimeZone.current
+        dateForamtter.dateFormat = "dd/MM HH:mm:ss.SSS"
+        return dateForamtter
+    }()
+
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    @IBOutlet weak var clearBarButton: UIBarButtonItem!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         receiver = Subscriber(accessToken: token)
-        tracker = Publisher(accessToken: token, distanceFilter: 30)
+        tracker = Publisher(accessToken: token, distanceFilter: 30.0)
         receiver.delegate = self
 
         tableView.delegate = self
         tableView.dataSource = self
     }
 
-    @IBAction func clearButtonTapped(_ sender: UIButton) {
-        sentLocations = []
-        receivedLocations = []
+    @IBAction func segmentChanged(_ sender: UISegmentedControl) {
+        tableView.reloadData()
+    }
 
+    @IBAction func clearButtonTapped(_ sender: Any) {
+        if segmentedControl.selectedSegmentIndex == 0 {
+            receivedLocations = []
+        } else {
+            sentLocations = []
+        }
         tableView.reloadData()
     }
 
@@ -54,9 +69,9 @@ class MainViewController: UIViewController {
     @IBAction func publishingSwitched(_ sender: UISwitch) {
         if sender.isOn {
             switch CLLocationManager.authorizationStatus() {
-            case .authorizedWhenInUse, .denied, .notDetermined, .restricted:
+            case .denied, .notDetermined, .restricted:
                 locationManager.requestAlwaysAuthorization()
-            case .authorizedAlways:
+            case .authorizedWhenInUse, .authorizedAlways:
                 tracker = Publisher(accessToken: token, distanceFilter: 10.0)
                 tracker.delegate = self
                 tracker.start(withTrackingIdentifier: trackingIdentifier)
@@ -67,15 +82,14 @@ class MainViewController: UIViewController {
             tracker.stop()
         }
     }
-    @IBAction func startPublishButtonTapped(_ sender: UIButton) {
-
-    }
 }
 
 extension MainViewController: SubscriberDelegate {
     func subscriber(_ subscriber: Subscriber, locationReceived location: CLLocation) {
         receivedLocations.insert(location, at: 0)
-        tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .top)
+        if segmentedControl.selectedSegmentIndex == 0 {
+            tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .top)
+        }
     }
 
     func subscriber(_ subscriber: Subscriber, failedWithError error: Error) {
@@ -95,9 +109,10 @@ extension MainViewController: SubscriberDelegate {
 
 extension MainViewController: PublisherDelegate {
     func publisher(_ liveTrackerPublisher: Publisher, publishedLocation location: CLLocation) {
-        
         sentLocations.insert(location, at: 0)
-        tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .top)
+        if segmentedControl.selectedSegmentIndex == 1 {
+            tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .top)
+        }
     }
 
     func publisher(_ liveTrackerPublisher: Publisher, failedWithError error: Error) {
@@ -115,42 +130,47 @@ extension MainViewController: PublisherDelegate {
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 1 {
-            return sentLocations.count
-        } else if section == 0 {
+        if segmentedControl.selectedSegmentIndex == 0 {
             return receivedLocations.count
+        } else {
+            return sentLocations.count
         }
-        return 0
+    }
+
+    func loactionForCurrentSegment(at index: Int) -> CLLocation {
+        if segmentedControl.selectedSegmentIndex == 0 {
+            return receivedLocations[index]
+        } else {
+            return sentLocations[index]
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var data: CLLocation = CLLocation()
-        if indexPath.section == 1 {
-            data = sentLocations[indexPath.row]
-        } else if indexPath.section == 0 {
-            data = receivedLocations[indexPath.row]
-        }
+        let data = loactionForCurrentSegment(at: indexPath.row)
 
         let cell = tableView.dequeueReusableCell(withIdentifier: DataTableViewCell.reuseIdentifier, for: indexPath) as! DataTableViewCell
 
         cell.coordinatesLabel.text = "\(data.coordinate.latitude), \(data.coordinate.longitude)"
         cell.directionLabel.text = "\(data.course)"
         cell.speedLabel.text = "\(data.speed)"
-        cell.timeLabel.text = "\(data.timestamp.description(with: Locale.current))"
+        cell.timeLabel.text = "\(dateFormatter.string(from: data.timestamp))"
 
         return cell
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
+    }
+
+    func titleForCurrentSegment() -> String {
+        if segmentedControl.selectedSegmentIndex == 0 {
+            return "Received Locations"
+        } else {
+            return "Sent Locations"
+        }
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 1 {
-            return "Sent Locations"
-        } else if section == 0 {
-            return "Received Locations"
-        }
-        return nil
+        return titleForCurrentSegment()
     }
 }
