@@ -1,0 +1,2 @@
+github "emqtt/CocoaMQTT" "master"
+github "apple/swift-protobuf" ~> 1.0
