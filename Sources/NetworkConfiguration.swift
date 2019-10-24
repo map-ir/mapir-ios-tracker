@@ -10,19 +10,36 @@ import Foundation
 import CocoaMQTT
 import UIKit
 
+/// An object that represents a network configuration for the service.
 public class NetworkConfiguration {
 
-    public let apiBaseURL: URL
+    /// API base URL.
+    ///
+    /// This url is used to fetch topics for tracking identifier.
+    public let authenticationServiceURL: URL
+
+    /// Maximum network retries.
     public let maximumNetworkRetries: Int
 
+    /// MQTT Broker address.
     public let brokerAddress: String
+
+    /// MQTT Broker port.
     public let brokerPort: UInt16
+
+    /// Quality of Service for MQTT packets.
     public let qos: CocoaMQTTQOS
+
+    /// Indicates that the configuration uses SSL or not.
     public let usesSSL: Bool
 
+    /// Shared `URLSession` instance for the service.
     public let session: URLSession
 
-    public static let mapirDefault = NetworkConfiguration(serverURL: URL(string: "https://tracking-dev.map.ir/")!,
+    /// Default Map.ir service configuration.
+    ///
+    /// - Attention: If you are using live tracking service with Map.ir infrastructre, you have to use this default configurations.
+    public static let mapirDefault = NetworkConfiguration(authenticationServiceURL: URL(string: "https://tracking-dev.map.ir/")!,
                                                           maximumRetries: 3,
                                                           brokerAddress: "dev.map.ir",
                                                           port: 1883,
@@ -30,8 +47,20 @@ public class NetworkConfiguration {
                                                           usesSSL: false,
                                                           session: .shared)
 
-    public init(serverURL: URL, maximumRetries: Int, brokerAddress: String, port: UInt16, qos: CocoaMQTTQOS, usesSSL: Bool, session: URLSession) {
-        self.apiBaseURL = serverURL
+    /// Creates a customized network configuration.
+    ///
+    /// - Parameter authenticationServiceURL: URL to fetch topics for tracking identifier.
+    /// - Parameter maximumRetries: Maximum network retries.
+    /// - Parameter brokerAddress: MQTT Broker address.
+    /// - Parameter port: MQTT Broker port.
+    /// - Parameter qos: Quality of Service for MQTT packets.
+    /// - Parameter usesSSL: Indicates that the configuration uses SSL or not.
+    /// - Parameter session: Shared `URLSession` instance for the service.
+    ///
+    /// If you use Map.ir Live Tracking Service on your own infrastructure,
+    /// you can create a custom configuration using this initializer.
+    public init(authenticationServiceURL: URL, maximumRetries: Int, brokerAddress: String, port: UInt16, qos: CocoaMQTTQOS, usesSSL: Bool, session: URLSession) {
+        self.authenticationServiceURL = authenticationServiceURL
         self.brokerAddress = brokerAddress
         self.brokerPort = port
         self.maximumNetworkRetries = 3
