@@ -9,9 +9,9 @@
 import Foundation
 import CocoaMQTT
 
-public struct NetworkConfiguration {
+public class NetworkConfiguration {
 
-    public let serverURL: URL
+    public let apiBaseURL: URL
     public let maximumNetworkRetries: Int
 
     public let brokerAddress: String
@@ -19,22 +19,24 @@ public struct NetworkConfiguration {
     public let qos: CocoaMQTTQOS
     public let usesSSL: Bool
 
-    public let session: URLSession = .shared
+    public let session: URLSession
 
     public static let mapirDefault = NetworkConfiguration(serverURL: URL(string: "https://tracking-dev.map.ir/")!,
                                                           maximumRetries: 3,
                                                           brokerAddress: "dev.map.ir",
                                                           port: 1883,
                                                           qos: .qos0,
-                                                          usesSSL: false)
+                                                          usesSSL: false,
+                                                          session: .shared)
 
-    public init(serverURL: URL, maximumRetries: Int, brokerAddress: String, port: UInt16, qos: CocoaMQTTQOS, usesSSL: Bool) {
-        self.serverURL = serverURL
+    public init(serverURL: URL, maximumRetries: Int, brokerAddress: String, port: UInt16, qos: CocoaMQTTQOS, usesSSL: Bool, session: URLSession) {
+        self.apiBaseURL = serverURL
         self.brokerAddress = brokerAddress
         self.brokerPort = port
         self.maximumNetworkRetries = 3
         self.qos = qos
-        self.usesSSL = false
+        self.usesSSL = usesSSL
+        self.session = session
     }
 
     let userAgent: String = {
@@ -46,7 +48,7 @@ public struct NetworkConfiguration {
         }
 
         // Replace Your bundle name
-        let libraryBundle: Bundle? = Bundle(for: Publisher.self)
+        let libraryBundle: Bundle? = Bundle(for: NetworkConfiguration.self)
 
         if let libraryName = libraryBundle?.infoDictionary?["CFBundleName"] as? String, let version = libraryBundle?.infoDictionary?["CFBundleShortVersionString"] as? String {
             components.append("\(libraryName)/\(version)")
@@ -79,17 +81,4 @@ public struct NetworkConfiguration {
 
         return components.joined(separator: " ")
     }()
-}
-
-
-struct NewLiveTrackerResponse: Decodable {
-
-    struct Data: Decodable {
-        var topic: String
-        var username: String
-        var password: String
-    }
-
-    var data: NewLiveTrackerResponse.Data
-    var message: String
 }
