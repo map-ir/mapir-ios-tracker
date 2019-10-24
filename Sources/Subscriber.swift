@@ -17,6 +17,7 @@ import UIKit
 import AppKit
 #endif
 
+/// An object that handles publishing user location lively.
 
 public protocol SubscriberDelegate: class {
 
@@ -24,43 +25,47 @@ public protocol SubscriberDelegate: class {
     ///
     /// - parameter subscriber: the receiver that received the location.
     /// - Parameter location: `CLLocation` instance of received data.
-    /// It does not contain accuracy, floor and altitude data.
+    ///     It does not contain accuracy, floor and altitude data.
     ///
     /// You may check the timestamp of the received `location` object to validate it.
     func subscriber(_ subscriber: Subscriber, locationReceived location: CLLocation)
 
     /// Tells the delegate that the operation is going to stop with or without an error.
     ///
-    /// After such errors, you may use `restart()` method to start it again.
-    ///
     /// - Parameter subscriber: The receiver object that stopped.
     /// - Parameter error: Error which caused the process to stop, if there is any.
+    ///
+    /// After such errors, you may use `restart()` method to start it again.
     func subscriber(_ subscriber: Subscriber, stoppedWithError error: Error?)
+
+    /// Sends the delegate errors related to failure of the procedure.
+    ///
+    /// - parameter subscriber: the receiver that had failure.
+    /// - Parameter error: `Error` describing the failure.
+    ///
+    /// A failure does not mean that the service is going to stop the operation.
+    /// while an error cuases a stop, `receive(_:stoppedWithError:)` gets called instead.
+    func subscriber(_ subscriber: Subscriber, failedWithError error: Error)
 }
 
 public extension SubscriberDelegate {
 
-    /// Sends the delegate errors related to failure of the procedure.
-    ///
-    /// A failure does not mean that the service is going to stop the operation.
-    /// while an error cuases a stop, `receive(_:stoppedWithError:)` gets called instead.
-    ///
-    /// Default implementation provided.
-    /// - parameter subscriber: the receiver that had failure.
-    /// - Parameter error: `Error` describing the failure.
+    /// Default implementation has empty body.
     @inlinable func subscriber(_ subscriber: Subscriber, failedWithError error: Error) { return }
 }
 
+/// An object that handles fetching location lively based on a tracking identifier.
 public final class Subscriber {
 
     // MARK: General Properties
 
-    /// Your access token of Map.ir services.
-    /// Visit [App Registration website](https://corp.map.ir/appregistration) for more information.
-    private(set) var account: AccountManager
+    /// Last received valid location.
+    public private(set) var lastReceivedLocation: CLLocation?
+
     private var topic: String?
 
     /// Current tracking identifier which service is using.
+    ///
     /// `stop()` method does not remove tracking identifier,
     /// so you can use `restart()` method to receive data of the same identifier.
     public private(set) var trackingIdentifier: String?
@@ -72,19 +77,7 @@ public final class Subscriber {
     /// Receiver sents notifications about received data and failures to the delegate.
     public weak var delegate: SubscriberDelegate?
 
-    /// Maximum number of retries that SDK itself handles.
-    public var networkConfiguration: NetworkConfiguration
     private var retries = 0
-
-    private let deviceIdentifier: UUID = {
-        let uuid: UUID?
-        #if os(iOS) || os(watchOS) || os(tvOS)
-        if let uuid = UIDevice.current.identifierForVendor {
-            return uuid
-        }
-        #endif
-        return UUID()
-    }()
 
     /// Status of Receiver class
     public enum Status {
@@ -114,28 +107,29 @@ public final class Subscriber {
     /// If you don't have any, visit [App Registration website](https://corp.map.ir/appregistration).
     /// Starting the publisher fails if you don't define the this key-value pair.
     public init() {
-        self.account                    = AccountManager()
-        self.networkConfiguration       = .mapirDefault
-        self.mqttClient                 = MQTTClient(networkConfiguration: networkConfiguration)
-        self.status                     = .initiated
-        self.mqttClient.delegate        = self
+        AccountManager.shared.accessToken = nil
+        self.mqttClient                   = MQTTClient()
+        self.status                       = .initiated
+        self.mqttClient.delegate          = self
     }
 
     /// DescriptionInitializes a Receiver object.
     ///
     /// - Parameter token: Your Map.ir access token.
-    /// If you don't have any, visit [App Registration website](https://corp.map.ir/appregistration).
+    ///
+    /// If you don't have any, visit "[App Registration website](https://corp.map.ir/appregistration)".
     public init(accessToken: String) {
-        self.account                    = AccountManager(accessToken: accessToken)
-        self.networkConfiguration       = .mapirDefault
-        self.mqttClient                 = MQTTClient(networkConfiguration: networkConfiguration)
-        self.status                     = .initiated
-        self.mqttClient.delegate        = self
+        AccountManager.shared.accessToken = accessToken
+        self.mqttClient                   = MQTTClient()
+        self.status                       = .initiated
+        self.mqttClient.delegate          = self
     }
 
     // MARK: Start
 
     /// Starts receiving location of the the specified tracking identifier.
+    ///
+    /// - Parameter identifier: A string which is used to name the current publishing session.
     ///
     /// This method first authorizes the user then starts receiving. it may take some time to run.
     /// If the starting fails, you will be notified via `receiver(_:stoppedWithError:)` delegate method.
@@ -143,28 +137,26 @@ public final class Subscriber {
     ///
     /// - Attention: You yourself must handle uniqueness of your tracking identifiers.
     /// Otherwise conflicts may occure between published and received data.
-    ///
-    /// - Parameter identifier: A string which is used to name the current publishing session.
-    public func start(withTrackingIdentifier identifier: String) {
-        guard account.isAuthenticated else {
-            self.delegate?.subscriber(self, failedWithError: ServiceError.apiKeyNotAvailable)
+    public func start(withTrackingIdentifier trackingID: String) {
+        guard AccountManager.shared.isAuthenticated else {
+            stopService(shouldCallDelegate: true, error: LiveTrackerError.accessTokenNotAvailable)
             return
         }
 
-        switch status {
+        switch self.status {
         case .running, .starting:
-            delegate?.subscriber(self, failedWithError: ServiceError.serviceCurrentlyRunning)
+            self.delegate?.subscriber(self, failedWithError: LiveTrackerError.serviceCurrentlyRunning)
         case .stopped, .initiated:
-            retries = 0
-            trackingIdentifier = identifier
-            // Request topic, username and password from the server.
-            self.requestTopic(trackingIdentifier: identifier, completionHandler: requestTopicCompletionHandler)
+            self.retries = 0
+            self.trackingIdentifier = trackingID
+
+            AccountManager.shared.topic(forTrackingIdentifier: trackingID, completionHandler: self.requestTopicCompletionHandler)
         }
     }
 
-    private func connectMqtt() {
+    private func startService() {
         self.mqttClient.connect { [weak self] in
-            // TODO: Subscribe on topic and start receiving.
+            logDebug("Connected to MQTTBroker.")
             guard let topic = self?.topic else { return }
             self?.mqttClient.subscribe(toTopic: topic) { [weak self] in
                 self?.status = .running
@@ -172,74 +164,31 @@ public final class Subscriber {
         }
     }
 
-    private lazy var requestTopicCompletionHandler: ((Result<(String, String, String), Error>) -> Void) = {  [weak self] (result) in // TODO: Chech if [weak self] is needed.
+    private lazy var requestTopicCompletionHandler: (String?, Error?) -> () = {  [weak self] (topic, error) in
         guard let self = self else { return }
-        switch result {
-        case .failure(let error):
-            if self.retries < self.networkConfiguration.maximumNetworkRetries {
-                guard let trackingIdentifier = self.trackingIdentifier else { return }
+        if let error = error {
+            if let error = error as? InternalError, error == InternalError.couldNotCreateTopic {
+                logError("Live Tracker Service is not available. Contant support.")
+                self.stopService(shouldCallDelegate: true, error: LiveTrackerError.liveTrackerServiceNotAvailable)
+            } else if self.retries < NetworkingManager.shared.configuration.maximumNetworkRetries {
                 self.retries += 1
-                self.requestTopic(trackingIdentifier: trackingIdentifier, completionHandler: self.requestTopicCompletionHandler)
+                logDebug("Couldn't create topic. Retrying in 5 seconds. (\(self.retries))")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
+                    guard let self = self else { return }
+                    guard let trackingIdentifier = self.trackingIdentifier else { return }
+                    AccountManager.shared.topic(forTrackingIdentifier: trackingIdentifier, completionHandler: self.requestTopicCompletionHandler)
+                }
             } else {
-                self.delegate?.subscriber(self, failedWithError: error)
-                self.status = .stopped
+                logDebug("Couldn't create topic. Maximum retries reached. Stopping service. (\(self.retries))")
+                self.stopService(shouldCallDelegate: true, error: error)
             }
-        case .success(let topic, let username, let password):
-            self.topic = topic
-            self.mqttClient.username = username
-            self.mqttClient.password = password
-
-            self.retries = 0
-            // If request succeeds, connect to MQTT Client.
-            self.connectMqtt()
-        }
-    }
-
-    private func requestTopic(trackingIdentifier: String,
-                              completionHandler: @escaping (Result<(String, String, String), Error>) -> Void) {
-
-        let url = networkConfiguration.serverURL
-        var request = URLRequest(url: url)
-
-        guard let accessToken = account.accessToken else {
-            preconditionFailure("Token Removed.")
         }
 
-        request.addValue(accessToken, forHTTPHeaderField: "x-api-key")
-        request.addValue(self.networkConfiguration.userAgent, forHTTPHeaderField: "User-Agent")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpMethod = "post"
-        request.timeoutInterval = 10
+        guard let topic = topic else { return }
 
-        guard let trackingIdentifier = self.trackingIdentifier else { return }
-        let bodyDictionary: JSONDictionary = ["type": "subscriber", "track_id": trackingIdentifier, "device_id": deviceIdentifier.uuidString]
-
-        let jsonEncoder = JSONEncoder()
-        jsonEncoder.outputFormatting = .prettyPrinted
-
-        guard let encodedBody = try? jsonEncoder.encode(bodyDictionary) else { return }
-        request.httpBody = encodedBody
-
-        URLSession.shared.dataTask(with: request) { (data, urlResponse, error) in
-            if let error = error {
-                completionHandler(.failure(error))
-                return
-            }
-
-            guard let data = data else { return }
-            do {
-                let decodedData = try JSONDecoder().decode(NewLiveTrackerResponse.self, from: data)
-                DispatchQueue.main.async {
-                    completionHandler(.success((decodedData.data.topic, decodedData.data.username, decodedData.data.password)))
-                }
-                return
-            } catch let decodingError {
-                DispatchQueue.main.async {
-                    completionHandler(.failure(decodingError))
-                }
-                return
-            }
-        }.resume()
+        self.topic = topic
+        self.retries = 0
+        self.startService()
     }
 
     // MARK: Stop
@@ -252,47 +201,73 @@ public final class Subscriber {
     /// You can restart the service and the previously added tracking identifier will be used again.
     public func stop() {
         expectedDisconnect = true
+        stopService(shouldCallDelegate: false)
+    }
 
+    private func stopService(shouldCallDelegate: Bool, error: Error? = nil) {
         mqttClient.disconnect()
 
-        retries = 0
         self.status = .stopped
+
+        retries = 0
+
+        if shouldCallDelegate {
+            self.delegate?.subscriber(self, stoppedWithError: error)
+        }
     }
 
     // MARK: Restart
 
-    func restart() {
-        guard mqttClient.username != nil, mqttClient.password != nil, topic != nil else {
-            guard let delegate = delegate else { return }
-            delegate.subscriber(self, stoppedWithError: ServiceError.authorizationNotAvailable)
-            self.stop()
+    /// Restarts the service.
+    ///
+    /// You can't user `restart()` unless a tracking identifier is available.
+    /// A tracking identifier is added to the service once you use `start(withTrackingIdentifier:)`.
+    public func restart() {
+        guard let trackingID = self.trackingIdentifier else {
+            stopService(shouldCallDelegate: true, error: LiveTrackerError.trackingIdentifierNotAvailable)
             return
         }
 
-        self.connectMqtt()
+        if mqttClient.isReady {
+            start(withTrackingIdentifier: trackingID)
+        } else {
+            self.startService()
+        }
     }
 }
 
 // MARK: - MQTT Client Delegate
 extension Subscriber: MQTTClientDelegate {
     func mqttClient(_ mqttClient: MQTTClient, disconnectedWithError error: Error?) {
-        guard let delegate = delegate else { return }
 
         if expectedDisconnect {
-            delegate.subscriber(self, stoppedWithError: nil)
-            self.stop()
             expectedDisconnect = false
-        } else if retries < self.networkConfiguration.maximumNetworkRetries {
-            self.connectMqtt()
+            self.stopService(shouldCallDelegate: true)
+        } else if retries < NetworkingManager.shared.configuration.maximumNetworkRetries {
             retries += 1
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                self.startService()
+            }
         } else {
-            delegate.subscriber(self, stoppedWithError: error)
-            self.stop()
+            stopService(shouldCallDelegate: true, error: error)
         }
     }
 
-    func mqttClient(_ mqttClient: MQTTClient, publishedData data: Data) {
-        // Do nothing.
+    private func validateReceivedLocation(location: CLLocation) -> Bool {
+        if let lastReceivedLocation = lastReceivedLocation {
+            if location.timestamp > lastReceivedLocation.timestamp {
+                if location.timestamp > (Date() - 60 * 5) {
+                    return true
+                }
+                return false
+            }
+            return false
+        } else {
+            if location.timestamp > (Date() - 60 * 5) {
+                return true
+            }
+            return false
+        }
     }
 
     func mqttClient(_ mqttClient: MQTTClient, receivedData data: Data) {
@@ -300,9 +275,14 @@ extension Subscriber: MQTTClientDelegate {
         do {
             let decodedProto = try LiveTracker_Location(serializedData: data)
             let location = CLLocation(protoLocation: decodedProto)
-            delegate.subscriber(self, locationReceived: location)
+            if validateReceivedLocation(location: location) {
+                self.lastReceivedLocation = location
+                delegate.subscriber(self, locationReceived: location)
+            } else {
+                logDebug("Invalid location received.")
+            }
         } catch let error {
-            delegate.subscriber(self, failedWithError: ServiceError.couldNotDecodeProtobufData(error))
+            logError("Protobuf deserialization failure.\nError: \(error)")
         }
     }
 }
