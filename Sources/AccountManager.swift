@@ -20,9 +20,16 @@ let kUpdatedUsernameAndPasswordNotification = Notification.Name("kUpdatedUsernam
 /// Manager for Map.ir account.
 public final class AccountManager {
 
+    /// Shared instance for Map.ir account manager.
     public static var shared: AccountManager = AccountManager()
 
     private var _accessToken: String?
+
+    /// Your Map.ir access token.
+    ///
+    /// If you use `Publisher`/`Subscriber` initializers that has no accessToken arguments,
+    /// account manager searches for `MAPIRAccessToken` key/value pair in your project Info.plist file.
+    /// You can't use live tracking services without access token.
     public internal(set) var accessToken: String? {
         get {
             return _accessToken
@@ -44,7 +51,7 @@ public final class AccountManager {
     internal private(set) var password: String?
 
     private func set(username: String, password: String) {
-        if self.username?.lowercased() == username.lowercased() || self.password?.lowercased() == password.lowercased() {
+        if self.username?.lowercased() != username.lowercased() || self.password?.lowercased() != password.lowercased() {
             self.username = username
             self.password = password
             let notification = Notification(name: kUpdatedUsernameAndPasswordNotification)
@@ -65,10 +72,8 @@ public final class AccountManager {
     func topic(forTrackingIdentifier trackingID: String, completionHandler: @escaping RequestTopicCompletionHandler) {
         if let topic = topics[trackingID] {
             completionHandler(topic, nil)
-            return
         } else {
             createNewTopic(forTrackingIdentifier: trackingID, completionHandler: completionHandler)
-            return
         }
     }
 
@@ -124,6 +129,7 @@ public final class AccountManager {
 
                     let decodedData = try JSONDecoder().decode(NewLiveTrackerResponse.self, from: data)
                     self.set(username: decodedData.data.username, password: decodedData.data.password)
+                    self.topics[trackingID] = decodedData.data.topic
                     DispatchQueue.main.async {
                         completionHandler(decodedData.data.topic, nil)
                     }
