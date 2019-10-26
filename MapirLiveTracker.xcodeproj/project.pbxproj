@@ -26,6 +26,7 @@
 		C0485EB422FDFEA900E27F28 /* Subscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0485EB322FDFEA900E27F28 /* Subscriber.swift */; };
 		C0485EB622FE04E200E27F28 /* SwiftProtobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0485EB522FE04E200E27F28 /* SwiftProtobuf.framework */; };
 		C0485EB722FE04E200E27F28 /* SwiftProtobuf.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C0485EB522FE04E200E27F28 /* SwiftProtobuf.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C05B9F992364337F005FAD22 /* TrackerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B9F982364337F005FAD22 /* TrackerType.swift */; };
 		C07B855E23041A1C00E51BF2 /* CLLocation+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07B855D23041A1C00E51BF2 /* CLLocation+Extensions.swift */; };
 		C089446222F6E0FC00CBFB45 /* NetworkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C089446122F6E0FC00CBFB45 /* NetworkConfiguration.swift */; };
 		C0987AF3235DA28200EAE20B /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0987AF2235DA28200EAE20B /* Logger.swift */; };
@@ -130,6 +131,7 @@
 		C0478D2223028EBF00C15A73 /* DataTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTableViewCell.swift; sourceTree = "<group>"; };
 		C0485EB322FDFEA900E27F28 /* Subscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscriber.swift; sourceTree = "<group>"; };
 		C0485EB522FE04E200E27F28 /* SwiftProtobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftProtobuf.framework; path = Carthage/Build/iOS/SwiftProtobuf.framework; sourceTree = "<group>"; };
+		C05B9F982364337F005FAD22 /* TrackerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerType.swift; sourceTree = "<group>"; };
 		C07B855D23041A1C00E51BF2 /* CLLocation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocation+Extensions.swift"; sourceTree = "<group>"; };
 		C089446122F6E0FC00CBFB45 /* NetworkConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConfiguration.swift; sourceTree = "<group>"; };
 		C089446322F6E21D00CBFB45 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = SOURCE_ROOT; };
@@ -272,6 +274,7 @@
 				C0B5989322FE8D2700E997DA /* Location.pb.swift */,
 				C07B855D23041A1C00E51BF2 /* CLLocation+Extensions.swift */,
 				C0061BE82355B30C006435E7 /* AccountManager.swift */,
+				C05B9F982364337F005FAD22 /* TrackerType.swift */,
 				C0987AF2235DA28200EAE20B /* Logger.swift */,
 			);
 			path = Sources;
@@ -689,6 +692,7 @@
 			files = (
 				C01ABF2122F94B4500C93352 /* LocationManager.swift in Sources */,
 				C07B855E23041A1C00E51BF2 /* CLLocation+Extensions.swift in Sources */,
+				C05B9F992364337F005FAD22 /* TrackerType.swift in Sources */,
 				C0D8130E22F6FA6700DAC957 /* Errors.swift in Sources */,
 				C0F276AE22FD63670015EDFC /* MQTTClient.swift in Sources */,
 				C0F6DD4D236065FD00906036 /* NetworkManager.swift in Sources */,

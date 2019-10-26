@@ -69,17 +69,17 @@ public final class AccountManager {
 
     typealias RequestTopicCompletionHandler = (String?, Error?) -> ()
 
-    func topic(forTrackingIdentifier trackingID: String, completionHandler: @escaping RequestTopicCompletionHandler) {
+    func topic(forTrackingIdentifier trackingID: String, type: TrackerType, completionHandler: @escaping RequestTopicCompletionHandler) {
         if let topic = topics[trackingID] {
             completionHandler(topic, nil)
         } else {
-            createNewTopic(forTrackingIdentifier: trackingID, completionHandler: completionHandler)
+            createNewTopic(forTrackingIdentifier: trackingID, type: type, completionHandler: completionHandler)
         }
     }
 
     var activeTopicFetchingTask: URLSessionDataTask? = nil
 
-    func createNewTopic(forTrackingIdentifier trackingID: String, completionHandler: @escaping RequestTopicCompletionHandler) {
+    func createNewTopic(forTrackingIdentifier trackingID: String, type: TrackerType, completionHandler: @escaping RequestTopicCompletionHandler) {
 
         if let activeTask = activeTopicFetchingTask, activeTask.state == .running {
             activeTask.cancel()
@@ -94,7 +94,7 @@ public final class AccountManager {
         headers.updateValue(accessToken, forKey: "x-api-key")
         headers.updateValue("application/json", forKey: "Content-Type")
 
-        let bodyDictionary: JSONDictionary = ["type": "subscriber", "track_id": trackingID, "device_id": NetworkConfiguration.deviceIdentifier.uuidString]
+        let bodyDictionary: JSONDictionary = ["type": type.rawValue, "track_id": trackingID, "device_id": NetworkConfiguration.deviceIdentifier.uuidString]
 
         let jsonEncoder = JSONEncoder()
         jsonEncoder.outputFormatting = .prettyPrinted

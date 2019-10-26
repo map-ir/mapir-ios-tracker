@@ -173,7 +173,7 @@ public final class Publisher {
             retries = 0
             trackingIdentifier = identifier
             // Request topic, username and password from the server.
-            AccountManager.shared.topic(forTrackingIdentifier: identifier, completionHandler: requestTopicCompletionHandler)
+            AccountManager.shared.topic(forTrackingIdentifier: identifier, type: .publisher, completionHandler: requestTopicCompletionHandler)
         }
     }
 
@@ -203,7 +203,7 @@ public final class Publisher {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
                     guard let self = self else { return }
                     guard let trackingIdentifier = self.trackingIdentifier else { return }
-                    AccountManager.shared.topic(forTrackingIdentifier: trackingIdentifier, completionHandler: self.requestTopicCompletionHandler)
+                    AccountManager.shared.topic(forTrackingIdentifier: trackingIdentifier, type: .publisher, completionHandler: self.requestTopicCompletionHandler)
                 }
             } else {
                 logDebug("Couldn't create topic. Maximum retries reached. Stopping service. (\(self.retries))")
