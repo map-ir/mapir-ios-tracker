@@ -18,7 +18,7 @@ import AppKit
 #endif
 
 /// An object that handles publishing user location lively.
-
+@objc(MLTSubscriberDelegate)
 public protocol SubscriberDelegate: class {
 
     /// Receives location updates of the specified tracking identifier.
@@ -28,6 +28,7 @@ public protocol SubscriberDelegate: class {
     ///     It does not contain accuracy, floor and altitude data.
     ///
     /// You may check the timestamp of the received `location` object to validate it.
+    @objc(subscriber:locationReceived:)
     func subscriber(_ subscriber: Subscriber, locationReceived location: CLLocation)
 
     /// Tells the delegate that the operation is going to stop with or without an error.
@@ -36,6 +37,7 @@ public protocol SubscriberDelegate: class {
     /// - Parameter error: Error which caused the process to stop, if there is any.
     ///
     /// After such errors, you may use `restart()` method to start it again.
+    @objc(subscriber:stoppedWithError:)
     func subscriber(_ subscriber: Subscriber, stoppedWithError error: Error?)
 
     /// Sends the delegate errors related to failure of the procedure.
@@ -45,7 +47,8 @@ public protocol SubscriberDelegate: class {
     ///
     /// A failure does not mean that the service is going to stop the operation.
     /// while an error cuases a stop, `receive(_:stoppedWithError:)` gets called instead.
-    func subscriber(_ subscriber: Subscriber, failedWithError error: Error)
+    @objc(subscriber:failedWithError:)
+    optional func subscriber(_ subscriber: Subscriber, failedWithError error: Error)
 }
 
 public extension SubscriberDelegate {
@@ -55,11 +58,13 @@ public extension SubscriberDelegate {
 }
 
 /// An object that handles fetching location lively based on a tracking identifier.
-public final class Subscriber {
+@objc(MLTSubscriber)
+public final class Subscriber: NSObject {
 
     // MARK: General Properties
 
     /// Last received valid location.
+    @objc(lastReceivedLocation)
     public private(set) var lastReceivedLocation: CLLocation?
 
     private var topic: String?
@@ -68,6 +73,7 @@ public final class Subscriber {
     ///
     /// `stop()` method does not remove tracking identifier,
     /// so you can use `restart()` method to receive data of the same identifier.
+    @objc(trackingIdentifier)
     public private(set) var trackingIdentifier: String?
 
     private var mqttClient: MQTTClient
@@ -75,12 +81,14 @@ public final class Subscriber {
     /// The receiver's delegate.
     ///
     /// Receiver sents notifications about received data and failures to the delegate.
+    @objc(delegate)
     public weak var delegate: SubscriberDelegate?
 
     private var retries = 0
 
     /// Status of Receiver class
-    public enum Status {
+    @objc(MLTSubscriberStatus)
+    public enum Status: UInt {
         /// Class is initiated and it's ready to start.
         case initiated
 
@@ -97,6 +105,7 @@ public final class Subscriber {
     /// Indicates the current status of the service.
     ///
     /// It can be one of 4 different states: `initiated`, `starting`, `running`, `stopped`.
+    @objc(status)
     public private(set) var status: Status
 
     // MARK: Initializers
@@ -106,10 +115,13 @@ public final class Subscriber {
     /// Consider adding your valid access token with key of `MAPIRAccessToken` to your **Info.plist**.
     /// If you don't have any, visit [App Registration website](https://corp.map.ir/appregistration).
     /// Starting the publisher fails if you don't define the this key-value pair.
-    public init() {
+    @objc(init)
+    public override init() {
         AccountManager.shared.accessToken = nil
         self.mqttClient                   = MQTTClient()
         self.status                       = .initiated
+        super.init()
+
         self.mqttClient.delegate          = self
     }
 
@@ -118,10 +130,13 @@ public final class Subscriber {
     /// - Parameter token: Your Map.ir access token.
     ///
     /// If you don't have any, visit "[App Registration website](https://corp.map.ir/appregistration)".
+    @objc(initWithAccessToken:)
     public init(accessToken: String) {
         AccountManager.shared.accessToken = accessToken
         self.mqttClient                   = MQTTClient()
         self.status                       = .initiated
+        super.init()
+
         self.mqttClient.delegate          = self
     }
 
@@ -137,6 +152,7 @@ public final class Subscriber {
     ///
     /// - Attention: You yourself must handle uniqueness of your tracking identifiers.
     /// Otherwise conflicts may occure between published and received data.
+    @objc(startWithTrackingIdentifier:)
     public func start(withTrackingIdentifier trackingID: String) {
         guard AccountManager.shared.isAuthenticated else {
             stopService(shouldCallDelegate: true, error: LiveTrackerError.accessTokenNotAvailable)
@@ -145,7 +161,7 @@ public final class Subscriber {
 
         switch self.status {
         case .running, .starting:
-            self.delegate?.subscriber(self, failedWithError: LiveTrackerError.serviceCurrentlyRunning)
+            self.delegate?.subscriber?(self, failedWithError: LiveTrackerError.serviceCurrentlyRunning)
         case .stopped, .initiated:
             self.retries = 0
             self.trackingIdentifier = trackingID
@@ -199,6 +215,7 @@ public final class Subscriber {
     ///
     /// Stopping does not remove the previous tracking identifier.
     /// You can restart the service and the previously added tracking identifier will be used again.
+    @objc(stop)
     public func stop() {
         expectedDisconnect = true
         stopService(shouldCallDelegate: false)
@@ -222,6 +239,7 @@ public final class Subscriber {
     ///
     /// You can't user `restart()` unless a tracking identifier is available.
     /// A tracking identifier is added to the service once you use `start(withTrackingIdentifier:)`.
+    @objc(restart)
     public func restart() {
         guard let trackingID = self.trackingIdentifier else {
             stopService(shouldCallDelegate: true, error: LiveTrackerError.trackingIdentifierNotAvailable)

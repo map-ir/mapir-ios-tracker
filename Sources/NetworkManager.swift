@@ -13,9 +13,11 @@ let kNetworkConfigurationUpdatedNotification = Notification.Name("kNetworkConfig
 typealias JSONDictionary = [String: String]
 
 /// Object that managers networking related tasks.
-public class NetworkingManager {
+@objc(MLTNetworkingManager)
+public class NetworkingManager: NSObject {
 
     /// Shared networking manager.
+    @objc(sharedManager)
     public static let shared = NetworkingManager()
 
     private var _configuration: NetworkConfiguration = .mapirDefault
@@ -25,6 +27,7 @@ public class NetworkingManager {
     /// By default it is set to `NetworkConfiguration.mapirDefault`.
     /// If you want to change the network configuration, you may stop the service first.
     /// Or just change it before instatiating `Publisher` or `Subscriber`.
+    @objc(configuration)
     public var configuration: NetworkConfiguration {
         get { _configuration }
         set {
@@ -34,7 +37,7 @@ public class NetworkingManager {
         }
     }
 
-    private init() { }
+    private override init() { }
 }
 
 extension NetworkingManager {

@@ -20,6 +20,7 @@ import AppKit
 public typealias Meters = Double
 
 /// Protocol for Publisher Delegate.
+@objc(MLTPublisherDelegate)
 public protocol PublisherDelegate: class {
 
     /// Tells the delegate that the operation is going to stop with or without an error.
@@ -28,6 +29,7 @@ public protocol PublisherDelegate: class {
     /// - Parameter error: Error which caused the process to stop, if there is any.
     ///
     /// After such errors, you may use `restart()` method to start it again.
+    @objc(publisher:stoppedWithError:)
     func publisher(_ publisher: Publisher, stoppedWithError error: Error?)
 
     /// Sends the delegate the latest published `CLLocation` object.
@@ -35,13 +37,15 @@ public protocol PublisherDelegate: class {
     /// - parameter publisher: the publisher that sent the location.
     /// - Parameter location: `CLLocation` instance of published data.
     ///     It does not contain accuracy, floor and altitude data.
-    func publisher(_ publisher: Publisher, publishedLocation location: CLLocation)
+    @objc(publisher:publishedLocation:)
+    optional func publisher(_ publisher: Publisher, publishedLocation location: CLLocation)
 
     /// Sends the failure details to the delegate.
     ///
     /// - Parameter publisher: The publisher which failed
     /// - Parameter error: `Error` describing the failure.
-    func publisher(_ publisher: Publisher, failedWithError error: Error)
+    @objc(publisher:failedWithError:)
+    optional func publisher(_ publisher: Publisher, failedWithError error: Error)
 }
 
 public extension PublisherDelegate {
@@ -54,7 +58,8 @@ public extension PublisherDelegate {
 }
 
 /// An object that handles publishing user location lively based on a tracking identifier.
-public final class Publisher {
+@objc(MLTPublisher)
+public final class Publisher: NSObject {
 
     // MARK: General Properties
 
@@ -71,17 +76,20 @@ public final class Publisher {
     /// The publisher's delegate.
     ///
     /// Publisher sents notifications about published data and failures to the delegate.
+    @objc(delegate)
     public weak var delegate: PublisherDelegate?
 
     private let locationManager: LocationManager
 
     /// Accuracy of the location service.
+    @objc(serviceAccuracy)
     public var serviceAccuracy: CLLocationAccuracy {
         get { locationManager.locationManager.desiredAccuracy }
         set { locationManager.locationManager.desiredAccuracy = newValue }
     }
 
     /// Distance filter for location service
+    @objc(distanceFilter)
     public var distanceFilter: Meters  {
         get { return locationManager.distanceFilter }
         set { locationManager.distanceFilter = newValue}
@@ -90,7 +98,8 @@ public final class Publisher {
     private var retries = 0
 
     /// Status of Publisher class
-    public enum Status {
+    @objc(MLTPublisherStatus)
+    public enum Status: UInt {
         /// Class is initiated and it's ready to start.
         case initiated
 
@@ -107,6 +116,7 @@ public final class Publisher {
     /// Indicates the current status of the service.
     ///
     /// It can be one of 4 different states: `initiated`, `starting`, `running`, `stopped`.
+    @objc(status)
     public private(set) var status: Status
 
     // MARK: Initializers
@@ -118,11 +128,14 @@ public final class Publisher {
     ///
     /// Consider adding your valid access token with key of `MAPIRAccessToken` to your **Info.plist**.
     /// starting the publisher fails if you don't define the this key-value pair.
+    @objc(initWithDistanceFilter:)
     public init(distanceFilter: Meters) {
         AccountManager.shared.accessToken = nil
         self.locationManager              = LocationManager()
         self.mqttClient                   = MQTTClient()
         self.status                       = .initiated
+        super.init()
+
         self.locationManager.delegate     = self
         self.distanceFilter               = distanceFilter
         self.mqttClient.delegate          = self
@@ -137,11 +150,14 @@ public final class Publisher {
     /// Consider adding your valid access token with key of `MAPIRAccessToken` to your **Info.plist**.
     /// If you don't have any, visit [App Registration website](https://corp.map.ir/appregistration).
     /// starting the publisher fails if you don't define the this key-value pair.
+    @objc(initWithAccessToken:distanceFilter:)
     public init(accessToken: String, distanceFilter: Meters) {
         AccountManager.shared.accessToken = accessToken
         self.locationManager              = LocationManager()
         self.mqttClient                   = MQTTClient()
         self.status                       = .initiated
+        super.init()
+
         self.locationManager.delegate     = self
         self.distanceFilter               = distanceFilter
         self.mqttClient.delegate          = self
@@ -159,6 +175,7 @@ public final class Publisher {
     ///
     /// - Attention: You yourself must handle uniqueness of your tracking identifiers.
     ///     Otherwise conflicts may occure between published and received data.
+    @objc(startWithTrackingIdentifier:)
     public func start(withTrackingIdentifier identifier: String) {
         guard AccountManager.shared.isAuthenticated else {
             stopService(shouldCallDelegate: true, error: LiveTrackerError.accessTokenNotAvailable)
@@ -167,7 +184,7 @@ public final class Publisher {
 
         switch status {
         case .running, .starting:
-            delegate?.publisher(self, failedWithError: LiveTrackerError.serviceCurrentlyRunning)
+            delegate?.publisher?(self, failedWithError: LiveTrackerError.serviceCurrentlyRunning)
             return
         case .stopped, .initiated:
             retries = 0
@@ -228,6 +245,7 @@ public final class Publisher {
     ///
     /// Stopping does not remove the previous tracking identifier.
     /// You can restart the service and the previously added tracking identifier will be used again.
+    @objc(stop)
     public func stop() {
         expectedDisconnect = true
         stopService(shouldCallDelegate: false)
@@ -252,6 +270,7 @@ public final class Publisher {
     ///
     /// You can't user `restart()` unless a tracking identifier is available.
     /// A tracking identifier is added to the service once you use `start(withTrackingIdentifier:)`.
+    @objc(restart)
     public func restart() {
         guard let trackingID = self.trackingIdentifier else {
             stopService(shouldCallDelegate: true, error: LiveTrackerError.trackingIdentifierNotAvailable)
@@ -312,7 +331,7 @@ extension Publisher: MQTTClientDelegate {
         do {
             let decodedProto = try LiveTracker_Location(serializedData: data)
             let location = CLLocation(protoLocation: decodedProto)
-            delegate.publisher(self, publishedLocation: location)
+            delegate.publisher?(self, publishedLocation: location)
         } catch let error {
             logError("protobuf serialization failure.\nError: \(error)")
         }

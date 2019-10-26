@@ -18,9 +18,11 @@ let kAccessTokenInfoPlistKey = "MAPIRAccessToken"
 let kUpdatedUsernameAndPasswordNotification = Notification.Name("kUpdatedUsernameAndPasswordNotification")
 
 /// Manager for Map.ir account.
-public final class AccountManager {
+@objc(MLTAccoutManager)
+public final class AccountManager: NSObject {
 
     /// Shared instance for Map.ir account manager.
+    @objc(sharedManager)
     public static var shared: AccountManager = AccountManager()
 
     private var _accessToken: String?
@@ -30,6 +32,7 @@ public final class AccountManager {
     /// If you use `Publisher`/`Subscriber` initializers that has no accessToken arguments,
     /// account manager searches for `MAPIRAccessToken` key/value pair in your project Info.plist file.
     /// You can't use live tracking services without access token.
+    @objc(accessToken)
     public internal(set) var accessToken: String? {
         get {
             return _accessToken
@@ -61,7 +64,7 @@ public final class AccountManager {
 
     private var topics: [String: String] = [:]
 
-    private init() { }
+    private override init() { }
 
     var isAuthenticated: Bool {
         (accessToken ?? "").isEmpty ? false : true

@@ -11,35 +11,36 @@ import CocoaMQTT
 import UIKit
 
 /// An object that represents a network configuration for the service.
-public class NetworkConfiguration {
+@objc(MLTNetworkConfiguration)
+public class NetworkConfiguration: NSObject {
 
     /// API base URL.
     ///
     /// This url is used to fetch topics for tracking identifier.
-    public let authenticationServiceURL: URL
+    @objc public let authenticationServiceURL: URL
 
     /// Maximum network retries.
-    public let maximumNetworkRetries: Int
+    @objc public let maximumNetworkRetries: Int
 
     /// MQTT Broker address.
-    public let brokerAddress: String
+    @objc public let brokerAddress: String
 
     /// MQTT Broker port.
-    public let brokerPort: UInt16
+    @objc public let brokerPort: UInt16
 
     /// Quality of Service for MQTT packets.
-    public let qos: CocoaMQTTQOS
+    @objc public let qos: CocoaMQTTQOS
 
     /// Indicates that the configuration uses SSL or not.
-    public let usesSSL: Bool
+    @objc public let usesSSL: Bool
 
     /// Shared `URLSession` instance for the service.
-    public let session: URLSession
+    @objc public let session: URLSession
 
     /// Default Map.ir service configuration.
     ///
     /// - Attention: If you are using live tracking service with Map.ir infrastructre, you have to use this default configurations.
-    public static let mapirDefault = NetworkConfiguration(authenticationServiceURL: URL(string: "https://tracking-dev.map.ir/")!,
+    @objc public static let mapirDefault = NetworkConfiguration(authenticationServiceURL: URL(string: "https://tracking-dev.map.ir/")!,
                                                           maximumRetries: 3,
                                                           brokerAddress: "dev.map.ir",
                                                           port: 1883,
@@ -59,6 +60,7 @@ public class NetworkConfiguration {
     ///
     /// If you use Map.ir Live Tracking Service on your own infrastructure,
     /// you can create a custom configuration using this initializer.
+    @objc(initWithAuthenticationServiceURL:maximumRetries:brokerAddress:port:qos:usesSSL:session:)
     public init(authenticationServiceURL: URL, maximumRetries: Int, brokerAddress: String, port: UInt16, qos: CocoaMQTTQOS, usesSSL: Bool, session: URLSession) {
         self.authenticationServiceURL = authenticationServiceURL
         self.brokerAddress = brokerAddress
