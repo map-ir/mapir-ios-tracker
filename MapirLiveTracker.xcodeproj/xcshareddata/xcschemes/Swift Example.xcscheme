@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1030"
+   LastUpgradeVersion = "1110"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3D9C43202274629B000A6585"
-               BuildableName = "Swift Example.app"
+               BuildableName = "MapirLiveTracker Swift.app"
                BlueprintName = "Swift Example"
                ReferencedContainer = "container:MapirLiveTracker.xcodeproj">
             </BuildableReference>
@@ -31,7 +31,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3D9C43202274629B000A6585"
-            BuildableName = "Swift Example.app"
+            BuildableName = "MapirLiveTracker Swift.app"
             BlueprintName = "Swift Example"
             ReferencedContainer = "container:MapirLiveTracker.xcodeproj">
          </BuildableReference>
@@ -54,7 +54,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3D9C43202274629B000A6585"
-            BuildableName = "Swift Example.app"
+            BuildableName = "MapirLiveTracker Swift.app"
             BlueprintName = "Swift Example"
             ReferencedContainer = "container:MapirLiveTracker.xcodeproj">
          </BuildableReference>
@@ -75,7 +75,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3D9C43202274629B000A6585"
-            BuildableName = "Swift Example.app"
+            BuildableName = "MapirLiveTracker Swift.app"
             BlueprintName = "Swift Example"
             ReferencedContainer = "container:MapirLiveTracker.xcodeproj">
          </BuildableReference>

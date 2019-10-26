@@ -127,7 +127,7 @@ public final class Subscriber: NSObject {
 
     /// DescriptionInitializes a Receiver object.
     ///
-    /// - Parameter token: Your Map.ir access token.
+    /// - Parameter accessToken: Your Map.ir access token.
     ///
     /// If you don't have any, visit "[App Registration website](https://corp.map.ir/appregistration)".
     @objc(initWithAccessToken:)
@@ -144,7 +144,7 @@ public final class Subscriber: NSObject {
 
     /// Starts receiving location of the the specified tracking identifier.
     ///
-    /// - Parameter identifier: A string which is used to name the current publishing session.
+    /// - Parameter trackingIdentifier: A string which is used to name the current publishing session.
     ///
     /// This method first authorizes the user then starts receiving. it may take some time to run.
     /// If the starting fails, you will be notified via `receiver(_:stoppedWithError:)` delegate method.
@@ -153,7 +153,7 @@ public final class Subscriber: NSObject {
     /// - Attention: You yourself must handle uniqueness of your tracking identifiers.
     /// Otherwise conflicts may occure between published and received data.
     @objc(startWithTrackingIdentifier:)
-    public func start(withTrackingIdentifier trackingID: String) {
+    public func start(withTrackingIdentifier trackingIdentifier: String) {
         guard AccountManager.shared.isAuthenticated else {
             stopService(shouldCallDelegate: true, error: LiveTrackerError.accessTokenNotAvailable)
             return
@@ -164,9 +164,9 @@ public final class Subscriber: NSObject {
             self.delegate?.subscriber?(self, failedWithError: LiveTrackerError.serviceCurrentlyRunning)
         case .stopped, .initiated:
             self.retries = 0
-            self.trackingIdentifier = trackingID
+            self.trackingIdentifier = trackingIdentifier
 
-            AccountManager.shared.topic(forTrackingIdentifier: trackingID, type: .subscriber, completionHandler: self.requestTopicCompletionHandler)
+            AccountManager.shared.topic(forTrackingIdentifier: trackingIdentifier, type: .subscriber, completionHandler: self.requestTopicCompletionHandler)
         }
     }
 

@@ -114,15 +114,15 @@ final class MQTTClient {
     func publish(data: Data, onTopic topic: String) {
         let payload: [UInt8] = [UInt8](data)
         let message = CocoaMQTTMessage(topic: topic, payload: payload)
-        message.qos = self.networkConfiguration.qos
-        message.dup = false
+        message.qos = self.networkConfiguration.qos.asCocoaMQTTQoS
+        message.duplicated = false
         message.retained = true
         client.publish(message)
     }
 
     func subscribe(toTopic topic: String, completionHandler: SubscribeCompletionHandler?) {
         self.subscribeCompletionHandler = completionHandler
-        client.subscribe(topic, qos: self.networkConfiguration.qos)
+        client.subscribe(topic, qos: self.networkConfiguration.qos.asCocoaMQTTQoS)
     }
 
     func unsubscribe(topic: String) {
@@ -163,11 +163,11 @@ extension MQTTClient: CocoaMQTTDelegate {
         
     }
 
-    func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopic topics: [String]) {
+    func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopics topics: [String]) {
         subscribeCompletionHandler?()
     }
 
-    func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopic topic: String) {
+    func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopics topic: [String]) {
 
     }
 

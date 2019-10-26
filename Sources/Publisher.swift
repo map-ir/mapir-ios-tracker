@@ -167,7 +167,7 @@ public final class Publisher: NSObject {
 
     /// Starts publishing location of the current device.
     ///
-    /// - Parameter identifier: A string which is used to name the current publishing session.
+    /// - Parameter trackingIdentifier: A string which is used to name the current publishing session.
     ///
     /// This method first authorizes the user then starts publishing. it may take some time to run.
     /// If the starting fails, you will be notified via `publisher(_:stoppedWithError:)` delegate method.
@@ -176,7 +176,7 @@ public final class Publisher: NSObject {
     /// - Attention: You yourself must handle uniqueness of your tracking identifiers.
     ///     Otherwise conflicts may occure between published and received data.
     @objc(startWithTrackingIdentifier:)
-    public func start(withTrackingIdentifier identifier: String) {
+    public func start(withTrackingIdentifier trackingIdentifier: String) {
         guard AccountManager.shared.isAuthenticated else {
             stopService(shouldCallDelegate: true, error: LiveTrackerError.accessTokenNotAvailable)
             return
@@ -188,9 +188,9 @@ public final class Publisher: NSObject {
             return
         case .stopped, .initiated:
             retries = 0
-            trackingIdentifier = identifier
+            self.trackingIdentifier = trackingIdentifier
             // Request topic, username and password from the server.
-            AccountManager.shared.topic(forTrackingIdentifier: identifier, type: .publisher, completionHandler: requestTopicCompletionHandler)
+            AccountManager.shared.topic(forTrackingIdentifier: trackingIdentifier, type: .publisher, completionHandler: requestTopicCompletionHandler)
         }
     }
 
