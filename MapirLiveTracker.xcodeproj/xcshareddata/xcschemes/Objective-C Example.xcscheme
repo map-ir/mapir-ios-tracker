@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1020"
+   LastUpgradeVersion = "1110"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3D9C428F22745894000A6585"
-               BuildableName = "MapirLiveTracker.framework"
-               BlueprintName = "MapirLiveTracker-iOS"
+               BlueprintIdentifier = "C05B9F9D23643A86005FAD22"
+               BuildableName = "Objective-C Example.app"
+               BlueprintName = "Objective-C Example"
                ReferencedContainer = "container:MapirLiveTracker.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -26,30 +26,8 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3D9C428F22745894000A6585"
-            BuildableName = "MapirLiveTracker.framework"
-            BlueprintName = "MapirLiveTracker-iOS"
-            ReferencedContainer = "container:MapirLiveTracker.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES"
-            testExecutionOrdering = "random">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3D9C42F02274604A000A6585"
-               BuildableName = "MapirLiveTracker-iOSTests.xctest"
-               BlueprintName = "MapirLiveTracker-iOSTests"
-               ReferencedContainer = "container:MapirLiveTracker.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -62,15 +40,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3D9C428F22745894000A6585"
-            BuildableName = "MapirLiveTracker.framework"
-            BlueprintName = "MapirLiveTracker-iOS"
+            BlueprintIdentifier = "C05B9F9D23643A86005FAD22"
+            BuildableName = "Objective-C Example.app"
+            BlueprintName = "Objective-C Example"
             ReferencedContainer = "container:MapirLiveTracker.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -78,15 +57,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3D9C428F22745894000A6585"
-            BuildableName = "MapirLiveTracker.framework"
-            BlueprintName = "MapirLiveTracker-iOS"
+            BlueprintIdentifier = "C05B9F9D23643A86005FAD22"
+            BuildableName = "Objective-C Example.app"
+            BlueprintName = "Objective-C Example"
             ReferencedContainer = "container:MapirLiveTracker.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
