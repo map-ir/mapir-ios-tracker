@@ -18,9 +18,11 @@ let kAccessTokenInfoPlistKey = "MAPIRAccessToken"
 let kUpdatedUsernameAndPasswordNotification = Notification.Name("kUpdatedUsernameAndPasswordNotification")
 
 /// Manager for Map.ir account.
-public final class AccountManager {
+@objc(MLTAccoutManager)
+public final class AccountManager: NSObject {
 
     /// Shared instance for Map.ir account manager.
+    @objc(sharedManager)
     public static var shared: AccountManager = AccountManager()
 
     private var _accessToken: String?
@@ -30,6 +32,7 @@ public final class AccountManager {
     /// If you use `Publisher`/`Subscriber` initializers that has no accessToken arguments,
     /// account manager searches for `MAPIRAccessToken` key/value pair in your project Info.plist file.
     /// You can't use live tracking services without access token.
+    @objc(accessToken)
     public internal(set) var accessToken: String? {
         get {
             return _accessToken
@@ -61,7 +64,7 @@ public final class AccountManager {
 
     private var topics: [String: String] = [:]
 
-    private init() { }
+    private override init() { }
 
     var isAuthenticated: Bool {
         (accessToken ?? "").isEmpty ? false : true
@@ -69,17 +72,17 @@ public final class AccountManager {
 
     typealias RequestTopicCompletionHandler = (String?, Error?) -> ()
 
-    func topic(forTrackingIdentifier trackingID: String, completionHandler: @escaping RequestTopicCompletionHandler) {
+    func topic(forTrackingIdentifier trackingID: String, type: TrackerType, completionHandler: @escaping RequestTopicCompletionHandler) {
         if let topic = topics[trackingID] {
             completionHandler(topic, nil)
         } else {
-            createNewTopic(forTrackingIdentifier: trackingID, completionHandler: completionHandler)
+            createNewTopic(forTrackingIdentifier: trackingID, type: type, completionHandler: completionHandler)
         }
     }
 
     var activeTopicFetchingTask: URLSessionDataTask? = nil
 
-    func createNewTopic(forTrackingIdentifier trackingID: String, completionHandler: @escaping RequestTopicCompletionHandler) {
+    func createNewTopic(forTrackingIdentifier trackingID: String, type: TrackerType, completionHandler: @escaping RequestTopicCompletionHandler) {
 
         if let activeTask = activeTopicFetchingTask, activeTask.state == .running {
             activeTask.cancel()
@@ -94,7 +97,7 @@ public final class AccountManager {
         headers.updateValue(accessToken, forKey: "x-api-key")
         headers.updateValue("application/json", forKey: "Content-Type")
 
-        let bodyDictionary: JSONDictionary = ["type": "subscriber", "track_id": trackingID, "device_id": NetworkConfiguration.deviceIdentifier.uuidString]
+        let bodyDictionary: JSONDictionary = ["type": type.rawValue, "track_id": trackingID, "device_id": NetworkConfiguration.deviceIdentifier.uuidString]
 
         let jsonEncoder = JSONEncoder()
         jsonEncoder.outputFormatting = .prettyPrinted
