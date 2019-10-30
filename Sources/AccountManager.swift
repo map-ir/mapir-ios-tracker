@@ -62,8 +62,6 @@ public final class AccountManager: NSObject {
         }
     }
 
-    private var topics: [String: String] = [:]
-
     private override init() { }
 
     var isAuthenticated: Bool {
@@ -72,17 +70,9 @@ public final class AccountManager: NSObject {
 
     typealias RequestTopicCompletionHandler = (String?, Error?) -> ()
 
-    func topic(forTrackingIdentifier trackingID: String, type: TrackerType, completionHandler: @escaping RequestTopicCompletionHandler) {
-        if let topic = topics[trackingID] {
-            completionHandler(topic, nil)
-        } else {
-            createNewTopic(forTrackingIdentifier: trackingID, type: type, completionHandler: completionHandler)
-        }
-    }
-
     var activeTopicFetchingTask: URLSessionDataTask? = nil
 
-    func createNewTopic(forTrackingIdentifier trackingID: String, type: TrackerType, completionHandler: @escaping RequestTopicCompletionHandler) {
+    func requestTopic(forTrackingIdentifier trackingID: String, type: TrackerType, completionHandler: @escaping RequestTopicCompletionHandler) {
 
         if let activeTask = activeTopicFetchingTask, activeTask.state == .running {
             activeTask.cancel()
@@ -132,7 +122,6 @@ public final class AccountManager: NSObject {
 
                     let decodedData = try JSONDecoder().decode(NewLiveTrackerResponse.self, from: data)
                     self.set(username: decodedData.data.username, password: decodedData.data.password)
-                    self.topics[trackingID] = decodedData.data.topic
                     DispatchQueue.main.async {
                         completionHandler(decodedData.data.topic, nil)
                     }

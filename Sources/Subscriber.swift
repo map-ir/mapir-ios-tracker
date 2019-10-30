@@ -166,7 +166,7 @@ public final class Subscriber: NSObject {
             self.retries = 0
             self.trackingIdentifier = trackingIdentifier
 
-            AccountManager.shared.topic(forTrackingIdentifier: trackingIdentifier, type: .subscriber, completionHandler: self.requestTopicCompletionHandler)
+            AccountManager.shared.requestTopic(forTrackingIdentifier: trackingIdentifier, type: .subscriber, completionHandler: self.requestTopicCompletionHandler)
         }
     }
 
@@ -192,7 +192,7 @@ public final class Subscriber: NSObject {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
                     guard let self = self else { return }
                     guard let trackingIdentifier = self.trackingIdentifier else { return }
-                    AccountManager.shared.topic(forTrackingIdentifier: trackingIdentifier, type: .subscriber, completionHandler: self.requestTopicCompletionHandler)
+                    AccountManager.shared.requestTopic(forTrackingIdentifier: trackingIdentifier, type: .subscriber, completionHandler: self.requestTopicCompletionHandler)
                 }
             } else {
                 logDebug("Couldn't create topic. Maximum retries reached. Stopping service. (\(self.retries))")
