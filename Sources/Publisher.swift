@@ -187,7 +187,7 @@ public final class Publisher: NSObject {
             delegate?.publisher?(self, failedWithError: LiveTrackerError.serviceCurrentlyRunning)
             return
         case .stopped, .initiated:
-            retries = 0
+            self.retries = 0
             self.trackingIdentifier = trackingIdentifier
             // Request topic, username and password from the server.
             AccountManager.shared.topic(forTrackingIdentifier: trackingIdentifier, type: .publisher, completionHandler: requestTopicCompletionHandler)
@@ -195,16 +195,16 @@ public final class Publisher: NSObject {
     }
 
     private func startService() {
-        self.mqttClient.connect { [weak self] in
-            guard let self = self else { return }
-            logDebug("Connected to MQTTBroker.")
-            do {
-                try self.locationManager.startTracking()
-                self.status = .running
-            } catch let error {
-                self.status = .stopped
-                self.stopService(shouldCallDelegate: true, error: error)
+        do {
+            try self.locationManager.startTracking()
+
+            self.mqttClient.connect { [weak self] in
+                guard let self = self else { return }
+                logDebug("Connected to MQTTBroker.")
+                    self.status = .running
             }
+        } catch let locationServiceError {
+            stopService(shouldCallDelegate: true, error: locationServiceError)
         }
     }
 
@@ -232,7 +232,6 @@ public final class Publisher: NSObject {
 
         guard let topic = topic else { return }
 
-        self.retries = 0
         self.topic = topic
         self.startService()
     }

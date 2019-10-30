@@ -203,7 +203,6 @@ public final class Subscriber: NSObject {
         guard let topic = topic else { return }
 
         self.topic = topic
-        self.retries = 0
         self.startService()
     }
 
