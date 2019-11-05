@@ -7,10 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3D9C42A222745900000A6585 /* MapirLiveTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9C42A122745900000A6585 /* MapirLiveTracker.swift */; };
-		3D9C42B1227459C1000A6585 /* MapirLiveTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9C42A122745900000A6585 /* MapirLiveTracker.swift */; };
-		3D9C42BF227459F6000A6585 /* MapirLiveTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9C42A122745900000A6585 /* MapirLiveTracker.swift */; };
-		3D9C42CD22745A28000A6585 /* MapirLiveTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9C42A122745900000A6585 /* MapirLiveTracker.swift */; };
+		3D9C42A222745900000A6585 /* Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9C42A122745900000A6585 /* Publisher.swift */; };
 		3D9C42F62274604A000A6585 /* MapirLiveTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9C429022745894000A6585 /* MapirLiveTracker.framework */; };
 		3D9C42FC22746078000A6585 /* MapirLiveTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9C42D722745CDE000A6585 /* MapirLiveTrackerTests.swift */; };
 		3D9C43062274611B000A6585 /* MapirLiveTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9C42A92274599D000A6585 /* MapirLiveTracker.framework */; };
@@ -23,6 +20,37 @@
 		3D9C432E2274629C000A6585 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D9C432C2274629C000A6585 /* LaunchScreen.storyboard */; };
 		3D9C433422746323000A6585 /* MapirLiveTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9C429022745894000A6585 /* MapirLiveTracker.framework */; };
 		3D9C433522746323000A6585 /* MapirLiveTracker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9C429022745894000A6585 /* MapirLiveTracker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C0061BE92355B30C006435E7 /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0061BE82355B30C006435E7 /* AccountManager.swift */; };
+		C01ABF2122F94B4500C93352 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01ABF2022F94B4500C93352 /* LocationManager.swift */; };
+		C01FA27F23695EA200E4EFB8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C05B9FA923643A86005FAD22 /* Main.storyboard */; };
+		C0478D2323028EBF00C15A73 /* DataTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0478D2223028EBF00C15A73 /* DataTableViewCell.swift */; };
+		C0485EB422FDFEA900E27F28 /* Subscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0485EB322FDFEA900E27F28 /* Subscriber.swift */; };
+		C05B9F992364337F005FAD22 /* TrackerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B9F982364337F005FAD22 /* TrackerType.swift */; };
+		C05B9FA223643A86005FAD22 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C05B9FA123643A86005FAD22 /* AppDelegate.m */; };
+		C05B9FA523643A86005FAD22 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C05B9FA423643A86005FAD22 /* SceneDelegate.m */; };
+		C05B9FA823643A86005FAD22 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C05B9FA723643A86005FAD22 /* ViewController.m */; };
+		C05B9FAD23643A87005FAD22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C05B9FAC23643A87005FAD22 /* Assets.xcassets */; };
+		C05B9FB023643A87005FAD22 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C05B9FAE23643A87005FAD22 /* LaunchScreen.storyboard */; };
+		C05B9FB323643A87005FAD22 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C05B9FB223643A87005FAD22 /* main.m */; };
+		C05B9FB723644C04005FAD22 /* MapirLiveTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9C429022745894000A6585 /* MapirLiveTracker.framework */; };
+		C05B9FB823644C04005FAD22 /* MapirLiveTracker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9C429022745894000A6585 /* MapirLiveTracker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C05B9FBD23644E97005FAD22 /* MapirLiveTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = C05B9FBC23644E97005FAD22 /* MapirLiveTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C07B855E23041A1C00E51BF2 /* CLLocation+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07B855D23041A1C00E51BF2 /* CLLocation+Extensions.swift */; };
+		C089446222F6E0FC00CBFB45 /* NetworkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C089446122F6E0FC00CBFB45 /* NetworkConfiguration.swift */; };
+		C0987AF3235DA28200EAE20B /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0987AF2235DA28200EAE20B /* Logger.swift */; };
+		C0B5989422FE8D2700E997DA /* Location.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B5989322FE8D2700E997DA /* Location.pb.swift */; };
+		C0B5989622FED19B00E997DA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C0B5989522FED19B00E997DA /* Main.storyboard */; };
+		C0C206A523714C0700379A6A /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0A39FDB22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework */; };
+		C0C206A623714C0700379A6A /* CocoaAsyncSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C0A39FDB22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C0C206A723714C0700379A6A /* CocoaMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0A39FDA22F6EC3200D1DFD0 /* CocoaMQTT.framework */; };
+		C0C206A823714C0700379A6A /* CocoaMQTT.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C0A39FDA22F6EC3200D1DFD0 /* CocoaMQTT.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C0C206A923714C0700379A6A /* SwiftProtobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0485EB522FE04E200E27F28 /* SwiftProtobuf.framework */; };
+		C0C206AA23714C0700379A6A /* SwiftProtobuf.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C0485EB522FE04E200E27F28 /* SwiftProtobuf.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C0D8130E22F6FA6700DAC957 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D8130D22F6FA6700DAC957 /* Errors.swift */; };
+		C0ED1E752364736700F1959C /* DataTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = C0ED1E732364736700F1959C /* DataTableViewCell.h */; };
+		C0ED1E762364736700F1959C /* DataTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C0ED1E742364736700F1959C /* DataTableViewCell.m */; };
+		C0F276AE22FD63670015EDFC /* MQTTClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F276AD22FD63670015EDFC /* MQTTClient.swift */; };
+		C0F6DD4D236065FD00906036 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F6DD4C236065FD00906036 /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +82,13 @@
 			remoteGlobalIDString = 3D9C428F22745894000A6585;
 			remoteInfo = "MapirLiveTracker-iOS";
 		};
+		C05B9FB923644C04005FAD22 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3D9C428722745894000A6585 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3D9C428F22745894000A6585;
+			remoteInfo = "MapirLiveTracker-iOS";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -68,13 +103,37 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C05B9FBB23644C04005FAD22 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C05B9FB823644C04005FAD22 /* MapirLiveTracker.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C0C206AB23714C0700379A6A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C0C206A823714C0700379A6A /* CocoaMQTT.framework in Embed Frameworks */,
+				C0C206AA23714C0700379A6A /* SwiftProtobuf.framework in Embed Frameworks */,
+				C0C206A623714C0700379A6A /* CocoaAsyncSocket.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		3D9C429022745894000A6585 /* MapirLiveTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MapirLiveTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9C429C227458E8000A6585 /* MapirLiveTracker.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MapirLiveTracker.plist; sourceTree = "<group>"; };
 		3D9C429D227458E8000A6585 /* MapirLiveTrackerTests.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MapirLiveTrackerTests.plist; sourceTree = "<group>"; };
-		3D9C42A122745900000A6585 /* MapirLiveTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapirLiveTracker.swift; sourceTree = "<group>"; };
+		3D9C42A122745900000A6585 /* Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Publisher.swift; sourceTree = "<group>"; };
 		3D9C42A92274599D000A6585 /* MapirLiveTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MapirLiveTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9C42B7227459D6000A6585 /* MapirLiveTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MapirLiveTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9C42C522745A07000A6585 /* MapirLiveTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MapirLiveTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -88,16 +147,51 @@
 		3D9C42D922745DAF000A6585 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
 		3D9C42DA22745DB0000A6585 /* .swift-version */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".swift-version"; sourceTree = SOURCE_ROOT; };
 		3D9C42DB22745DB0000A6585 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = SOURCE_ROOT; };
-		3D9C42EC22745FDA000A6585 /* LinuxMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
 		3D9C42F12274604A000A6585 /* MapirLiveTracker-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MapirLiveTracker-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9C43012274611B000A6585 /* MapirLiveTracker-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MapirLiveTracker-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9C431122746198000A6585 /* MapirLiveTracker-macOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MapirLiveTracker-macOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3D9C43212274629B000A6585 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D9C43212274629B000A6585 /* MapirLiveTracker Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MapirLiveTracker Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9C43232274629B000A6585 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3D9C43252274629B000A6585 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		3D9C432A2274629C000A6585 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3D9C432D2274629C000A6585 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3D9C432F2274629C000A6585 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C0061BE82355B30C006435E7 /* AccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
+		C01ABF2022F94B4500C93352 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		C01FA2802369A45C00E4EFB8 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Makefile; sourceTree = SOURCE_ROOT; };
+		C02BD7BB2370427D006BA5F2 /* BuildForDistribution.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = BuildForDistribution.sh; sourceTree = "<group>"; };
+		C0478D2223028EBF00C15A73 /* DataTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTableViewCell.swift; sourceTree = "<group>"; };
+		C0485EB322FDFEA900E27F28 /* Subscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscriber.swift; sourceTree = "<group>"; };
+		C0485EB522FE04E200E27F28 /* SwiftProtobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftProtobuf.framework; path = Carthage/Build/iOS/SwiftProtobuf.framework; sourceTree = "<group>"; };
+		C05B9F982364337F005FAD22 /* TrackerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerType.swift; sourceTree = "<group>"; };
+		C05B9F9E23643A86005FAD22 /* MapirLiveTracker Objective-C.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MapirLiveTracker Objective-C.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C05B9FA023643A86005FAD22 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		C05B9FA123643A86005FAD22 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C05B9FA323643A86005FAD22 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		C05B9FA423643A86005FAD22 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
+		C05B9FA623643A86005FAD22 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		C05B9FA723643A86005FAD22 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		C05B9FAA23643A86005FAD22 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C05B9FAC23643A87005FAD22 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C05B9FAF23643A87005FAD22 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C05B9FB123643A87005FAD22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C05B9FB223643A87005FAD22 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C05B9FBC23644E97005FAD22 /* MapirLiveTracker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapirLiveTracker.h; sourceTree = "<group>"; };
+		C07B855D23041A1C00E51BF2 /* CLLocation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocation+Extensions.swift"; sourceTree = "<group>"; };
+		C089446122F6E0FC00CBFB45 /* NetworkConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConfiguration.swift; sourceTree = "<group>"; };
+		C089446322F6E21D00CBFB45 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = SOURCE_ROOT; };
+		C0987AF2235DA28200EAE20B /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		C0A39FDA22F6EC3200D1DFD0 /* CocoaMQTT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaMQTT.framework; path = Carthage/Build/iOS/CocoaMQTT.framework; sourceTree = "<group>"; };
+		C0A39FDB22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaAsyncSocket.framework; path = Carthage/Build/iOS/CocoaAsyncSocket.framework; sourceTree = "<group>"; };
+		C0B5989322FE8D2700E997DA /* Location.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.pb.swift; sourceTree = "<group>"; };
+		C0B5989522FED19B00E997DA /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		C0BDDBAE23623671007F4A16 /* Documentation.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = Documentation.sh; sourceTree = "<group>"; };
+		C0D22D5722FEE81A00FD65E4 /* Terhran, Iran, Running.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Terhran, Iran, Running.gpx"; sourceTree = "<group>"; };
+		C0D8130D22F6FA6700DAC957 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		C0ED1E732364736700F1959C /* DataTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataTableViewCell.h; sourceTree = "<group>"; };
+		C0ED1E742364736700F1959C /* DataTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DataTableViewCell.m; sourceTree = "<group>"; };
+		C0F276AD22FD63670015EDFC /* MQTTClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MQTTClient.swift; sourceTree = "<group>"; };
+		C0F6DD4C236065FD00906036 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +199,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C0C206A723714C0700379A6A /* CocoaMQTT.framework in Frameworks */,
+				C0C206A923714C0700379A6A /* SwiftProtobuf.framework in Frameworks */,
+				C0C206A523714C0700379A6A /* CocoaAsyncSocket.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -161,6 +258,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C05B9F9B23643A86005FAD22 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C05B9FB723644C04005FAD22 /* MapirLiveTracker.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -169,9 +274,11 @@
 			children = (
 				3D9C42A0227458FA000A6585 /* Sources */,
 				3D9C42A32274595F000A6585 /* Tests */,
-				3D9C43222274629B000A6585 /* Example */,
+				C05B9FD7236451D1005FAD22 /* Examples */,
 				3D9C429B227458E8000A6585 /* Configs */,
+				C0BDDBAD2362364B007F4A16 /* Scripts */,
 				3D9C429122745894000A6585 /* Products */,
+				C0A39FD922F6EC3200D1DFD0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -185,7 +292,8 @@
 				3D9C42F12274604A000A6585 /* MapirLiveTracker-iOSTests.xctest */,
 				3D9C43012274611B000A6585 /* MapirLiveTracker-tvOSTests.xctest */,
 				3D9C431122746198000A6585 /* MapirLiveTracker-macOSTests.xctest */,
-				3D9C43212274629B000A6585 /* Example.app */,
+				3D9C43212274629B000A6585 /* MapirLiveTracker Swift.app */,
+				C05B9F9E23643A86005FAD22 /* MapirLiveTracker Objective-C.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -198,15 +306,14 @@
 				3D9C42D422745B48000A6585 /* MapirLiveTracker.podspec */,
 				3D9C42D322745B48000A6585 /* Package.swift */,
 				3D9C42D622745C9D000A6585 /* Fastfile */,
+				C089446322F6E21D00CBFB45 /* Cartfile */,
 				3D9C42D222745B48000A6585 /* LICENSE */,
 				3D9C42D522745B48000A6585 /* README.md */,
 				3D9C42DB22745DB0000A6585 /* .gitignore */,
 				3D9C42D822745DAF000A6585 /* .jazzy.yaml */,
 				3D9C42DA22745DB0000A6585 /* .swift-version */,
 				3D9C42D922745DAF000A6585 /* .swiftlint.yml */,
-				3DB91AC4229AC263002668DA,
-				3DB91AC5229AC26C002668DA,
-				3DB91AC6229AC272002668DA,
+				C01FA2802369A45C00E4EFB8 /* Makefile */,
 			);
 			path = Configs;
 			sourceTree = "<group>";
@@ -214,7 +321,19 @@
 		3D9C42A0227458FA000A6585 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				3D9C42A122745900000A6585 /* MapirLiveTracker.swift */,
+				C05B9FBC23644E97005FAD22 /* MapirLiveTracker.h */,
+				3D9C42A122745900000A6585 /* Publisher.swift */,
+				C0485EB322FDFEA900E27F28 /* Subscriber.swift */,
+				C0D8130D22F6FA6700DAC957 /* Errors.swift */,
+				C089446122F6E0FC00CBFB45 /* NetworkConfiguration.swift */,
+				C0F6DD4C236065FD00906036 /* NetworkManager.swift */,
+				C01ABF2022F94B4500C93352 /* LocationManager.swift */,
+				C0F276AD22FD63670015EDFC /* MQTTClient.swift */,
+				C0B5989322FE8D2700E997DA /* Location.pb.swift */,
+				C07B855D23041A1C00E51BF2 /* CLLocation+Extensions.swift */,
+				C0061BE82355B30C006435E7 /* AccountManager.swift */,
+				C05B9F982364337F005FAD22 /* TrackerType.swift */,
+				C0987AF2235DA28200EAE20B /* Logger.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -222,30 +341,88 @@
 		3D9C42A32274595F000A6585 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				3D9C42EC22745FDA000A6585 /* LinuxMain.swift */,
 				3D9C42D722745CDE000A6585 /* MapirLiveTrackerTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
 		};
-		3D9C43222274629B000A6585 /* Example */ = {
+		3D9C43222274629B000A6585 /* Swift Example */ = {
 			isa = PBXGroup;
 			children = (
 				3D9C43232274629B000A6585 /* AppDelegate.swift */,
 				3D9C43252274629B000A6585 /* ViewController.swift */,
+				C0478D2223028EBF00C15A73 /* DataTableViewCell.swift */,
 				3D9C4333227462B9000A6585 /* Resources */,
 			);
-			path = Example;
+			path = "Swift Example";
 			sourceTree = "<group>";
 		};
 		3D9C4333227462B9000A6585 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C0B5989522FED19B00E997DA /* Main.storyboard */,
+				C0D22D5722FEE81A00FD65E4 /* Terhran, Iran, Running.gpx */,
 				3D9C432A2274629C000A6585 /* Assets.xcassets */,
 				3D9C432C2274629C000A6585 /* LaunchScreen.storyboard */,
 				3D9C432F2274629C000A6585 /* Info.plist */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		C05B9F9F23643A86005FAD22 /* Objective-C Example */ = {
+			isa = PBXGroup;
+			children = (
+				C05B9FA023643A86005FAD22 /* AppDelegate.h */,
+				C05B9FA123643A86005FAD22 /* AppDelegate.m */,
+				C05B9FA323643A86005FAD22 /* SceneDelegate.h */,
+				C05B9FA423643A86005FAD22 /* SceneDelegate.m */,
+				C05B9FA623643A86005FAD22 /* ViewController.h */,
+				C05B9FA723643A86005FAD22 /* ViewController.m */,
+				C0ED1E732364736700F1959C /* DataTableViewCell.h */,
+				C0ED1E742364736700F1959C /* DataTableViewCell.m */,
+				C05B9FD523645140005FAD22 /* Resources */,
+			);
+			path = "Objective-C Example";
+			sourceTree = "<group>";
+		};
+		C05B9FD523645140005FAD22 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C05B9FA923643A86005FAD22 /* Main.storyboard */,
+				C05B9FAC23643A87005FAD22 /* Assets.xcassets */,
+				C05B9FAE23643A87005FAD22 /* LaunchScreen.storyboard */,
+				C05B9FB123643A87005FAD22 /* Info.plist */,
+				C05B9FB223643A87005FAD22 /* main.m */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		C05B9FD7236451D1005FAD22 /* Examples */ = {
+			isa = PBXGroup;
+			children = (
+				3D9C43222274629B000A6585 /* Swift Example */,
+				C05B9F9F23643A86005FAD22 /* Objective-C Example */,
+			);
+			path = Examples;
+			sourceTree = "<group>";
+		};
+		C0A39FD922F6EC3200D1DFD0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C0485EB522FE04E200E27F28 /* SwiftProtobuf.framework */,
+				C0A39FDB22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework */,
+				C0A39FDA22F6EC3200D1DFD0 /* CocoaMQTT.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C0BDDBAD2362364B007F4A16 /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				C0BDDBAE23623671007F4A16 /* Documentation.sh */,
+				C02BD7BB2370427D006BA5F2 /* BuildForDistribution.sh */,
+			);
+			path = Scripts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -255,6 +432,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C05B9FBD23644E97005FAD22 /* MapirLiveTracker.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,6 +457,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C05B9FD323645005005FAD22 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0ED1E752364736700F1959C /* DataTableViewCell.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -290,13 +476,16 @@
 				3D9C428C22745894000A6585 /* Sources */,
 				3D9C428D22745894000A6585 /* Frameworks */,
 				3D9C428E22745894000A6585 /* Resources */,
-				3D9C42CE22745AEA000A6585 /* Run SwiftLint */,
+				C080C2E82307F387004B0CBB /* Carthage Outdated Frameworks */,
+				C0C206AB23714C0700379A6A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = "MapirLiveTracker-iOS";
+			packageProductDependencies = (
+			);
 			productName = MapirLiveTracker;
 			productReference = 3D9C429022745894000A6585 /* MapirLiveTracker.framework */;
 			productType = "com.apple.product-type.framework";
@@ -309,7 +498,6 @@
 				3D9C42A52274599D000A6585 /* Sources */,
 				3D9C42A62274599D000A6585 /* Frameworks */,
 				3D9C42A72274599D000A6585 /* Resources */,
-				3D9C42CF22745AF5000A6585 /* Run SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -328,7 +516,6 @@
 				3D9C42B3227459D6000A6585 /* Sources */,
 				3D9C42B4227459D6000A6585 /* Frameworks */,
 				3D9C42B5227459D6000A6585 /* Resources */,
-				3D9C42D022745AFE000A6585 /* Run SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -347,7 +534,6 @@
 				3D9C42C122745A07000A6585 /* Sources */,
 				3D9C42C222745A07000A6585 /* Frameworks */,
 				3D9C42C322745A07000A6585 /* Resources */,
-				3D9C42D122745B08000A6585 /* Run SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -412,23 +598,44 @@
 			productReference = 3D9C431122746198000A6585 /* MapirLiveTracker-macOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		3D9C43202274629B000A6585 /* Example */ = {
+		3D9C43202274629B000A6585 /* Swift Example */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3D9C43302274629C000A6585 /* Build configuration list for PBXNativeTarget "Example" */;
+			buildConfigurationList = 3D9C43302274629C000A6585 /* Build configuration list for PBXNativeTarget "Swift Example" */;
 			buildPhases = (
 				3D9C431D2274629B000A6585 /* Sources */,
 				3D9C431E2274629B000A6585 /* Frameworks */,
 				3D9C431F2274629B000A6585 /* Resources */,
 				3D9C433822746323000A6585 /* Embed Frameworks */,
+				C000B2C22308014200BBF22D /* Carthage Copy-Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				3D9C433722746323000A6585 /* PBXTargetDependency */,
 			);
-			name = Example;
+			name = "Swift Example";
 			productName = Example;
-			productReference = 3D9C43212274629B000A6585 /* Example.app */;
+			productReference = 3D9C43212274629B000A6585 /* MapirLiveTracker Swift.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C05B9F9D23643A86005FAD22 /* Objective-C Example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C05B9FB423643A87005FAD22 /* Build configuration list for PBXNativeTarget "Objective-C Example" */;
+			buildPhases = (
+				C05B9FD323645005005FAD22 /* Headers */,
+				C05B9F9A23643A86005FAD22 /* Sources */,
+				C05B9F9B23643A86005FAD22 /* Frameworks */,
+				C05B9F9C23643A86005FAD22 /* Resources */,
+				C05B9FBB23644C04005FAD22 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C05B9FBA23644C04005FAD22 /* PBXTargetDependency */,
+			);
+			name = "Objective-C Example";
+			productName = "Objective-C Example";
+			productReference = C05B9F9E23643A86005FAD22 /* MapirLiveTracker Objective-C.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -438,7 +645,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1020;
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1110;
 				ORGANIZATIONNAME = Map;
 				TargetAttributes = {
 					3D9C428F22745894000A6585 = {
@@ -465,6 +672,14 @@
 					};
 					3D9C43202274629B000A6585 = {
 						CreatedOnToolsVersion = 10.2.1;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
+					C05B9F9D23643A86005FAD22 = {
+						CreatedOnToolsVersion = 11.1;
 					};
 				};
 			};
@@ -477,6 +692,8 @@
 				Base,
 			);
 			mainGroup = 3D9C428622745894000A6585;
+			packageReferences = (
+			);
 			productRefGroup = 3D9C429122745894000A6585 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -488,7 +705,8 @@
 				3D9C42F02274604A000A6585 /* MapirLiveTracker-iOSTests */,
 				3D9C43002274611B000A6585 /* MapirLiveTracker-tvOSTests */,
 				3D9C431022746198000A6585 /* MapirLiveTracker-macOSTests */,
-				3D9C43202274629B000A6585 /* Example */,
+				3D9C43202274629B000A6585 /* Swift Example */,
+				C05B9F9D23643A86005FAD22 /* Objective-C Example */,
 			);
 		};
 /* End PBXProject section */
@@ -547,15 +765,26 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C0B5989622FED19B00E997DA /* Main.storyboard in Resources */,
 				3D9C432E2274629C000A6585 /* LaunchScreen.storyboard in Resources */,
 				3D9C432B2274629C000A6585 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C05B9F9C23643A86005FAD22 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C01FA27F23695EA200E4EFB8 /* Main.storyboard in Resources */,
+				C05B9FB023643A87005FAD22 /* LaunchScreen.storyboard in Resources */,
+				C05B9FAD23643A87005FAD22 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3D9C42CE22745AEA000A6585 /* Run SwiftLint */ = {
+		C000B2C22308014200BBF22D /* Carthage Copy-Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -563,17 +792,23 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaAsyncSocket.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaMQTT.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
 			);
-			name = "Run SwiftLint";
+			name = "Carthage Copy-Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaAsyncSocket.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaMQTT.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftProtobuf.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
-		3D9C42CF22745AF5000A6585 /* Run SwiftLint */ = {
+		C080C2E82307F387004B0CBB /* Carthage Outdated Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -582,50 +817,14 @@
 			);
 			inputPaths = (
 			);
-			name = "Run SwiftLint";
+			name = "Carthage Outdated Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
-		3D9C42D022745AFE000A6585 /* Run SwiftLint */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Run SwiftLint";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
-		3D9C42D122745B08000A6585 /* Run SwiftLint */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Run SwiftLint";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "/usr/local/bin/carthage outdated --xcode-warnings 2>/dev/null\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -634,7 +833,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D9C42A222745900000A6585 /* MapirLiveTracker.swift in Sources */,
+				C01ABF2122F94B4500C93352 /* LocationManager.swift in Sources */,
+				C07B855E23041A1C00E51BF2 /* CLLocation+Extensions.swift in Sources */,
+				C05B9F992364337F005FAD22 /* TrackerType.swift in Sources */,
+				C0D8130E22F6FA6700DAC957 /* Errors.swift in Sources */,
+				C0F276AE22FD63670015EDFC /* MQTTClient.swift in Sources */,
+				C0F6DD4D236065FD00906036 /* NetworkManager.swift in Sources */,
+				C0485EB422FDFEA900E27F28 /* Subscriber.swift in Sources */,
+				C0987AF3235DA28200EAE20B /* Logger.swift in Sources */,
+				C0061BE92355B30C006435E7 /* AccountManager.swift in Sources */,
+				C0B5989422FE8D2700E997DA /* Location.pb.swift in Sources */,
+				3D9C42A222745900000A6585 /* Publisher.swift in Sources */,
+				C089446222F6E0FC00CBFB45 /* NetworkConfiguration.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -642,7 +852,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D9C42B1227459C1000A6585 /* MapirLiveTracker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -650,7 +859,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D9C42BF227459F6000A6585 /* MapirLiveTracker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -658,7 +866,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D9C42CD22745A28000A6585 /* MapirLiveTracker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -691,7 +898,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D9C43262274629B000A6585 /* ViewController.swift in Sources */,
+				C0478D2323028EBF00C15A73 /* DataTableViewCell.swift in Sources */,
 				3D9C43242274629B000A6585 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C05B9F9A23643A86005FAD22 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C05B9FA823643A86005FAD22 /* ViewController.m in Sources */,
+				C05B9FA223643A86005FAD22 /* AppDelegate.m in Sources */,
+				C05B9FB323643A87005FAD22 /* main.m in Sources */,
+				C0ED1E762364736700F1959C /* DataTableViewCell.m in Sources */,
+				C05B9FA523643A86005FAD22 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -718,6 +938,11 @@
 			target = 3D9C428F22745894000A6585 /* MapirLiveTracker-iOS */;
 			targetProxy = 3D9C433622746323000A6585 /* PBXContainerItemProxy */;
 		};
+		C05B9FBA23644C04005FAD22 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3D9C428F22745894000A6585 /* MapirLiveTracker-iOS */;
+			targetProxy = C05B9FB923644C04005FAD22 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -725,6 +950,22 @@
 			isa = PBXVariantGroup;
 			children = (
 				3D9C432D2274629C000A6585 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		C05B9FA923643A86005FAD22 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C05B9FAA23643A86005FAD22 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		C05B9FAE23643A87005FAD22 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C05B9FAF23643A87005FAD22 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -784,8 +1025,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -844,8 +1085,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -861,18 +1102,24 @@
 		3D9C429922745894000A6585 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
+				APPLICATION_EXTENSION_API_ONLY = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Configs/MapirLiveTracker.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -881,7 +1128,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "ir.map.MapirLiveTracker-iOS";
 				PRODUCT_NAME = MapirLiveTracker;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -891,7 +1140,8 @@
 		3D9C429A22745894000A6585 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
+				APPLICATION_EXTENSION_API_ONLY = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
@@ -900,9 +1150,13 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Configs/MapirLiveTracker.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -912,6 +1166,7 @@
 				PRODUCT_NAME = MapirLiveTracker;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -943,7 +1198,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
 			};
 			name = Debug;
 		};
@@ -973,7 +1228,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
 			};
 			name = Release;
 		};
@@ -1058,7 +1313,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = "ir.map.MapirLiveTracker-macOS";
 				PRODUCT_NAME = MapirLiveTracker;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1089,7 +1344,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = "ir.map.MapirLiveTracker-macOS";
 				PRODUCT_NAME = MapirLiveTracker;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1112,6 +1367,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "ir.map.MapirLiveTracker-iOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1130,6 +1386,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "ir.map.MapirLiveTracker-iOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1218,16 +1475,17 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = Example/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 33DVPZ7L7T;
+				INFOPLIST_FILE = "Examples/Swift Example/Resources/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "ir.map-iOS.Example";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = "ir.map.Swift-example";
+				PRODUCT_NAME = "MapirLiveTracker Swift";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1239,18 +1497,55 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = Example/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 33DVPZ7L7T;
+				INFOPLIST_FILE = "Examples/Swift Example/Resources/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "ir.map-iOS.Example";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = "ir.map.Swift-example";
+				PRODUCT_NAME = "MapirLiveTracker Swift";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C05B9FB523643A87005FAD22 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = "Examples/Objective-C Example/Resources/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "ir.map.Objective-C-Example";
+				PRODUCT_NAME = "MapirLiveTracker Objective-C";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C05B9FB623643A87005FAD22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = "Examples/Objective-C Example/Resources/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "ir.map.Objective-C-Example";
+				PRODUCT_NAME = "MapirLiveTracker Objective-C";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1330,11 +1625,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3D9C43302274629C000A6585 /* Build configuration list for PBXNativeTarget "Example" */ = {
+		3D9C43302274629C000A6585 /* Build configuration list for PBXNativeTarget "Swift Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3D9C43312274629C000A6585 /* Debug */,
 				3D9C43322274629C000A6585 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C05B9FB423643A87005FAD22 /* Build configuration list for PBXNativeTarget "Objective-C Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C05B9FB523643A87005FAD22 /* Debug */,
+				C05B9FB623643A87005FAD22 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

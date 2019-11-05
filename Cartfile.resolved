@@ -1,0 +1,3 @@
+github "apple/swift-protobuf" "1.7.0"
+github "emqtt/CocoaMQTT" "b4b624330573c3110a4a3d990679a8b925256d5a"
+github "robbiehanson/CocoaAsyncSocket" "7.6.3"
