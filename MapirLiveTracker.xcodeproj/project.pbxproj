@@ -25,8 +25,6 @@
 		C01FA27F23695EA200E4EFB8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C05B9FA923643A86005FAD22 /* Main.storyboard */; };
 		C0478D2323028EBF00C15A73 /* DataTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0478D2223028EBF00C15A73 /* DataTableViewCell.swift */; };
 		C0485EB422FDFEA900E27F28 /* Subscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0485EB322FDFEA900E27F28 /* Subscriber.swift */; };
-		C0485EB622FE04E200E27F28 /* SwiftProtobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0485EB522FE04E200E27F28 /* SwiftProtobuf.framework */; };
-		C0485EB722FE04E200E27F28 /* SwiftProtobuf.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C0485EB522FE04E200E27F28 /* SwiftProtobuf.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C05B9F992364337F005FAD22 /* TrackerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B9F982364337F005FAD22 /* TrackerType.swift */; };
 		C05B9FA223643A86005FAD22 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C05B9FA123643A86005FAD22 /* AppDelegate.m */; };
 		C05B9FA523643A86005FAD22 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C05B9FA423643A86005FAD22 /* SceneDelegate.m */; };
@@ -40,12 +38,14 @@
 		C07B855E23041A1C00E51BF2 /* CLLocation+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07B855D23041A1C00E51BF2 /* CLLocation+Extensions.swift */; };
 		C089446222F6E0FC00CBFB45 /* NetworkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C089446122F6E0FC00CBFB45 /* NetworkConfiguration.swift */; };
 		C0987AF3235DA28200EAE20B /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0987AF2235DA28200EAE20B /* Logger.swift */; };
-		C0A39FDC22F6EC3200D1DFD0 /* CocoaMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0A39FDA22F6EC3200D1DFD0 /* CocoaMQTT.framework */; };
-		C0A39FDD22F6EC3200D1DFD0 /* CocoaMQTT.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C0A39FDA22F6EC3200D1DFD0 /* CocoaMQTT.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		C0A39FDE22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0A39FDB22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework */; };
-		C0A39FDF22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C0A39FDB22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C0B5989422FE8D2700E997DA /* Location.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B5989322FE8D2700E997DA /* Location.pb.swift */; };
 		C0B5989622FED19B00E997DA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C0B5989522FED19B00E997DA /* Main.storyboard */; };
+		C0C206A523714C0700379A6A /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0A39FDB22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework */; };
+		C0C206A623714C0700379A6A /* CocoaAsyncSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C0A39FDB22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C0C206A723714C0700379A6A /* CocoaMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0A39FDA22F6EC3200D1DFD0 /* CocoaMQTT.framework */; };
+		C0C206A823714C0700379A6A /* CocoaMQTT.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C0A39FDA22F6EC3200D1DFD0 /* CocoaMQTT.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C0C206A923714C0700379A6A /* SwiftProtobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0485EB522FE04E200E27F28 /* SwiftProtobuf.framework */; };
+		C0C206AA23714C0700379A6A /* SwiftProtobuf.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C0485EB522FE04E200E27F28 /* SwiftProtobuf.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C0D8130E22F6FA6700DAC957 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D8130D22F6FA6700DAC957 /* Errors.swift */; };
 		C0ED1E752364736700F1959C /* DataTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = C0ED1E732364736700F1959C /* DataTableViewCell.h */; };
 		C0ED1E762364736700F1959C /* DataTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C0ED1E742364736700F1959C /* DataTableViewCell.m */; };
@@ -114,15 +114,15 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C0A39FE022F6EC3200D1DFD0 /* Embed Frameworks */ = {
+		C0C206AB23714C0700379A6A /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				C0A39FDF22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework in Embed Frameworks */,
-				C0485EB722FE04E200E27F28 /* SwiftProtobuf.framework in Embed Frameworks */,
-				C0A39FDD22F6EC3200D1DFD0 /* CocoaMQTT.framework in Embed Frameworks */,
+				C0C206A823714C0700379A6A /* CocoaMQTT.framework in Embed Frameworks */,
+				C0C206AA23714C0700379A6A /* SwiftProtobuf.framework in Embed Frameworks */,
+				C0C206A623714C0700379A6A /* CocoaAsyncSocket.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -159,6 +159,7 @@
 		C0061BE82355B30C006435E7 /* AccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
 		C01ABF2022F94B4500C93352 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		C01FA2802369A45C00E4EFB8 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Makefile; sourceTree = SOURCE_ROOT; };
+		C02BD7BB2370427D006BA5F2 /* BuildForDistribution.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = BuildForDistribution.sh; sourceTree = "<group>"; };
 		C0478D2223028EBF00C15A73 /* DataTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTableViewCell.swift; sourceTree = "<group>"; };
 		C0485EB322FDFEA900E27F28 /* Subscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscriber.swift; sourceTree = "<group>"; };
 		C0485EB522FE04E200E27F28 /* SwiftProtobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftProtobuf.framework; path = Carthage/Build/iOS/SwiftProtobuf.framework; sourceTree = "<group>"; };
@@ -198,9 +199,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C0A39FDE22F6EC3200D1DFD0 /* CocoaAsyncSocket.framework in Frameworks */,
-				C0485EB622FE04E200E27F28 /* SwiftProtobuf.framework in Frameworks */,
-				C0A39FDC22F6EC3200D1DFD0 /* CocoaMQTT.framework in Frameworks */,
+				C0C206A723714C0700379A6A /* CocoaMQTT.framework in Frameworks */,
+				C0C206A923714C0700379A6A /* SwiftProtobuf.framework in Frameworks */,
+				C0C206A523714C0700379A6A /* CocoaAsyncSocket.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,6 +420,7 @@
 			isa = PBXGroup;
 			children = (
 				C0BDDBAE23623671007F4A16 /* Documentation.sh */,
+				C02BD7BB2370427D006BA5F2 /* BuildForDistribution.sh */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -474,14 +476,16 @@
 				3D9C428C22745894000A6585 /* Sources */,
 				3D9C428D22745894000A6585 /* Frameworks */,
 				3D9C428E22745894000A6585 /* Resources */,
-				C0A39FE022F6EC3200D1DFD0 /* Embed Frameworks */,
 				C080C2E82307F387004B0CBB /* Carthage Outdated Frameworks */,
+				C0C206AB23714C0700379A6A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = "MapirLiveTracker-iOS";
+			packageProductDependencies = (
+			);
 			productName = MapirLiveTracker;
 			productReference = 3D9C429022745894000A6585 /* MapirLiveTracker.framework */;
 			productType = "com.apple.product-type.framework";
@@ -688,6 +692,8 @@
 				Base,
 			);
 			mainGroup = 3D9C428622745894000A6585;
+			packageReferences = (
+			);
 			productRefGroup = 3D9C429122745894000A6585 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1097,6 +1103,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -1123,6 +1130,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1133,6 +1141,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
@@ -1157,6 +1166,7 @@
 				PRODUCT_NAME = MapirLiveTracker;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1357,6 +1367,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "ir.map.MapirLiveTracker-iOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1375,6 +1386,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "ir.map.MapirLiveTracker-iOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1506,6 +1518,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Examples/Objective-C Example/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -1523,6 +1536,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Examples/Objective-C Example/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;

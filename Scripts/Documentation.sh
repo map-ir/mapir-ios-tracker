@@ -10,20 +10,22 @@ set -euo pipefail
 
 function step { >&2 echo "\033[1m\033[36m$@\033[0m"; }
 
-
-cd ..
-
 step "🧩 Enter module version:"
 read MODULE_VERSION
-THEME="Documentation/theme"
-OUTPUT="Documentation/theme"
-README="Readme.md"
+
+DOCUMENTATION_DIR="Documentation"
+THEME_DIR="${DOCUMENTATION_DIR}/theme"
+OUTPUT_DIR="${DOCUMENTATION_DIR}/docs"
+GUIDES_DIR="${DOCUMENTATION_DIR}/guides"
+
+README="README.md"
 JAZZY_CONF=".jazzy.yaml"
 
-rm -rf ${OUTPUT}
-mkdir ${OUTPUT}
+step "🛠 Generating documentation."
 
-step "🎷 Generating Jazzy Docs."
+rm -rf ${OUTPUT}
+mkdir -p ${OUTPUT}
+
 jazzy \
     --config ${JAZZY_CONF} \
     --readme ${README} \
@@ -37,3 +39,5 @@ jazzy \
     --root-url https://support.map.ir/developer/ios/live-tracking/${MODULE_VERSION}/ \
     --output ${OUTPUT} \
     --theme ${THEME}
+
+step "🎷 Created."
