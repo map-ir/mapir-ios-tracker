@@ -10,11 +10,11 @@ import UIKit
 import MapirLiveTracker
 import CoreLocation
 
-let token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6Ijc4MDMzN2YyYjFlOTZkZjExZjdhY2FhZGI1MzVhNDBjMjA4N2E2MmVkMDFjMmE5MzI4Y2M1ZDE2MDJjODlkMDIzOTEwZDdkY2YxNjQwNTA1In0.eyJhdWQiOiI3MTU3IiwianRpIjoiNzgwMzM3ZjJiMWU5NmRmMTFmN2FjYWFkYjUzNWE0MGMyMDg3YTYyZWQwMWMyYTkzMjhjYzVkMTYwMmM4OWQwMjM5MTBkN2RjZjE2NDA1MDUiLCJpYXQiOjE1NjQyOTI3MzksIm5iZiI6MTU2NDI5MjczOSwiZXhwIjoxNTY2OTcxMTM4LCJzdWIiOiIiLCJzY29wZXMiOlsiYmFzaWMiXX0.Ef9kZ-_jmy8Dcp_Pu1fGlu5RbMZLORUgFFpcSD_dRBfXb232TJldXRFu66pIoiQcLqtFTWFPwx31HXDfruWh0Nt3QsoG9zvxqAi0ILCdioW4aiJVM5jro1euPSQ3ezlDgqzcraAToVjVrvy-5C7CQ9aFVy8PNq-oB9-PIeHsBfqGOYo4xjfsaCEB1_eqst_jWICUs-1fTLzCUyrRv2RsKHfJdhaFbc-3Mim1oQjYah4C8Qa4BFcGDcfYLR_LMu68zUdQSQL1yBZZsfpINVcGpFggP1zbtNbXPEk0Ouf5wlVz0AA2nL8Heu9Owjoc9_gVuPOeMF7qXpBE0d5WXRJjHw"
+let mapirAPIKey = "<#Map.ir API Key#>"
 
 class MainViewController: UIViewController {
 
-    var tracker: Publisher!
+    var publisher: Publisher!
     var receiver: Subscriber!
     let locationManager = CLLocationManager()
 
@@ -37,12 +37,21 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        receiver = Subscriber(accessToken: token)
-        tracker = Publisher(accessToken: token, distanceFilter: 30.0)
+        receiver = Subscriber(apiKey: mapirAPIKey)
+        publisher = Publisher(apiKey: mapirAPIKey, distanceFilter: 30.0)
         receiver.delegate = self
 
         tableView.delegate = self
         tableView.dataSource = self
+
+        switch CLLocationManager.authorizationStatus() {
+        case .denied, .notDetermined, .restricted:
+            locationManager.requestAlwaysAuthorization()
+        case .authorizedWhenInUse, .authorizedAlways:
+            break
+        @unknown default:
+            fatalError()
+        }
     }
 
     @IBAction func segmentChanged(_ sender: UISegmentedControl) {
@@ -68,18 +77,9 @@ class MainViewController: UIViewController {
 
     @IBAction func publishingSwitched(_ sender: UISwitch) {
         if sender.isOn {
-            switch CLLocationManager.authorizationStatus() {
-            case .denied, .notDetermined, .restricted:
-                locationManager.requestAlwaysAuthorization()
-            case .authorizedWhenInUse, .authorizedAlways:
-                tracker = Publisher(accessToken: token, distanceFilter: 10.0)
-                tracker.delegate = self
-                tracker.start(withTrackingIdentifier: trackingIdentifier)
-            @unknown default:
-                fatalError()
-            }
+            publisher.start(withTrackingIdentifier: trackingIdentifier)
         } else {
-            tracker.stop()
+            publisher.stop()
         }
     }
 }

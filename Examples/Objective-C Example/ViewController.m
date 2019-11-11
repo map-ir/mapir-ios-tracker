@@ -9,6 +9,8 @@
 #import "ViewController.h"
 #import "DataTableViewCell.h"
 
+#define API_KEY @"<#Map.ir API Key#>"
+
 @interface ObjcViewController ()
 
 @end
@@ -50,8 +52,8 @@
 
 - (void)setupPublisherAndSubscriber
 {
-    self.publisher = [[MLTPublisher alloc] initWithAccessToken:ACCESS_TOKEN distanceFilter:30.0];
-    self.subscriber = [[MLTSubscriber alloc] initWithAccessToken:ACCESS_TOKEN];
+    self.publisher = [[MLTPublisher alloc] initWithAPIKey:API_KEY distanceFilter:30.0];
+    self.subscriber = [[MLTSubscriber alloc] initWithAPIKey:API_KEY];
 
     self.sentLocations = [[NSMutableArray alloc] init];
     self.receivedLocations = [[NSMutableArray alloc] init];
