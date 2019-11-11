@@ -16,9 +16,9 @@ enum LiveTrackerError: Error {
     ///
     /// You can't use Map.ir Live Tracker unless you have access token. If you don't have any,
     /// see "[App Regstration](https://corp.map.ir/registration)". If you have access token,
-    /// use Publisher/Subscriber initializers with accessToken argument, or add it to your Info.plist
+    /// use Publisher/Subscriber initializers with APIKey argument, or add it to your Info.plist
     /// of your bundle.
-    case accessTokenNotAvailable
+    case apiKeyNotAvailable
 
     /// Service is currently running
     ///
@@ -45,7 +45,7 @@ enum LiveTrackerError: Error {
     /// Description of the error.
     var errorDescription: String? {
         switch self {
-        case .accessTokenNotAvailable:
+        case .apiKeyNotAvailable:
             return "Starting service requires Map.ir access token. add your access token in Info.plist or use initalizer that accepts token."
 
         case .serviceCurrentlyRunning:

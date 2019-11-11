@@ -40,13 +40,13 @@ public class NetworkConfiguration: NSObject {
     /// Default Map.ir service configuration.
     ///
     /// - Attention: If you are using live tracking service with Map.ir infrastructre, you have to use this default configurations.
-    @objc public static let mapirDefault = NetworkConfiguration(authenticationServiceURL: URL(string: "https://tracking-dev.map.ir/")!,
-                                                          maximumRetries: 3,
-                                                          brokerAddress: "dev.map.ir",
-                                                          port: 1883,
-                                                          qos: .qos0,
-                                                          usesSSL: false,
-                                                          session: .shared)
+    @objc public static let mapirDefault = NetworkConfiguration(authenticationServiceURL: URL(string: "https://tracking.map.ir/")!,
+                                                                maximumRetries: 3,
+                                                                brokerAddress: "dev.map.ir",
+                                                                port: 1883,
+                                                                qos: .qos0,
+                                                                usesSSL: false,
+                                                                session: .shared)
     /// Enum representing QoS in MQTT Packets.
     @objc(MLTMQTTQoS)
     public enum MQTTQoS: UInt {

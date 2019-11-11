@@ -117,7 +117,7 @@ public final class Subscriber: NSObject {
     /// Starting the publisher fails if you don't define the this key-value pair.
     @objc(init)
     public override init() {
-        AccountManager.shared.accessToken = nil
+        AccountManager.shared.apiKey      = nil
         self.mqttClient                   = MQTTClient()
         self.status                       = .initiated
         super.init()
@@ -127,12 +127,12 @@ public final class Subscriber: NSObject {
 
     /// DescriptionInitializes a Receiver object.
     ///
-    /// - Parameter accessToken: Your Map.ir access token.
+    /// - Parameter apiKey: Your Map.ir access token.
     ///
     /// If you don't have any, visit "[App Registration website](https://corp.map.ir/appregistration)".
-    @objc(initWithAccessToken:)
-    public init(accessToken: String) {
-        AccountManager.shared.accessToken = accessToken
+    @objc(initWithAPIKey:)
+    public init(apiKey: String) {
+        AccountManager.shared.apiKey      = apiKey
         self.mqttClient                   = MQTTClient()
         self.status                       = .initiated
         super.init()
@@ -155,7 +155,7 @@ public final class Subscriber: NSObject {
     @objc(startWithTrackingIdentifier:)
     public func start(withTrackingIdentifier trackingIdentifier: String) {
         guard AccountManager.shared.isAuthenticated else {
-            stopService(shouldCallDelegate: true, error: LiveTrackerError.accessTokenNotAvailable)
+            stopService(shouldCallDelegate: true, error: LiveTrackerError.apiKeyNotAvailable)
             return
         }
 

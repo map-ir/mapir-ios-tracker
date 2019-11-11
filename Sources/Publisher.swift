@@ -130,7 +130,7 @@ public final class Publisher: NSObject {
     /// starting the publisher fails if you don't define the this key-value pair.
     @objc(initWithDistanceFilter:)
     public init(distanceFilter: Meters) {
-        AccountManager.shared.accessToken = nil
+        AccountManager.shared.apiKey      = nil
         self.locationManager              = LocationManager()
         self.mqttClient                   = MQTTClient()
         self.status                       = .initiated
@@ -144,15 +144,15 @@ public final class Publisher: NSObject {
 
     /// Initializes a Publisher object.
     ///
-    /// - Parameter accessToken: Your Map.ir access token.
+    /// - Parameter apiKey: Your Map.ir access token.
     /// - Parameter distanceFilter: New location will be published when the user moves this amount from last published location.
     ///
     /// Consider adding your valid access token with key of `MAPIRAccessToken` to your **Info.plist**.
     /// If you don't have any, visit [App Registration website](https://corp.map.ir/appregistration).
     /// starting the publisher fails if you don't define the this key-value pair.
-    @objc(initWithAccessToken:distanceFilter:)
-    public init(accessToken: String, distanceFilter: Meters) {
-        AccountManager.shared.accessToken = accessToken
+    @objc(initWithAPIKey:distanceFilter:)
+    public init(apiKey: String, distanceFilter: Meters) {
+        AccountManager.shared.apiKey      = apiKey
         self.locationManager              = LocationManager()
         self.mqttClient                   = MQTTClient()
         self.status                       = .initiated
@@ -178,7 +178,7 @@ public final class Publisher: NSObject {
     @objc(startWithTrackingIdentifier:)
     public func start(withTrackingIdentifier trackingIdentifier: String) {
         guard AccountManager.shared.isAuthenticated else {
-            stopService(shouldCallDelegate: true, error: LiveTrackerError.accessTokenNotAvailable)
+            stopService(shouldCallDelegate: true, error: LiveTrackerError.apiKeyNotAvailable)
             return
         }
 

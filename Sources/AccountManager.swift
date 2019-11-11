@@ -13,7 +13,7 @@ import UIKit
 import AppKit
 #endif
 
-let kAccessTokenInfoPlistKey = "MAPIRAccessToken"
+let kAPIKeyInfoPlistKey = "MAPIRAccessToken"
 
 let kUpdatedUsernameAndPasswordNotification = Notification.Name("kUpdatedUsernameAndPasswordNotification")
 
@@ -25,26 +25,26 @@ public final class AccountManager: NSObject {
     @objc(sharedManager)
     public static var shared: AccountManager = AccountManager()
 
-    private var _accessToken: String?
+    private var _apiKey: String?
 
     /// Your Map.ir access token.
     ///
-    /// If you use `Publisher`/`Subscriber` initializers that has no accessToken arguments,
+    /// If you use `Publisher`/`Subscriber` initializers that has no APIKey arguments,
     /// account manager searches for `MAPIRAccessToken` key/value pair in your project Info.plist file.
     /// You can't use live tracking services without access token.
-    @objc(accessToken)
-    public internal(set) var accessToken: String? {
+    @objc(apiKey)
+    public internal(set) var apiKey: String? {
         get {
-            return _accessToken
+            return _apiKey
         }
         set {
             if let newValue = newValue, !newValue.isEmpty {
-                _accessToken = newValue
+                _apiKey = newValue
             } else {
-                if let token = Bundle.main.object(forInfoDictionaryKey: kAccessTokenInfoPlistKey) as? String {
-                    _accessToken = token
+                if let token = Bundle.main.object(forInfoDictionaryKey: kAPIKeyInfoPlistKey) as? String {
+                    _apiKey = token
                 } else {
-                    logError("Couldn't find access token in Info.plist. You can't start unless you add your access token using Publisher/Subsciber initializer that has accessToken argument, or Info.plist.")
+                    logError("Couldn't find access token in Info.plist. You can't start unless you add your access token using Publisher/Subsciber initializer that has APIKey argument, or Info.plist.")
                 }
             }
         }
@@ -65,7 +65,7 @@ public final class AccountManager: NSObject {
     private override init() { }
 
     var isAuthenticated: Bool {
-        (accessToken ?? "").isEmpty ? false : true
+        (apiKey ?? "").isEmpty ? false : true
     }
 
     typealias RequestTopicCompletionHandler = (String?, Error?) -> ()
@@ -78,13 +78,13 @@ public final class AccountManager: NSObject {
             activeTask.cancel()
         }
 
-        guard let accessToken = self.accessToken else {
+        guard let apiKey = self.apiKey else {
             logError("Couldn't find Map.ir access token.")
             return
         }
 
         var headers: [String: String] = [:]
-        headers.updateValue(accessToken, forKey: "x-api-key")
+        headers.updateValue(apiKey, forKey: "x-api-key")
         headers.updateValue("application/json", forKey: "Content-Type")
 
         let bodyDictionary: JSONDictionary = ["type": type.rawValue, "track_id": trackingID, "device_id": NetworkConfiguration.deviceIdentifier.uuidString]
