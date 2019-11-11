@@ -23,11 +23,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Please</string>
+	<string>In order to use the example app you need access to location service.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Please</string>
+	<string>In order to use the example app you need access to location service.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Please</string>
+	<string>In order to use the example app you need access to location service.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
