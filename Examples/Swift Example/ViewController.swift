@@ -21,7 +21,7 @@ class MainViewController: UIViewController {
     var sentLocations: [CLLocation] = []
     var receivedLocations: [CLLocation] = []
 
-    var _trackingIdentifier = "sample-unique-identifier-test"
+    var _trackingIdentifier = ""
     var trackingIdentifier: String {
         get {
             return _trackingIdentifier
@@ -47,8 +47,15 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let distanceFilter = (UserDefaults.standard.value(forKey: "distanceFilter") as? Double) ?? 30.0
+        let trackingIdentifier = UserDefaults.standard.string(forKey: "trackingIdentifier") ?? "sample-unique-identifier-test"
+
         receiver = Subscriber(apiKey: mapirAPIKey)
-        publisher = Publisher(apiKey: mapirAPIKey, distanceFilter: 30.0)
+        publisher = Publisher(apiKey: mapirAPIKey, distanceFilter: distanceFilter)
+
+        self.trackingIdentifier = trackingIdentifier
+
+        publisher.delegate = self
         receiver.delegate = self
 
         tableView.delegate = self
@@ -67,10 +74,12 @@ class MainViewController: UIViewController {
             guard let changedSettings = notification.object as? [String: Any] else { return }
 
             if let newTrackingIdentifier = changedSettings["trackingIdentifier"] as? String {
+                UserDefaults.standard.set(newTrackingIdentifier, forKey: "trackingIdentifier")
                 self?.trackingIdentifier = newTrackingIdentifier
             }
 
             if let newDistanceFilter = changedSettings["distanceFilter"] as? Double {
+                UserDefaults.standard.set(newDistanceFilter, forKey: "distanceFilter")
                 self?.publisher.distanceFilter = newDistanceFilter
             }
         }
