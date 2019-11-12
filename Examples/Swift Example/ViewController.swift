@@ -10,8 +10,6 @@ import UIKit
 import MapirLiveTracker
 import CoreLocation
 
-let mapirAPIKey = "<#Map.ir API Key#>"
-
 class MainViewController: UIViewController {
 
     var publisher: Publisher!
