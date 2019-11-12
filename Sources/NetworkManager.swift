@@ -52,12 +52,15 @@ extension NetworkingManager {
             urlRequest = URLRequest(url: configuration.authenticationServiceURL)
         }
 
-        urlRequest.httpMethod = method
+        urlRequest.httpMethod = method.lowercased()
         urlRequest.timeoutInterval = 5.0
 
         for pair in customHeaders {
             urlRequest.addValue(pair.value, forHTTPHeaderField: pair.key)
         }
+
+        urlRequest.addValue(NetworkConfiguration.userAgent, forHTTPHeaderField: "User-Agent")
+        urlRequest.addValue(NetworkConfiguration.mapirIdentifier, forHTTPHeaderField: "MapIr-SDK")
 
         if method.lowercased() == "post" {
             urlRequest.httpBody = body

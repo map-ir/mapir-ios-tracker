@@ -132,6 +132,10 @@ public final class AccountManager: NSObject {
                     }
                     return
                 }
+            case 403:
+                DispatchQueue.main.async {
+                    completionHandler(nil, InternalError.unauthorizedToken)
+                }
             default:
                 DispatchQueue.main.async {
                     completionHandler(nil, InternalError.couldNotCreateTopic)

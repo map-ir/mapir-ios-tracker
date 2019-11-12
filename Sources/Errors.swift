@@ -65,6 +65,8 @@ enum LiveTrackerError: Error {
 
 internal enum InternalError: Error {
     case couldNotCreateTopic
+
+    case unauthorizedToken
 }
 
 fileprivate extension CLAuthorizationStatus {

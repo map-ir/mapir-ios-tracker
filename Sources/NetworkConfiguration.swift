@@ -42,7 +42,7 @@ public class NetworkConfiguration: NSObject {
     /// - Attention: If you are using live tracking service with Map.ir infrastructre, you have to use this default configurations.
     @objc public static let mapirDefault = NetworkConfiguration(authenticationServiceURL: URL(string: "https://tracking.map.ir/")!,
                                                                 maximumRetries: 3,
-                                                                brokerAddress: "dev.map.ir",
+                                                                brokerAddress: "tracking.map.ir",
                                                                 port: 1883,
                                                                 qos: .qos0,
                                                                 usesSSL: false,
@@ -54,10 +54,10 @@ public class NetworkConfiguration: NSObject {
         /// Quality of Service level 0.
         case qos0 = 0
 
-        /// Quality of Service level 0.
+        /// Quality of Service level 1.
         case qos1 = 1
 
-        /// Quality of Service level 0.
+        /// Quality of Service level 2.
         case qos2 = 2
 
         var asCocoaMQTTQoS: CocoaMQTTQoS {
@@ -96,7 +96,6 @@ public class NetworkConfiguration: NSObject {
             components.append("\(appName)/\(version)")
         }
 
-        // Replace Your bundle name
         let libraryBundle: Bundle? = Bundle(for: NetworkConfiguration.self)
 
         if let libraryName = libraryBundle?.infoDictionary?["CFBundleName"] as? String, let version = libraryBundle?.infoDictionary?["CFBundleShortVersionString"] as? String {
@@ -129,6 +128,49 @@ public class NetworkConfiguration: NSObject {
         components.append("(\(chip))")
 
         return components.joined(separator: " ")
+    }()
+
+    static let mapirIdentifier: String = {
+        var components: [String] = []
+
+        let system: String
+        #if os(OSX)
+            system = "macOS"
+        #elseif os(iOS)
+            system = "iOS"
+        #elseif os(watchOS)
+            system = "watchOS"
+        #elseif os(tvOS)
+            system = "tvOS"
+        #endif
+        let systemVersion = ProcessInfo().operatingSystemVersion
+
+        let chip: String
+        #if arch(x86_64)
+            chip = "x86_64"
+        #elseif arch(arm)
+            chip = "arm"
+        #elseif arch(arm64)
+            chip = "arm64"
+        #elseif arch(i386)
+            chip = "i386"
+        #else
+            chip = "n/a"
+        #endif
+        components.append("\(system)\(systemVersion.majorVersion).\(systemVersion.minorVersion).\(systemVersion.patchVersion)(\(chip))")
+
+        let libraryBundle: Bundle? = Bundle(for: NetworkConfiguration.self)
+
+        if let libraryName = libraryBundle?.infoDictionary?["CFBundleName"] as? String, let version = libraryBundle?.infoDictionary?["CFBundleShortVersionString"] as? String {
+            components.append("\(libraryName)/\(version)")
+        }
+
+        if let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String ?? Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String {
+            let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+                components.append("\(appName)/\(version)")
+        }
+
+        return components.joined(separator: "-")
     }()
 
     static let deviceIdentifier: UUID = {
