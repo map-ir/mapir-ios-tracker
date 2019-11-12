@@ -187,6 +187,11 @@
                     </view>
                     <navigationItem key="navigationItem" id="Goh-dV-65v">
                         <nil key="title"/>
+                        <barButtonItem key="leftBarButtonItem" title="Setting" id="jIr-cI-Fjc">
+                            <connections>
+                                <segue destination="YzI-bI-pIH" kind="presentation" identifier="ShowSettingSequeIdentifer" id="5ve-hd-ttb"/>
+                            </connections>
+                        </barButtonItem>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="Gk2-x9-lbW">
                             <rect key="frame" x="129.5" y="5.5" width="155" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -213,6 +218,93 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TOH-OW-4DP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="839.13043478260875" y="107.8125"/>
+        </scene>
+        <!--Setting Table View Controller-->
+        <scene sceneID="slP-Tz-mHz">
+            <objects>
+                <tableViewController id="YzI-bI-pIH" customClass="SettingTableViewController" customModule="MapirLiveTracker_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="mtX-Ca-Ch6">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="vfP-g8-DaP">
+                            <rect key="frame" x="0.0" y="216.5" width="414" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="Submit"/>
+                            <connections>
+                                <action selector="submitButtonTapped:" destination="YzI-bI-pIH" eventType="touchUpInside" id="KxJ-RE-UjN"/>
+                            </connections>
+                        </button>
+                        <sections>
+                            <tableViewSection headerTitle="Tracking Identifier" id="bl7-Wg-5Gl">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="D1O-wL-YQ5">
+                                        <rect key="frame" x="20" y="55.5" width="374" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="D1O-wL-YQ5" id="D9x-wr-RIe">
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Unu-PB-lh5">
+                                                    <rect key="frame" x="20" y="0.0" width="338" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="44" id="NyF-gm-sHI"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="Unu-PB-lh5" secondAttribute="bottom" id="1Xf-ec-yEu"/>
+                                                <constraint firstItem="Unu-PB-lh5" firstAttribute="leading" secondItem="D9x-wr-RIe" secondAttribute="leading" constant="20" id="MOZ-zS-MM5"/>
+                                                <constraint firstItem="Unu-PB-lh5" firstAttribute="top" secondItem="D9x-wr-RIe" secondAttribute="top" id="th0-3G-uLo"/>
+                                                <constraint firstAttribute="trailing" secondItem="Unu-PB-lh5" secondAttribute="trailing" constant="16" id="yAF-zG-E0I"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="Distance Filter" id="04F-sP-csD">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="UR3-3D-wYS">
+                                        <rect key="frame" x="20" y="155" width="374" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="UR3-3D-wYS" id="C6q-p7-Izs">
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ybh-zG-WCr">
+                                                    <rect key="frame" x="20" y="0.0" width="338" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="44" id="dV6-1n-Tt4"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="done"/>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="ybh-zG-WCr" firstAttribute="leading" secondItem="C6q-p7-Izs" secondAttribute="leading" constant="20" id="CZa-xd-Tt1"/>
+                                                <constraint firstItem="ybh-zG-WCr" firstAttribute="top" secondItem="C6q-p7-Izs" secondAttribute="top" id="Jql-Xa-irs"/>
+                                                <constraint firstAttribute="trailing" secondItem="ybh-zG-WCr" secondAttribute="trailing" constant="16" id="j0t-uM-qqp"/>
+                                                <constraint firstAttribute="bottom" secondItem="ybh-zG-WCr" secondAttribute="bottom" id="kbx-KZ-TOJ"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="YzI-bI-pIH" id="IZo-bc-bfc"/>
+                            <outlet property="delegate" destination="YzI-bI-pIH" id="ScC-ts-krH"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <outlet property="distanceFilterTextField" destination="ybh-zG-WCr" id="R11-BH-CO3"/>
+                        <outlet property="trackingIdentifierTextField" destination="Unu-PB-lh5" id="3MB-te-3aq"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RIV-bS-pyk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1721.7391304347827" y="107.8125"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="lhe-Pd-xwW">

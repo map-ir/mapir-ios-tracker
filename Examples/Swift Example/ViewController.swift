@@ -21,7 +21,17 @@ class MainViewController: UIViewController {
     var sentLocations: [CLLocation] = []
     var receivedLocations: [CLLocation] = []
 
-    var trackingIdentifier = "sample-unique-identifier-test"
+    var _trackingIdentifier = "sample-unique-identifier-test"
+    var trackingIdentifier: String {
+        get {
+            return _trackingIdentifier
+        }
+        set {
+            if publisher.status != .starting || publisher.status != .running {
+                _trackingIdentifier = newValue
+            }
+        }
+    }
 
     let dateFormatter: DateFormatter = {
         let dateForamtter = DateFormatter()
@@ -51,6 +61,18 @@ class MainViewController: UIViewController {
             break
         @unknown default:
             fatalError()
+        }
+
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.settingUpdatedNofitication, object: nil, queue: .main) { [weak self] (notification) in
+            guard let changedSettings = notification.object as? [String: Any] else { return }
+
+            if let newTrackingIdentifier = changedSettings["trackingIdentifier"] as? String {
+                self?.trackingIdentifier = newTrackingIdentifier
+            }
+
+            if let newDistanceFilter = changedSettings["distanceFilter"] as? Double {
+                self?.publisher.distanceFilter = newDistanceFilter
+            }
         }
     }
 
@@ -82,6 +104,38 @@ class MainViewController: UIViewController {
             publisher.stop()
         }
     }
+
+    static let kShowSettingSequeIdentifer = "ShowSettingSequeIdentifer"
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == MainViewController.kShowSettingSequeIdentifer {
+            guard let destination = segue.destination as? SettingTableViewController else { return }
+
+            destination.distanceFilter = publisher.distanceFilter
+            destination.trackingIdentifier = self.trackingIdentifier
+        }
+    }
+
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if identifier == MainViewController.kShowSettingSequeIdentifer {
+            if publisher.status == .stopped || publisher.status == .initiated {
+                return true
+            } else {
+                showError(message: "You can not update setting while Publisher is working.")
+                return false
+            }
+        }
+
+        return false
+    }
+
+    private func showError(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Got it", style: .default)
+        alert.addAction(okAction)
+
+        self.present(alert, animated: true)
+    }
 }
 
 extension MainViewController: SubscriberDelegate {
@@ -103,8 +157,6 @@ extension MainViewController: SubscriberDelegate {
             print("-- Recevier Stopped")
         }
     }
-
-
 }
 
 extension MainViewController: PublisherDelegate {
