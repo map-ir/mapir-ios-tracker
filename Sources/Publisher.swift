@@ -63,7 +63,9 @@ public final class Publisher: NSObject {
 
     // MARK: General Properties
 
-    private var topic: String?
+    /// Last published location.
+    @objc(lastPublishedLocation)
+    public private(set) var lastPublishedLocation: CLLocation?
 
     /// Current tracking identifier which service is using.
     ///
@@ -72,6 +74,8 @@ public final class Publisher: NSObject {
     public private(set) var trackingIdentifier: String?
 
     private var mqttClient: MQTTClient
+
+    private var topic: String?
 
     /// The publisher's delegate.
     ///
@@ -126,7 +130,7 @@ public final class Publisher: NSObject {
     ///
     /// - Parameter distanceFilter: New location will be published when the user moves this amount from last published location.
     ///
-    /// Consider adding your valid access token with key of `MAPIRAccessToken` to your **Info.plist**.
+    /// Consider adding your valid API key with key of `MAPIRAccessToken` to your **Info.plist**.
     /// starting the publisher fails if you don't define the this key-value pair.
     @objc(initWithDistanceFilter:)
     public init(distanceFilter: Meters) {
@@ -144,10 +148,10 @@ public final class Publisher: NSObject {
 
     /// Initializes a Publisher object.
     ///
-    /// - Parameter apiKey: Your Map.ir access token.
+    /// - Parameter apiKey: Your Map.ir API key.
     /// - Parameter distanceFilter: New location will be published when the user moves this amount from last published location.
     ///
-    /// Consider adding your valid access token with key of `MAPIRAccessToken` to your **Info.plist**.
+    /// Consider adding your valid API key with key of `MAPIRAccessToken` to your **Info.plist**.
     /// If you don't have any, visit [App Registration website](https://corp.map.ir/appregistration).
     /// starting the publisher fails if you don't define the this key-value pair.
     @objc(initWithAPIKey:distanceFilter:)
@@ -177,13 +181,21 @@ public final class Publisher: NSObject {
     ///     Otherwise conflicts may occure between published and received data.
     @objc(startWithTrackingIdentifier:)
     public func start(withTrackingIdentifier trackingIdentifier: String) {
-        guard AccountManager.shared.isAuthenticated else {
+        guard AccountManager.shared.apiKeyStatus != .notAvailable else {
+            logError("Publisher can not start. API Key is not available.")
             stopService(shouldCallDelegate: true, error: LiveTrackerError.apiKeyNotAvailable)
+            return
+        }
+
+        guard AccountManager.shared.apiKeyStatus != .unauthorized else {
+            logError("Publisher can not start. API Key is not valid.")
+            stopService(shouldCallDelegate: true, error: LiveTrackerError.unauthorizedAPIKey)
             return
         }
 
         switch status {
         case .running, .starting:
+            logError("Publisher is currently running or being started.")
             delegate?.publisher?(self, failedWithError: LiveTrackerError.serviceCurrentlyRunning)
             return
         case .stopped, .initiated:
@@ -200,10 +212,11 @@ public final class Publisher: NSObject {
 
             self.mqttClient.connect { [weak self] in
                 guard let self = self else { return }
-                logDebug("Connected to MQTTBroker.")
+                    logInfo("Publisher connected.")
                     self.status = .running
             }
         } catch let locationServiceError {
+            logError("Unathorized to use location services.")
             stopService(shouldCallDelegate: true, error: locationServiceError)
         }
     }
@@ -212,18 +225,23 @@ public final class Publisher: NSObject {
         guard let self = self else { return }
         if let error = error {
             if let error = error as? InternalError, error == InternalError.couldNotCreateTopic {
-                logError("Live Tracker Service is not available. Contant support.")
+                logError("Map.ir authenticator isn't available at the moment.")
                 self.stopService(shouldCallDelegate: true, error: LiveTrackerError.liveTrackerServiceNotAvailable)
+
+            } else if let error = error as? InternalError, error == .unauthorizedToken {
+                logError("Your API key is not authorized to use Map.ir live tracker serivces.")
+                self.stopService(shouldCallDelegate: true, error: LiveTrackerError.unauthorizedAPIKey)
+
             } else if self.retries < NetworkingManager.shared.configuration.maximumNetworkRetries {
+                logInfo("Couldn't reach Map.ir authenticator. retrying in 5 seconds...")
                 self.retries += 1
-                logDebug("Couldn't create topic. Retrying in 5 seconds. (\(self.retries))")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
                     guard let self = self else { return }
                     guard let trackingIdentifier = self.trackingIdentifier else { return }
                     AccountManager.shared.requestTopic(forTrackingIdentifier: trackingIdentifier, type: .publisher, completionHandler: self.requestTopicCompletionHandler)
                 }
             } else {
-                logDebug("Couldn't create topic. Maximum retries reached. Stopping service. (\(self.retries))")
+                logError("Couldn't reach Map.ir authenticator.")
                 self.stopService(shouldCallDelegate: true, error: error)
             }
 
@@ -298,7 +316,7 @@ extension Publisher: LocationManagerDelegate {
             guard let topic = topic else { return }
             mqttClient.publish(data: data, onTopic: topic)
         } catch let error {
-            logError("Protobuf serialization failure.\nError: \(error)")
+            logDebug("Publisher location data serialization failure: \(error)")
         }
     }
 
@@ -321,6 +339,7 @@ extension Publisher: MQTTClientDelegate {
                 self.startService()
             }
         } else {
+            logError("Publisher unexpectedly disconneted from the broker. \(error != nil ? "\(error!)" : "" )")
             stopService(shouldCallDelegate: true, error: error)
         }
     }
@@ -330,9 +349,10 @@ extension Publisher: MQTTClientDelegate {
         do {
             let decodedProto = try LiveTracker_Location(serializedData: data)
             let location = CLLocation(protoLocation: decodedProto)
+            self.lastPublishedLocation = location
             delegate.publisher?(self, publishedLocation: location)
         } catch let error {
-            logError("protobuf serialization failure.\nError: \(error)")
+            logDebug("Published location deserialization failure: \(error)")
         }
     }
 }

@@ -64,10 +64,11 @@ public final class Subscriber: NSObject {
     // MARK: General Properties
 
     /// Last received valid location.
+    ///
+    /// This property has the last valid received location. Sometimes received location is
+    /// not valid due to its timestamp. In this case location won't be saved in this property.
     @objc(lastReceivedLocation)
     public private(set) var lastReceivedLocation: CLLocation?
-
-    private var topic: String?
 
     /// Current tracking identifier which service is using.
     ///
@@ -77,6 +78,8 @@ public final class Subscriber: NSObject {
     public private(set) var trackingIdentifier: String?
 
     private var mqttClient: MQTTClient
+
+    private var topic: String?
 
     /// The receiver's delegate.
     ///
@@ -112,7 +115,7 @@ public final class Subscriber: NSObject {
 
     /// Initializes a Receiver object.
     ///
-    /// Consider adding your valid access token with key of `MAPIRAccessToken` to your **Info.plist**.
+    /// Consider adding your valid API key with key of `MAPIRAccessToken` to your **Info.plist**.
     /// If you don't have any, visit [App Registration website](https://corp.map.ir/appregistration).
     /// Starting the publisher fails if you don't define the this key-value pair.
     @objc(init)
@@ -127,7 +130,7 @@ public final class Subscriber: NSObject {
 
     /// DescriptionInitializes a Receiver object.
     ///
-    /// - Parameter apiKey: Your Map.ir access token.
+    /// - Parameter apiKey: Your Map.ir API key.
     ///
     /// If you don't have any, visit "[App Registration website](https://corp.map.ir/appregistration)".
     @objc(initWithAPIKey:)
@@ -154,8 +157,15 @@ public final class Subscriber: NSObject {
     /// Otherwise conflicts may occure between published and received data.
     @objc(startWithTrackingIdentifier:)
     public func start(withTrackingIdentifier trackingIdentifier: String) {
-        guard AccountManager.shared.isAuthenticated else {
+        guard AccountManager.shared.apiKeyStatus != .notAvailable else {
+            logError("Subscriber can not start. API Key is not available.")
             stopService(shouldCallDelegate: true, error: LiveTrackerError.apiKeyNotAvailable)
+            return
+        }
+
+        guard AccountManager.shared.apiKeyStatus != .unauthorized else {
+            logError("Subscriber can not start. API Key is not valid.")
+            stopService(shouldCallDelegate: true, error: LiveTrackerError.unauthorizedAPIKey)
             return
         }
 
@@ -172,10 +182,12 @@ public final class Subscriber: NSObject {
 
     private func startService() {
         self.mqttClient.connect { [weak self] in
-            logDebug("Connected to MQTTBroker.")
+
             guard let topic = self?.topic else { return }
             self?.mqttClient.subscribe(toTopic: topic) { [weak self] in
+                logInfo("Subscriber connected.")
                 self?.status = .running
+
             }
         }
     }
@@ -184,18 +196,23 @@ public final class Subscriber: NSObject {
         guard let self = self else { return }
         if let error = error {
             if let error = error as? InternalError, error == InternalError.couldNotCreateTopic {
-                logError("Live Tracker Service is not available. Contant support.")
+                logError("Map.ir authenticator isn't available at the moment.")
                 self.stopService(shouldCallDelegate: true, error: LiveTrackerError.liveTrackerServiceNotAvailable)
+
+            } else if let error = error as? InternalError, error == .unauthorizedToken {
+                logError("Your API key is not authorized to use Map.ir live tracker serivces.")
+                self.stopService(shouldCallDelegate: true, error: LiveTrackerError.unauthorizedAPIKey)
+
             } else if self.retries < NetworkingManager.shared.configuration.maximumNetworkRetries {
+                logInfo("Couldn't reach Map.ir authenticator. retrying in 5 seconds...")
                 self.retries += 1
-                logDebug("Couldn't create topic. Retrying in 5 seconds. (\(self.retries))")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
                     guard let self = self else { return }
                     guard let trackingIdentifier = self.trackingIdentifier else { return }
                     AccountManager.shared.requestTopic(forTrackingIdentifier: trackingIdentifier, type: .subscriber, completionHandler: self.requestTopicCompletionHandler)
                 }
             } else {
-                logDebug("Couldn't create topic. Maximum retries reached. Stopping service. (\(self.retries))")
+                logError("Couldn't reach Map.ir authenticator.")
                 self.stopService(shouldCallDelegate: true, error: error)
             }
         }
@@ -266,6 +283,7 @@ extension Subscriber: MQTTClientDelegate {
                 self.startService()
             }
         } else {
+            logError("Subscriber unexpectedly disconneted from the broker. \(error != nil ? "\(error!)" : "" )")
             stopService(shouldCallDelegate: true, error: error)
         }
     }
@@ -296,10 +314,10 @@ extension Subscriber: MQTTClientDelegate {
                 self.lastReceivedLocation = location
                 delegate.subscriber(self, locationReceived: location)
             } else {
-                logDebug("Invalid location received.")
+                logInfo("Received an invalid location data. Location might be too old or older than last received location.")
             }
         } catch let error {
-            logError("Protobuf deserialization failure.\nError: \(error)")
+            logDebug("Received location deserializition failure: \(error)")
         }
     }
 }

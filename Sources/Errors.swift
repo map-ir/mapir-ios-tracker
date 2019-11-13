@@ -12,13 +12,19 @@ import CoreLocation
 /// Errors related to the Map.ir Live Tracker service.
 enum LiveTrackerError: Error {
 
-    /// Your Map.ir access token is not available.
+    /// Your Map.ir API key is not available.
     ///
-    /// You can't use Map.ir Live Tracker unless you have access token. If you don't have any,
-    /// see "[App Regstration](https://corp.map.ir/registration)". If you have access token,
+    /// You can't use Map.ir Live Tracker unless you have API key. If you don't have any,
+    /// see "[App Regstration](https://corp.map.ir/registration)". If you have API key,
     /// use Publisher/Subscriber initializers with APIKey argument, or add it to your Info.plist
     /// of your bundle.
     case apiKeyNotAvailable
+
+    /// Your Map.ir API key is not authorized.
+    ///
+    /// If you don't have a valid API key, see "[App Regstration](https://corp.map.ir/registration)"
+    /// and get one. Then retry with the new API key.
+    case unauthorizedAPIKey
 
     /// Service is currently running
     ///
@@ -46,7 +52,10 @@ enum LiveTrackerError: Error {
     var errorDescription: String? {
         switch self {
         case .apiKeyNotAvailable:
-            return "Starting service requires Map.ir access token. add your access token in Info.plist or use initalizer that accepts token."
+            return "Using service requires a valid Map.ir API key. add your API key in Info.plist or use initalizer that accepts token."
+
+        case .unauthorizedAPIKey:
+            return "Using service requires a valid Map.ir API key. update your API key to a valid one, then retry."
 
         case .serviceCurrentlyRunning:
             return "Can't start a publisher while a service is being started or already started."

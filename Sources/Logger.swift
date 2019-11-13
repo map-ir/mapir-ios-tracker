@@ -21,16 +21,32 @@ func logError(_ message: Any..., separator: String = " ", terminator: String = "
 }
 
 /// Logging manager class for SDK.
-struct Logger {
+@objc(MLTLogger)
+public class Logger: NSObject {
 
-    /// Indicates logging level.
-    var level: Level
+    private var _level: Level
 
     /// Default logger instance.
-    static let `default` = Logger(level: .debug)
+    internal static let `default` = Logger()
 
-    private init(level: Level) {
-        self.level = level
+    /// Indicates logging level.
+    @objc
+    public static var level: Level {
+        get {
+            return Logger.default._level
+        }
+        set {
+            Logger.default._level = newValue
+        }
+    }
+
+    private init(level: Level? = nil) {
+        if let level = level {
+            self._level = level
+        } else {
+            self._level = .none
+        }
+        super.init()
     }
 
     private var timeFormatter: DateFormatter = {
@@ -39,29 +55,43 @@ struct Logger {
         return timeFormatter
     }()
 
-    func log(_ message: [Any], level: Level, separator: String = " ", terminator: String = "\n") {
-        if level.rawValue >= self.level.rawValue {
+    internal func log(_ message: [Any], level: Level, separator: String = " ", terminator: String = "\n") {
+        if level.rawValue >= self._level.rawValue {
             let message = message.map { "\($0)" }.joined(separator: separator)
             print("LiveTracker - \(level.description) - \(self.timeFormatter.string(from: Date())): \(message)", terminator: terminator)
         }
     }
 }
 
-
 extension Logger {
-    enum Level: Int, CustomStringConvertible {
-        case none = 0, info, debug, error
 
-        var description: String {
+    /// Shows different logging levels.
+    @objc(MLTLoggerLevel)
+    public enum Level: Int, CustomStringConvertible {
+
+        /// All debug, info and errors will be shown.
+        case debug = 0
+
+        /// All info and errors will be shown.
+        case info = 1
+
+        /// Only errors will be printed at this level.
+        case error = 2
+
+        /// No logs will be shown at this level.
+        case none = 3
+
+        /// Logger level description.
+        public var description: String {
             switch self {
-            case .none:
-                return "NONE"
-            case .info:
-                return "INFO"
             case .debug:
                 return "DEBUG"
+            case .info:
+                return "INFO"
             case .error:
                 return "ERROR"
+            case .none:
+                return "NONE"
             }
         }
     }

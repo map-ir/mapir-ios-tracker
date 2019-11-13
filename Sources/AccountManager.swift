@@ -31,7 +31,7 @@ public final class AccountManager: NSObject {
     ///
     /// If you use `Publisher`/`Subscriber` initializers that has no APIKey arguments,
     /// account manager searches for `MAPIRAccessToken` key/value pair in your project Info.plist file.
-    /// You can't use live tracking services without access token.
+    /// You can't use live tracking services without API key.
     @objc(apiKey)
     public internal(set) var apiKey: String? {
         get {
@@ -40,11 +40,13 @@ public final class AccountManager: NSObject {
         set {
             if let newValue = newValue, !newValue.isEmpty {
                 _apiKey = newValue
+                apiKeyStatus = .notDetermined
             } else {
                 if let token = Bundle.main.object(forInfoDictionaryKey: kAPIKeyInfoPlistKey) as? String {
                     _apiKey = token
+                    apiKeyStatus = .notDetermined
                 } else {
-                    logError("Couldn't find access token in Info.plist. You can't start unless you add your access token using Publisher/Subsciber initializer that has APIKey argument, or Info.plist.")
+                    logError("Couldn't find API key in Info.plist. You can't start unless you add your API key using Publisher/Subsciber initializer that has APIKey argument, or Info.plist.")
                 }
             }
         }
@@ -64,8 +66,27 @@ public final class AccountManager: NSObject {
 
     private override init() { }
 
-    var isAuthenticated: Bool {
-        (apiKey ?? "").isEmpty ? false : true
+    public private(set) var apiKeyStatus: APIKeyStatus = .notAvailable
+
+    /// Indicates current status for APIKey.
+    @objc(APIKeyStatus)
+    public enum APIKeyStatus: UInt {
+
+        /// API Key is not available. Possibly it is `nil`.
+        case notAvailable
+
+        /// Not Determined yet.
+        case notDetermined
+
+        /// Authorized to use Map.ir services.
+        case authorized
+
+        /// Invalid API Key.
+        case unauthorized
+
+        internal var canSendRequests: Bool {
+            self == .authorized || self == .notDetermined
+        }
     }
 
     typealias RequestTopicCompletionHandler = (String?, Error?) -> ()
@@ -79,7 +100,6 @@ public final class AccountManager: NSObject {
         }
 
         guard let apiKey = self.apiKey else {
-            logError("Couldn't find Map.ir access token.")
             return
         }
 
@@ -107,6 +127,7 @@ public final class AccountManager: NSObject {
             let urlResponse = urlResponse as! HTTPURLResponse
             switch urlResponse.statusCode {
             case 200...201:
+                self.apiKeyStatus = .authorized
                 do {
                     struct NewLiveTrackerResponse: Decodable {
 
@@ -133,10 +154,12 @@ public final class AccountManager: NSObject {
                     return
                 }
             case 403:
+                self.apiKeyStatus = .unauthorized
                 DispatchQueue.main.async {
                     completionHandler(nil, InternalError.unauthorizedToken)
                 }
             default:
+                self.apiKeyStatus = .notDetermined
                 DispatchQueue.main.async {
                     completionHandler(nil, InternalError.couldNotCreateTopic)
                 }
