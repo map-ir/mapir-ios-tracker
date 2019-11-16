@@ -1,0 +1,31 @@
+<header class="header-container">
+  <div class="limiter">
+    <div class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="{{path_to_root}}index.html">
+            <img style="height: 40px;" class="header-icon" src="{{path_to_root}}img/mapir.svg" alt="{{module_name}} Docs"/>
+            <span class="header-tag">{{docs_title}} Reference ({{module_version}})</span>
+        </a>
+        {{#doc_coverage}} ({{doc_coverage}}% documented){{/doc_coverage}}
+      </p>
+
+      {{#github_url}}
+      <p class="header-col header-col--secondary">
+        <a class="header-link" href="{{github_url}}">
+          <img class="header-icon" src="{{path_to_root}}img/gh.png"/>
+          View on GitHub
+        </a>
+      </p>
+      {{/github_url}}
+
+      {{#dash_url}}
+      <p class="header-col header-col--secondary">
+        <a class="header-link" href="{{dash_url}}">
+          <img class="header-icon" src="{{path_to_root}}img/dash.png"/>
+          Install in Dash
+        </a>
+      </p>
+      {{/dash_url}}
+    </div>
+  </div>
+</header>

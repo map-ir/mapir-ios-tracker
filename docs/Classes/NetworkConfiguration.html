@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>NetworkConfiguration Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Class/NetworkConfiguration" class="dashAnchor"></a>
+
+    <a title="NetworkConfiguration Class Reference"></a>
+
+    <header class="header-container">
+      <div class="limiter">
+        <div class="header">
+          <p class="header-col header-col--primary">
+            <a class="header-link" href="../index.html">
+                <img style="height: 40px;" class="header-icon" src="../img/mapir.svg" alt="MapirLiveTracker Docs"/>
+                <span class="header-tag">MapirLiveTracker 1.0 Docs Reference (1.0)</span>
+            </a>
+            
+          </p>
+    
+          <p class="header-col header-col--secondary">
+            <a class="header-link" href="https://github.com/map-ir/mapir-ios-tracker">
+              <img class="header-icon" src="../img/gh.png"/>
+              View on GitHub
+            </a>
+          </p>
+    
+          <p class="header-col header-col--secondary">
+            <a class="header-link" href="dash-feed://https%3A%2F%2Fmap%2Dir%2Egithub%2Eio%2Fdocsets%2FMapirLiveTracker%2Exml">
+              <img class="header-icon" src="../img/dash.png"/>
+              Install in Dash
+            </a>
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <div class="breadcrumbs">
+      <div class="limiter">
+        <a class="breadcrumb" href="../index.html">MapirLiveTracker Reference</a>
+        <img class="carat" src="../img/carat.png" />
+        NetworkConfiguration Class Reference
+      </div>
+    </div>
+
+    <div class="content-wrapper limiter">
+      <nav class="navigation">
+          <div class="header-col--secondary">
+            <form role="search" action="../search.json">
+              <input type="text" placeholder="Search documentation" data-typeahead>
+            </form>
+          </div>
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="small-heading" href="../Publisher.html">Publisher<span class="anchor-icon" /></a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Publisher.html">Publisher</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Publisher/Status.html">– Status</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/PublisherDelegate.html">PublisherDelegate</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="small-heading" href="../Subscriber.html">Subscriber<span class="anchor-icon" /></a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Subscriber.html">Subscriber</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Subscriber/Status.html">– Status</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/SubscriberDelegate.html">SubscriberDelegate</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="small-heading" href="../Networking.html">Networking<span class="anchor-icon" /></a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/NetworkingManager.html">NetworkingManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/NetworkConfiguration.html">NetworkConfiguration</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/NetworkConfiguration/MQTTQoS.html">– MQTTQoS</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="small-heading" href="../Account.html">Account<span class="anchor-icon" /></a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AccountManager.html">AccountManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AccountManager/APIKeyStatus.html">– APIKeyStatus</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="small-heading" href="../Logging.html">Logging<span class="anchor-icon" /></a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Logger.html">Logger</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Logger/Level.html">– Level</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="small-heading" href="../Type Aliases.html">Type Aliases<span class="anchor-icon" /></a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Type%20Aliases.html#/s:16MapirLiveTracker6Metersa">Meters</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            <a href="#/NetworkConfiguration"><h1 id="NetworkConfiguration">NetworkConfiguration<span class="anchor-icon" /></h1></a>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">@objc(MLTNetworkConfiguration)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="kt">NetworkConfiguration</span> <span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+
+                </div>
+              </div>
+            <p>An object that represents a network configuration for the service.</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(cs)MLTNetworkConfiguration(py)authenticationServiceURL"></a>
+                    <a name="//apple_ref/swift/Property/authenticationServiceURL" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(cs)MLTNetworkConfiguration(py)authenticationServiceURL">authenticationServiceURL</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>API base URL.</p>
+
+<p>This url is used to fetch topics for tracking identifier.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc</span>
+<span class="kd">public</span> <span class="k">let</span> <span class="nv">authenticationServiceURL</span><span class="p">:</span> <span class="kt">URL</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(cs)MLTNetworkConfiguration(py)maximumNetworkRetries"></a>
+                    <a name="//apple_ref/swift/Property/maximumNetworkRetries" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(cs)MLTNetworkConfiguration(py)maximumNetworkRetries">maximumNetworkRetries</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Maximum network retries.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc</span>
+<span class="kd">public</span> <span class="k">let</span> <span class="nv">maximumNetworkRetries</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(cs)MLTNetworkConfiguration(py)brokerAddress"></a>
+                    <a name="//apple_ref/swift/Property/brokerAddress" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(cs)MLTNetworkConfiguration(py)brokerAddress">brokerAddress</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>MQTT Broker address.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc</span>
+<span class="kd">public</span> <span class="k">let</span> <span class="nv">brokerAddress</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(cs)MLTNetworkConfiguration(py)brokerPort"></a>
+                    <a name="//apple_ref/swift/Property/brokerPort" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(cs)MLTNetworkConfiguration(py)brokerPort">brokerPort</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>MQTT Broker port.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc</span>
+<span class="kd">public</span> <span class="k">let</span> <span class="nv">brokerPort</span><span class="p">:</span> <span class="kt">UInt16</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(cs)MLTNetworkConfiguration(py)qos"></a>
+                    <a name="//apple_ref/swift/Property/qos" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(cs)MLTNetworkConfiguration(py)qos">qos</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Quality of Service for MQTT packets.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc</span>
+<span class="kd">public</span> <span class="k">let</span> <span class="nv">qos</span><span class="p">:</span> <span class="kt"><a href="../Classes/NetworkConfiguration/MQTTQoS.html">MQTTQoS</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(cs)MLTNetworkConfiguration(py)usesSSL"></a>
+                    <a name="//apple_ref/swift/Property/usesSSL" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(cs)MLTNetworkConfiguration(py)usesSSL">usesSSL</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Indicates that the configuration uses SSL or not.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc</span>
+<span class="kd">public</span> <span class="k">let</span> <span class="nv">usesSSL</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(cs)MLTNetworkConfiguration(py)session"></a>
+                    <a name="//apple_ref/swift/Property/session" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(cs)MLTNetworkConfiguration(py)session">session</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Shared <code>URLSession</code> instance for the service.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc</span>
+<span class="kd">public</span> <span class="k">let</span> <span class="nv">session</span><span class="p">:</span> <span class="kt">URLSession</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(cs)MLTNetworkConfiguration(cpy)mapirDefault"></a>
+                    <a name="//apple_ref/swift/Variable/mapirDefault" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(cs)MLTNetworkConfiguration(cpy)mapirDefault">mapirDefault</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Default Map.ir service configuration.</p>
+<div class="aside aside-attention">
+    <p class="aside-title">Attention</p>
+    If you are using live tracking service with Map.ir infrastructre, you have to use this default configurations.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">mapirDefault</span><span class="p">:</span> <span class="kt">NetworkConfiguration</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16MapirLiveTracker20NetworkConfigurationC7MQTTQoSO"></a>
+                    <a name="//apple_ref/swift/Enum/MQTTQoS" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16MapirLiveTracker20NetworkConfigurationC7MQTTQoSO">MQTTQoS</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Enum representing QoS in MQTT Packets.</p>
+
+                        <a href="../Classes/NetworkConfiguration/MQTTQoS.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc(MLTMQTTQoS)</span>
+<span class="kd">public</span> <span class="kd">enum</span> <span class="kt">MQTTQoS</span> <span class="p">:</span> <span class="kt">UInt</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(cs)MLTNetworkConfiguration(im)initWithAuthenticationServiceURL:maximumRetries:brokerAddress:port:qos:usesSSL:session:"></a>
+                    <a name="//apple_ref/swift/Method/init(authenticationServiceURL:maximumRetries:brokerAddress:port:qos:usesSSL:session:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(cs)MLTNetworkConfiguration(im)initWithAuthenticationServiceURL:maximumRetries:brokerAddress:port:qos:usesSSL:session:">init(authenticationServiceURL:maximumRetries:brokerAddress:port:qos:usesSSL:session:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a customized network configuration.</p>
+
+<p>If you use Map.ir Live Tracking Service on your own infrastructure,
+you can create a custom configuration using this initializer.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc(initWithAuthenticationServiceURL:maximumRetries:brokerAddress:port:qos:usesSSL:session:)</span>
+<span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">authenticationServiceURL</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="nv">maximumRetries</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">brokerAddress</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">port</span><span class="p">:</span> <span class="kt">UInt16</span><span class="p">,</span> <span class="nv">qos</span><span class="p">:</span> <span class="kt"><a href="../Classes/NetworkConfiguration/MQTTQoS.html">MQTTQoS</a></span><span class="p">,</span> <span class="nv">usesSSL</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="nv">session</span><span class="p">:</span> <span class="kt">URLSession</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>authenticationServiceURL</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>URL to fetch topics for tracking identifier.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>maximumRetries</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Maximum network retries.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>brokerAddress</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>MQTT Broker address.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>port</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>MQTT Broker port.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>qos</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Quality of Service for MQTT packets.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>usesSSL</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Indicates that the configuration uses SSL or not.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>session</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Shared <code>URLSession</code> instance for the service.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>Copyright 1398 Map</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

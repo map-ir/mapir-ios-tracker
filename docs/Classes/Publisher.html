@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Publisher Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Class/Publisher" class="dashAnchor"></a>
+
+    <a title="Publisher Class Reference"></a>
+
+    <header class="header-container">
+      <div class="limiter">
+        <div class="header">
+          <p class="header-col header-col--primary">
+            <a class="header-link" href="../index.html">
+                <img style="height: 40px;" class="header-icon" src="../img/mapir.svg" alt="MapirLiveTracker Docs"/>
+                <span class="header-tag">MapirLiveTracker 1.0 Docs Reference (1.0)</span>
+            </a>
+            
+          </p>
+    
+          <p class="header-col header-col--secondary">
+            <a class="header-link" href="https://github.com/map-ir/mapir-ios-tracker">
+              <img class="header-icon" src="../img/gh.png"/>
+              View on GitHub
+            </a>
+          </p>
+    
+          <p class="header-col header-col--secondary">
+            <a class="header-link" href="dash-feed://https%3A%2F%2Fmap%2Dir%2Egithub%2Eio%2Fdocsets%2FMapirLiveTracker%2Exml">
+              <img class="header-icon" src="../img/dash.png"/>
+              Install in Dash
+            </a>
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <div class="breadcrumbs">
+      <div class="limiter">
+        <a class="breadcrumb" href="../index.html">MapirLiveTracker Reference</a>
+        <img class="carat" src="../img/carat.png" />
+        Publisher Class Reference
+      </div>
+    </div>
+
+    <div class="content-wrapper limiter">
+      <nav class="navigation">
+          <div class="header-col--secondary">
+            <form role="search" action="../search.json">
+              <input type="text" placeholder="Search documentation" data-typeahead>
+            </form>
+          </div>
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="small-heading" href="../Publisher.html">Publisher<span class="anchor-icon" /></a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Publisher.html">Publisher</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Publisher/Status.html">– Status</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/PublisherDelegate.html">PublisherDelegate</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="small-heading" href="../Subscriber.html">Subscriber<span class="anchor-icon" /></a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Subscriber.html">Subscriber</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Subscriber/Status.html">– Status</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/SubscriberDelegate.html">SubscriberDelegate</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="small-heading" href="../Networking.html">Networking<span class="anchor-icon" /></a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/NetworkingManager.html">NetworkingManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/NetworkConfiguration.html">NetworkConfiguration</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/NetworkConfiguration/MQTTQoS.html">– MQTTQoS</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="small-heading" href="../Account.html">Account<span class="anchor-icon" /></a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AccountManager.html">AccountManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AccountManager/APIKeyStatus.html">– APIKeyStatus</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="small-heading" href="../Logging.html">Logging<span class="anchor-icon" /></a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Logger.html">Logger</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Logger/Level.html">– Level</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="small-heading" href="../Type Aliases.html">Type Aliases<span class="anchor-icon" /></a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Type%20Aliases.html#/s:16MapirLiveTracker6Metersa">Meters</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            <a href="#/Publisher"><h1 id="Publisher">Publisher<span class="anchor-icon" /></h1></a>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">@objc(MLTPublisher)</span>
+<span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">Publisher</span> <span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+
+                </div>
+              </div>
+            <p>An object that handles publishing user location lively based on a tracking identifier.</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/General%20Properties"></a>
+                <a name="//apple_ref/swift/Section/General Properties" class="dashAnchor"></a>
+                <a href="#/General%20Properties">
+                  <h3 class="section-name">General Properties</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(py)lastPublishedLocation"></a>
+                    <a name="//apple_ref/swift/Property/lastPublishedLocation" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(py)lastPublishedLocation">lastPublishedLocation</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Last published location.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc(lastPublishedLocation)</span>
+<span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">lastPublishedLocation</span><span class="p">:</span> <span class="kt">CLLocation</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16MapirLiveTracker9PublisherC18trackingIdentifierSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/trackingIdentifier" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16MapirLiveTracker9PublisherC18trackingIdentifierSSSgvp">trackingIdentifier</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Current tracking identifier which service is using.</p>
+
+<p><code><a href="../Classes/Publisher.html#/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(im)stop">stop()</a></code> method does not remove tracking identifier,
+so you can use <code><a href="../Classes/Publisher.html#/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(im)restart">restart()</a></code> method to publish data of the same identifier.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">trackingIdentifier</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(py)delegate"></a>
+                    <a name="//apple_ref/swift/Property/delegate" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(py)delegate">delegate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The publisher&rsquo;s delegate.</p>
+
+<p>Publisher sents notifications about published data and failures to the delegate.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc(delegate)</span>
+<span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/PublisherDelegate.html">PublisherDelegate</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(py)serviceAccuracy"></a>
+                    <a name="//apple_ref/swift/Property/serviceAccuracy" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(py)serviceAccuracy">serviceAccuracy</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Accuracy of the location service.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc(serviceAccuracy)</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">serviceAccuracy</span><span class="p">:</span> <span class="kt">CLLocationAccuracy</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(py)distanceFilter"></a>
+                    <a name="//apple_ref/swift/Property/distanceFilter" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(py)distanceFilter">distanceFilter</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Distance filter for location service</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc(distanceFilter)</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">distanceFilter</span><span class="p">:</span> <span class="kt"><a href="../Type%20Aliases.html#/s:16MapirLiveTracker6Metersa">Meters</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16MapirLiveTracker9PublisherC6StatusO"></a>
+                    <a name="//apple_ref/swift/Enum/Status" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16MapirLiveTracker9PublisherC6StatusO">Status</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Status of Publisher class</p>
+
+                        <a href="../Classes/Publisher/Status.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc(MLTPublisherStatus)</span>
+<span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Status</span> <span class="p">:</span> <span class="kt">UInt</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(py)status"></a>
+                    <a name="//apple_ref/swift/Property/status" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(py)status">status</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Indicates the current status of the service.</p>
+
+<p>It can be one of 4 different states: <code>initiated</code>, <code>starting</code>, <code>running</code>, <code>stopped</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc(status)</span>
+<span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">status</span><span class="p">:</span> <span class="kt"><a href="../Classes/Publisher/Status.html">Status</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Initializers"></a>
+                <a name="//apple_ref/swift/Section/Initializers" class="dashAnchor"></a>
+                <a href="#/Initializers">
+                  <h3 class="section-name">Initializers</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(im)initWithDistanceFilter:"></a>
+                    <a name="//apple_ref/swift/Method/init(distanceFilter:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(im)initWithDistanceFilter:">init(distanceFilter:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializes a Publisher object.</p>
+
+<p>Consider adding your valid API key with key of <code>MAPIRAccessToken</code> to your <strong>Info.plist</strong>.
+starting the publisher fails if you don&rsquo;t define the this key-value pair.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc(initWithDistanceFilter:)</span>
+<span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">distanceFilter</span><span class="p">:</span> <span class="kt"><a href="../Type%20Aliases.html#/s:16MapirLiveTracker6Metersa">Meters</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>distanceFilter</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>New location will be published when the user moves this amount from last published location.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(im)initWithAPIKey:distanceFilter:"></a>
+                    <a name="//apple_ref/swift/Method/init(apiKey:distanceFilter:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(im)initWithAPIKey:distanceFilter:">init(apiKey:distanceFilter:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializes a Publisher object.</p>
+
+<p>Consider adding your valid API key with key of <code>MAPIRAccessToken</code> to your <strong>Info.plist</strong>.
+If you don&rsquo;t have any, visit <a href="https://corp.map.ir/appregistration">App Registration website</a>.
+starting the publisher fails if you don&rsquo;t define the this key-value pair.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc(initWithAPIKey:distanceFilter:)</span>
+<span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">apiKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">distanceFilter</span><span class="p">:</span> <span class="kt"><a href="../Type%20Aliases.html#/s:16MapirLiveTracker6Metersa">Meters</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>apiKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Your Map.ir API key.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>distanceFilter</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>New location will be published when the user moves this amount from last published location.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Start"></a>
+                <a name="//apple_ref/swift/Section/Start" class="dashAnchor"></a>
+                <a href="#/Start">
+                  <h3 class="section-name">Start</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(im)startWithTrackingIdentifier:"></a>
+                    <a name="//apple_ref/swift/Method/start(withTrackingIdentifier:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(im)startWithTrackingIdentifier:">start(withTrackingIdentifier:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Starts publishing location of the current device.</p>
+
+<p>This method first authorizes the user then starts publishing. it may take some time to run.
+If the starting fails, you will be notified via <code>publisher(_:stoppedWithError:)</code> delegate method.
+A receiver that uses this identifier receives the data which is published in this session.</p>
+<div class="aside aside-attention">
+    <p class="aside-title">Attention</p>
+    You yourself must handle uniqueness of your tracking identifiers.
+Otherwise conflicts may occure between published and received data.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc(startWithTrackingIdentifier:)</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">start</span><span class="p">(</span><span class="n">withTrackingIdentifier</span> <span class="nv">trackingIdentifier</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>trackingIdentifier</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A string which is used to name the current publishing session.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Stop"></a>
+                <a name="//apple_ref/swift/Section/Stop" class="dashAnchor"></a>
+                <a href="#/Stop">
+                  <h3 class="section-name">Stop</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(im)stop"></a>
+                    <a name="//apple_ref/swift/Method/stop()" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(im)stop">stop()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Stops the service.</p>
+
+<p>Stopping does not remove the previous tracking identifier.
+You can restart the service and the previously added tracking identifier will be used again.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc(stop)</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">stop</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Restart"></a>
+                <a name="//apple_ref/swift/Section/Restart" class="dashAnchor"></a>
+                <a href="#/Restart">
+                  <h3 class="section-name">Restart</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(im)restart"></a>
+                    <a name="//apple_ref/swift/Method/restart()" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(im)restart">restart()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Restarts the service.</p>
+
+<p>You can&rsquo;t user <code>restart()</code> unless a tracking identifier is available.
+A tracking identifier is added to the service once you use <code><a href="../Classes/Publisher.html#/c:@M@MapirLiveTracker@objc(cs)MLTPublisher(im)startWithTrackingIdentifier:">start(withTrackingIdentifier:)</a></code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc(restart)</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">restart</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>Copyright 1398 Map</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

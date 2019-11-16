@@ -11,7 +11,6 @@ custom_categories:
   children:
     - Publisher
     - PublisherDelegate
-    - Publisher.State
 - name: Subscriber
   children:
     - Subscriber
@@ -23,6 +22,9 @@ custom_categories:
 - name: Account
   children:
     - AccountManager
+- name: Logging
+  children:
+    - Logger
 - name: Type Aliases
   children:
     - Meters

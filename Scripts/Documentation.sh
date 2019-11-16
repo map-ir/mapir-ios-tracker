@@ -10,21 +10,20 @@ set -euo pipefail
 
 function step { >&2 echo "\033[1m\033[36m$@\033[0m"; }
 
-step "🧩 Enter module version:"
-read MODULE_VERSION
+SDK_VERSION=$(make sdk_version)
 
-DOCUMENTATION_DIR="Documentation"
-THEME_DIR="${DOCUMENTATION_DIR}/theme"
-OUTPUT_DIR="${DOCUMENTATION_DIR}/docs"
-GUIDES_DIR="${DOCUMENTATION_DIR}/guides"
+DOCUMENTATION_ASSETS_DIR="Documentation"
+THEME_DIR="${DOCUMENTATION_ASSETS_DIR}/theme"
+GUIDES_DIR="${DOCUMENTATION_ASSETS_DIR}/guides"
+OUTPUT_DIR="docs"
 
 README="README.md"
 JAZZY_CONF=".jazzy.yaml"
 
 step "🛠 Generating documentation."
 
-rm -rf ${OUTPUT}
-mkdir -p ${OUTPUT}
+rm -rf ${OUTPUT_DIR}
+mkdir -p ${OUTPUT_DIR}
 
 jazzy \
     --config ${JAZZY_CONF} \
@@ -33,11 +32,12 @@ jazzy \
     --clean \
     --author Map.ir \
     --author_url https://map.ir \
-    --module-version ${MODULE_VERSION} \
+    --module-version ${SDK_VERSION} \
     --build-tool-arguments -scheme,MapirLiveTracker-iOS \
     --module MapirLiveTracker \
-    --root-url https://support.map.ir/developer/ios/live-tracking/${MODULE_VERSION}/ \
-    --output ${OUTPUT} \
-    --theme ${THEME}
+    --github-url https://github.com/map-ir/mapir-ios-tracker \
+    --root-url https://map-ir.github.io/mapir-ios-tracker \
+    --output ${OUTPUT_DIR} \
+    --theme ${THEME_DIR}
 
 step "🎷 Created."

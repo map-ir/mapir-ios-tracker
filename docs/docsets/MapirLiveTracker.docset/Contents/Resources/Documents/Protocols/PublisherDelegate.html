@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>PublisherDelegate Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Protocol/PublisherDelegate" class="dashAnchor"></a>
+
+    <a title="PublisherDelegate Protocol Reference"></a>
+
+    <header class="header-container">
+      <div class="limiter">
+        <div class="header">
+          <p class="header-col header-col--primary">
+            <a class="header-link" href="../index.html">
+                <img style="height: 40px;" class="header-icon" src="../img/mapir.svg" alt="MapirLiveTracker Docs"/>
+                <span class="header-tag">MapirLiveTracker 1.0 Docs Reference (1.0)</span>
+            </a>
+            
+          </p>
+    
+          <p class="header-col header-col--secondary">
+            <a class="header-link" href="https://github.com/map-ir/mapir-ios-tracker">
+              <img class="header-icon" src="../img/gh.png"/>
+              View on GitHub
+            </a>
+          </p>
+    
+          <p class="header-col header-col--secondary">
+            <a class="header-link" href="dash-feed://https%3A%2F%2Fmap%2Dir%2Egithub%2Eio%2Fdocsets%2FMapirLiveTracker%2Exml">
+              <img class="header-icon" src="../img/dash.png"/>
+              Install in Dash
+            </a>
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <div class="breadcrumbs">
+      <div class="limiter">
+        <a class="breadcrumb" href="../index.html">MapirLiveTracker Reference</a>
+        <img class="carat" src="../img/carat.png" />
+        PublisherDelegate Protocol Reference
+      </div>
+    </div>
+
+    <div class="content-wrapper limiter">
+      <nav class="navigation">
+          <div class="header-col--secondary">
+            <form role="search" action="../search.json">
+              <input type="text" placeholder="Search documentation" data-typeahead>
+            </form>
+          </div>
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="small-heading" href="../Publisher.html">Publisher<span class="anchor-icon" /></a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Publisher.html">Publisher</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Publisher/Status.html">– Status</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/PublisherDelegate.html">PublisherDelegate</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="small-heading" href="../Subscriber.html">Subscriber<span class="anchor-icon" /></a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Subscriber.html">Subscriber</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Subscriber/Status.html">– Status</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/SubscriberDelegate.html">SubscriberDelegate</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="small-heading" href="../Networking.html">Networking<span class="anchor-icon" /></a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/NetworkingManager.html">NetworkingManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/NetworkConfiguration.html">NetworkConfiguration</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/NetworkConfiguration/MQTTQoS.html">– MQTTQoS</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="small-heading" href="../Account.html">Account<span class="anchor-icon" /></a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AccountManager.html">AccountManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AccountManager/APIKeyStatus.html">– APIKeyStatus</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="small-heading" href="../Logging.html">Logging<span class="anchor-icon" /></a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Logger.html">Logger</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Logger/Level.html">– Level</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="small-heading" href="../Type Aliases.html">Type Aliases<span class="anchor-icon" /></a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Type%20Aliases.html#/s:16MapirLiveTracker6Metersa">Meters</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            <a href="#/PublisherDelegate"><h1 id="PublisherDelegate">PublisherDelegate<span class="anchor-icon" /></h1></a>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">@objc(MLTPublisherDelegate)</span>
+<span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">PublisherDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+
+                </div>
+              </div>
+            <p>Protocol for Publisher Delegate.</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(pl)MLTPublisherDelegate(im)publisher:stoppedWithError:"></a>
+                    <a name="//apple_ref/swift/Method/publisher(_:stoppedWithError:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(pl)MLTPublisherDelegate(im)publisher:stoppedWithError:">publisher(_:stoppedWithError:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Tells the delegate that the operation is going to stop with or without an error.</p>
+
+<p>After such errors, you may use <code>restart()</code> method to start it again.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc(publisher:stoppedWithError:)</span>
+<span class="kd">func</span> <span class="nf">publisher</span><span class="p">(</span><span class="n">_</span> <span class="nv">publisher</span><span class="p">:</span> <span class="kt"><a href="../Classes/Publisher.html">Publisher</a></span><span class="p">,</span> <span class="n">stoppedWithError</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>publisher</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Publisher object that stopped.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>error</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Error which caused the process to stop, if there is any.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(pl)MLTPublisherDelegate(im)publisher:publishedLocation:"></a>
+                    <a name="//apple_ref/swift/Method/publisher(_:publishedLocation:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(pl)MLTPublisherDelegate(im)publisher:publishedLocation:">publisher(_:publishedLocation:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Sends the delegate the latest published <code>CLLocation</code> object.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default implementation has empty body.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc(publisher:publishedLocation:)</span>
+<span class="kd">optional</span> <span class="kd">func</span> <span class="nf">publisher</span><span class="p">(</span><span class="n">_</span> <span class="nv">publisher</span><span class="p">:</span> <span class="kt"><a href="../Classes/Publisher.html">Publisher</a></span><span class="p">,</span> <span class="n">publishedLocation</span> <span class="nv">location</span><span class="p">:</span> <span class="kt">CLLocation</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>publisher</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the publisher that sent the location.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>location</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p><code>CLLocation</code> instance of published data.
+It does not contain accuracy, floor and altitude data.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MapirLiveTracker@objc(pl)MLTPublisherDelegate(im)publisher:failedWithError:"></a>
+                    <a name="//apple_ref/swift/Method/publisher(_:failedWithError:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MapirLiveTracker@objc(pl)MLTPublisherDelegate(im)publisher:failedWithError:">publisher(_:failedWithError:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Sends the failure details to the delegate.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default implementation has empty body.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@objc(publisher:failedWithError:)</span>
+<span class="kd">optional</span> <span class="kd">func</span> <span class="nf">publisher</span><span class="p">(</span><span class="n">_</span> <span class="nv">publisher</span><span class="p">:</span> <span class="kt"><a href="../Classes/Publisher.html">Publisher</a></span><span class="p">,</span> <span class="n">failedWithError</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>publisher</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The publisher which failed</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>error</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p><code>Error</code> describing the failure.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>Copyright 1398 Map</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>
