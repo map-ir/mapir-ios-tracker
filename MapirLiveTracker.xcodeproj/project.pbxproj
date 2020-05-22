@@ -19,7 +19,6 @@
 		C0061BE92355B30C006435E7 /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0061BE82355B30C006435E7 /* AccountManager.swift */; };
 		C01ABF2122F94B4500C93352 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01ABF2022F94B4500C93352 /* LocationManager.swift */; };
 		C01FA27F23695EA200E4EFB8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C05B9FA923643A86005FAD22 /* Main.storyboard */; };
-		C03D1FC8237ADCBD004A7D3E /* APIKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03D1FC5237ADBD5004A7D3E /* APIKey.swift */; };
 		C0478D2323028EBF00C15A73 /* DataTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0478D2223028EBF00C15A73 /* DataTableViewCell.swift */; };
 		C0485EB422FDFEA900E27F28 /* Subscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0485EB322FDFEA900E27F28 /* Subscriber.swift */; };
 		C05B9F992364337F005FAD22 /* TrackerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B9F982364337F005FAD22 /* TrackerType.swift */; };
@@ -121,7 +120,6 @@
 		C0061BE82355B30C006435E7 /* AccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
 		C01ABF2022F94B4500C93352 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		C01FA2802369A45C00E4EFB8 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Makefile; sourceTree = SOURCE_ROOT; };
-		C03D1FC5237ADBD5004A7D3E /* APIKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKey.swift; sourceTree = "<group>"; };
 		C03D1FC7237ADC02004A7D3E /* APIKey.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APIKey.h; sourceTree = "<group>"; };
 		C0478D2223028EBF00C15A73 /* DataTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTableViewCell.swift; sourceTree = "<group>"; };
 		C0485EB322FDFEA900E27F28 /* Subscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscriber.swift; sourceTree = "<group>"; };
@@ -276,7 +274,6 @@
 				3D9C43252274629B000A6585 /* ViewController.swift */,
 				C0478D2223028EBF00C15A73 /* DataTableViewCell.swift */,
 				C09036A1237A9A08002E5840 /* SettingTableViewController.swift */,
-				C03D1FC5237ADBD5004A7D3E /* APIKey.swift */,
 				3D9C4333227462B9000A6585 /* Resources */,
 			);
 			path = "Swift Example";
@@ -390,7 +387,6 @@
 				3D9C428C22745894000A6585 /* Sources */,
 				3D9C428D22745894000A6585 /* Frameworks */,
 				3D9C428E22745894000A6585 /* Resources */,
-				C080C2E82307F387004B0CBB /* Carthage Outdated Frameworks */,
 			);
 			buildRules = (
 			);
@@ -431,7 +427,7 @@
 				3D9C431E2274629B000A6585 /* Frameworks */,
 				3D9C431F2274629B000A6585 /* Resources */,
 				3D9C433822746323000A6585 /* Embed Frameworks */,
-				C000B2C22308014200BBF22D /* Carthage Copy-Frameworks */,
+				C07BD2272477F8CA00BC57F6 /* Insert Map.ir API Key */,
 			);
 			buildRules = (
 			);
@@ -557,7 +553,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		C000B2C22308014200BBF22D /* Carthage Copy-Frameworks */ = {
+		C07BD2272477F8CA00BC57F6 /* Insert Map.ir API Key */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -565,39 +561,16 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/CocoaAsyncSocket.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/CocoaMQTT.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
+				"$(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)",
 			);
-			name = "Carthage Copy-Frameworks";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaAsyncSocket.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaMQTT.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftProtobuf.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
-		};
-		C080C2E82307F387004B0CBB /* Carthage Outdated Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Carthage Outdated Frameworks";
+			name = "Insert Map.ir API Key";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage outdated --xcode-warnings 2>/dev/null\n";
+			shellScript = "echo \"Inserting Map.ir API key...\"\nkey_file=~/.mapir\nkey=\"$(cat $key_file 2>/dev/null)\"\n\nif [ \"$key\" ]; then\n  plutil -replace MapirAPIKey -string $key \"$TARGET_BUILD_DIR/$INFOPLIST_PATH\"\n  echo \"API key inserted.\"\nelse\n  echo \"ERROR: Missing Map.ir API key. In order to use example application you need an API key. create an account or login to your account at <https://corp.map.ir/registration>, create a project or open an existing one, then create a new file at $key_file, add your project's API key to the file.\"\n  exit 1\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -637,7 +610,6 @@
 				3D9C43262274629B000A6585 /* ViewController.swift in Sources */,
 				C0478D2323028EBF00C15A73 /* DataTableViewCell.swift in Sources */,
 				3D9C43242274629B000A6585 /* AppDelegate.swift in Sources */,
-				C03D1FC8237ADCBD004A7D3E /* APIKey.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

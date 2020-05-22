@@ -48,8 +48,10 @@ class MainViewController: UIViewController {
         let distanceFilter = (UserDefaults.standard.value(forKey: "distanceFilter") as? Double) ?? 30.0
         let trackingIdentifier = UserDefaults.standard.string(forKey: "trackingIdentifier") ?? "sample-unique-identifier-test"
 
-        receiver = Subscriber(apiKey: mapirAPIKey)
-        publisher = Publisher(apiKey: mapirAPIKey, distanceFilter: distanceFilter)
+        let apiKey = Bundle.main.object(forInfoDictionaryKey: "MapirAPIKey") as! String
+
+        receiver = Subscriber(apiKey: apiKey)
+        publisher = Publisher(apiKey: apiKey, distanceFilter: distanceFilter)
 
         NetworkingManager.shared.configuration = .mapirDefault
 
