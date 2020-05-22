@@ -66,6 +66,7 @@ public final class AccountManager: NSObject {
 
     private override init() { }
 
+    /// Shows current API key's status.
     public private(set) var apiKeyStatus: APIKeyStatus = .notAvailable
 
     /// Indicates current status for APIKey.

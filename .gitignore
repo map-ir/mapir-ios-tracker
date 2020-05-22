@@ -103,3 +103,6 @@ fastlane/test_output
 # APIKeys
 Examples/Swift Example/APIKey.swift
 Examples/Objective-C Example/APIKey.h
+
+# .private
+.private

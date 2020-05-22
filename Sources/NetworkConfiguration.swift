@@ -32,7 +32,7 @@ public class NetworkConfiguration: NSObject {
     @objc public let qos: MQTTQoS
 
     /// Indicates that the configuration uses SSL or not.
-    @objc public let usesSSL: Bool
+    @objc public let sslCertificate: SSLCetrificate?
 
     /// Shared `URLSession` instance for the service.
     @objc public let session: URLSession
@@ -40,13 +40,25 @@ public class NetworkConfiguration: NSObject {
     /// Default Map.ir service configuration.
     ///
     /// - Attention: If you are using live tracking service with Map.ir infrastructre, you have to use this default configurations.
-    @objc public static let mapirDefault = NetworkConfiguration(authenticationServiceURL: URL(string: "https://tracking.map.ir/")!,
+    @objc public static let mapirDefault = NetworkConfiguration(authenticationServiceURL: URL(string: "https://tracking-dev.map.ir/")!,
                                                                 maximumRetries: 3,
                                                                 brokerAddress: "tracking.map.ir",
                                                                 port: 1883,
                                                                 qos: .qos0,
-                                                                usesSSL: false,
+                                                                sslCertificate: nil,
                                                                 session: .shared)
+
+    /// Default Map.ir service configuration.
+    ///
+    /// - Attention: If you are using live tracking service with Map.ir infrastructre, you have to use this default configurations.
+    @objc static let mapirSSLDefault = NetworkConfiguration(authenticationServiceURL: URL(string: "https://tracking.map.ir/")!,
+                                                                   maximumRetries: 3,
+                                                                   brokerAddress: "tracking.map.ir",
+                                                                   port: 8883,
+                                                                   qos: .qos0,
+                                                                   sslCertificate: SSLCetrificate(name: "certificate", password: "123456"),
+                                                                   session: .shared)
+
     /// Enum representing QoS in MQTT Packets.
     @objc(MLTMQTTQoS)
     public enum MQTTQoS: UInt {
@@ -77,14 +89,14 @@ public class NetworkConfiguration: NSObject {
     ///
     /// If you use Map.ir Live Tracking Service on your own infrastructure,
     /// you can create a custom configuration using this initializer.
-    @objc(initWithAuthenticationServiceURL:maximumRetries:brokerAddress:port:qos:usesSSL:session:)
-    public init(authenticationServiceURL: URL, maximumRetries: Int, brokerAddress: String, port: UInt16, qos: MQTTQoS, usesSSL: Bool, session: URLSession) {
+    @objc(initWithAuthenticationServiceURL:maximumRetries:brokerAddress:port:qos:sslCertificate:session:)
+    public init(authenticationServiceURL: URL, maximumRetries: Int, brokerAddress: String, port: UInt16, qos: MQTTQoS, sslCertificate: SSLCetrificate?, session: URLSession) {
         self.authenticationServiceURL = authenticationServiceURL
         self.brokerAddress = brokerAddress
         self.brokerPort = port
         self.maximumNetworkRetries = 3
         self.qos = qos
-        self.usesSSL = usesSSL
+        self.sslCertificate = sslCertificate
         self.session = session
     }
 
@@ -181,4 +193,76 @@ public class NetworkConfiguration: NSObject {
         #endif
         return UUID()
     }()
+}
+
+extension NetworkConfiguration {
+
+    @objc(MLTSSLCertificate)
+    public class SSLCetrificate: NSObject {
+        let name: String
+        let password: String
+        var setting: [String: NSObject] = [:]
+
+        /// Creates SSLCertifiate.
+        /// - Parameters:
+        ///   - name: Name of the .p12 file.
+        ///   - password: password of the .p12 file.
+        @objc(initWithName:password:)
+        public init(name: String, password: String? = nil) {
+            self.name = name
+            self.password = password ?? ""
+            super.init()
+            
+            self.readCertificate()
+        }
+
+        func readCertificate() {
+            guard let clientCertArray = readCertFromP12File(certName: self.name, certPassword: self.password) else {
+                return
+            }
+
+            var sslSettings: [String: NSObject] = [:]
+            sslSettings[kCFStreamSSLCertificates as String] = clientCertArray
+
+            self.setting = sslSettings
+        }
+
+        private func readCertFromP12File(certName: String, certPassword: String) -> CFArray? {
+            // get p12 file path
+            let resourcePath = Bundle.main.path(forResource: certName, ofType: "p12")
+
+            guard let filePath = resourcePath, let p12Data = NSData(contentsOfFile: filePath) else {
+                print("Failed to open the certificate file: \(certName).p12")
+                return nil
+            }
+
+            // create key dictionary for reading p12 file
+            let key = kSecImportExportPassphrase as String
+            let options : NSDictionary = [key: certPassword]
+
+            var items : CFArray?
+            let securityError = SecPKCS12Import(p12Data, options, &items)
+
+            guard securityError == errSecSuccess else {
+                if securityError == errSecAuthFailed {
+                    print("ERROR: SecPKCS12Import returned errSecAuthFailed. Incorrect password?")
+                } else {
+                    print("Failed to open the certificate file: \(certName).p12")
+                }
+                return nil
+            }
+
+            guard let theArray = items, CFArrayGetCount(theArray) > 0 else {
+                return nil
+            }
+
+            let dictionary = (theArray as NSArray).object(at: 0)
+            guard let identity = (dictionary as AnyObject).value(forKey: kSecImportItemIdentity as String) else {
+                return nil
+            }
+            let certArray = [identity] as CFArray
+
+            return certArray
+        }
+    }
 }

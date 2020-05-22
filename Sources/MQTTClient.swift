@@ -62,31 +62,33 @@ final class MQTTClient {
     }
 
     func setupObservers() {
-        NotificationCenter.default.addObserver(forName: kNetworkConfigurationUpdatedNotification,
-                                               object: nil,
-                                               queue: .main) { [weak self] (_) in
-            self?.updateNetworkConfiguration()
-        }
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateNetworkConfiguration),
+            name: kNetworkConfigurationUpdatedNotification,
+            object: nil)
 
-        NotificationCenter.default.addObserver(forName: kUpdatedUsernameAndPasswordNotification,
-                                               object: nil,
-                                               queue: .main) { [weak self] (_) in
-            self?.updateUsernameAndPassword()
-        }
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateUsernameAndPassword),
+            name: kUpdatedUsernameAndPasswordNotification,
+            object: nil)
     }
 
-    func updateNetworkConfiguration() {
+    @objc func updateNetworkConfiguration() {
         client.host = NetworkingManager.shared.configuration.brokerAddress
         client.port = NetworkingManager.shared.configuration.brokerPort
 
-        if NetworkingManager.shared.configuration.usesSSL {
-            // TODO: setup SSL
+        if let sslCert = NetworkingManager.shared.configuration.sslCertificate {
+            client.allowUntrustCACertificate = true
+            client.sslSettings = sslCert.setting
+            client.enableSSL = true
         }
 
         networkConfiguration = NetworkingManager.shared.configuration
     }
 
-    func updateUsernameAndPassword() {
+    @objc func updateUsernameAndPassword() {
         self.username = AccountManager.shared.username
         self.password = AccountManager.shared.password
     }
@@ -94,6 +96,8 @@ final class MQTTClient {
     deinit {
         connectCompletionHandler = nil
         subscribeCompletionHandler = nil
+
+        NotificationCenter.default.removeObserver(self)
     }
 
     private var connectCompletionHandler: ConnectCompletionHandler?
@@ -137,15 +141,18 @@ extension MQTTClient: CocoaMQTTDelegate {
             if let connectCompletionHandler = connectCompletionHandler {
                 connectCompletionHandler()
             }
-        case .disconnected:
-            break
-        case .connecting, .initial:
+        case .disconnected, .connecting:
             break
         }
     }
-    
-    func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
 
+    func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
+        delegate?.mqttClient(self, disconnectedWithError: err)
+    }
+
+    func mqtt(_ mqtt: CocoaMQTT, didReceive trust: SecTrust, completionHandler: @escaping (Bool) -> Void) {
+        print(trust)
+        completionHandler(true)
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
@@ -153,18 +160,22 @@ extension MQTTClient: CocoaMQTTDelegate {
         delegate?.mqttClient(self, publishedData: data)
     }
 
-    func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
-
-    }
-
     func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
         let data = Data(message.payload)
         delegate?.mqttClient(self, receivedData: data)
-        
+
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopics topics: [String]) {
         subscribeCompletionHandler?()
+    }
+    
+    func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
+
+    }
+
+    func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
+
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopics topic: [String]) {
@@ -179,7 +190,7 @@ extension MQTTClient: CocoaMQTTDelegate {
 
     }
 
-    func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
-        delegate?.mqttClient(self, disconnectedWithError: err)
+    func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopics success: NSDictionary, failed: [String]) {
+
     }
 }

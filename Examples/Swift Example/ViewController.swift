@@ -51,6 +51,8 @@ class MainViewController: UIViewController {
         receiver = Subscriber(apiKey: mapirAPIKey)
         publisher = Publisher(apiKey: mapirAPIKey, distanceFilter: distanceFilter)
 
+        NetworkingManager.shared.configuration = .mapirDefault
+
         Logger.level = .info
 
         self.trackingIdentifier = trackingIdentifier
